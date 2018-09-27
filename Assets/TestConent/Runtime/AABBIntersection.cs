@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace SimpleTools.Culling.Tests
@@ -12,52 +13,34 @@ namespace SimpleTools.Culling.Tests
 
 		public Transform raySource;
 
-		// ----------------------------------------------------------------------------------------------------//
-		//                                               TEST                                                  //
-		// ----------------------------------------------------------------------------------------------------//
+        // ----------------------------------------------------------------------------------------------------//
+        //                                               TEST                                                  //
+        // ----------------------------------------------------------------------------------------------------//
 
-		// --------------------------------------------------
-		// Runtime Data
+        // --------------------------------------------------
+        // Runtime Data
 
-		[SerializeField]		
-		private TestData[] m_TestData;
+        [SerializeField]
+        private MeshRenderer[] m_StaticRenderers;
 
-		[SerializeField]
-		private MeshRenderer[] m_PassedRenderers;
+        [SerializeField]
+        private MeshRenderer[] m_PassedRenderers;
 
 		// --------------------------------------------------
 		// Test Execution
 
 		private void Update()
 		{
-			MeshRenderer[] staticRenderers = Utils.GetStaticRenderers();
-			m_TestData = new TestData[staticRenderers.Length];
+            m_StaticRenderers = Utils.GetStaticRenderers();
+            List<MeshRenderer> renderers = new List<MeshRenderer>();
 
-			for(int i = 0; i < m_TestData.Length; i++)
+			for(int i = 0; i < m_StaticRenderers.Length; i++)
 			{
-				bool isHit = Utils.CheckAABBIntersection(raySource.position, raySource.forward, staticRenderers[i].bounds);
-				Vector3[] rayData = new Vector3[2] {raySource.position, raySource.position + Vector3.Scale(raySource.forward, new Vector3(10, 10, 10))};
-				m_TestData[i] = new TestData(rayData, staticRenderers[i], isHit);
+                if (Utils.CheckAABBIntersection(raySource.position, raySource.forward, m_StaticRenderers[i].bounds))
+                    renderers.Add(m_StaticRenderers[i]);
 			}
-		}
-
-        // --------------------------------------------------
-        // Data Structures
-
-        [Serializable]
-        public struct TestData
-		{
-			public TestData(Vector3[] ray, MeshRenderer renderer, bool pass)
-			{
-				this.ray = ray;
-				this.renderer = renderer;
-				this.pass = pass;
-			}
-
-			public Vector3[] ray;
-			public MeshRenderer renderer;
-			public bool pass;
-		}
+            m_PassedRenderers = renderers.ToArray();
+        }
 
 		// ----------------------------------------------------------------------------------------------------//
 		//                                              DEBUG                                                  //
@@ -66,26 +49,8 @@ namespace SimpleTools.Culling.Tests
 		[ExecuteInEditMode]
         private void OnDrawGizmos()
         {
-			DrawIntersectionDebug();
+            DebugUtils.DrawRayDebug(raySource.position, raySource.forward);
+            DebugUtils.DrawRendererDebug(m_StaticRenderers, m_PassedRenderers);
         }
-
-		private void DrawIntersectionDebug()
-		{
-			if(m_TestData == null)
-				return;
-
-			for(int i = 0; i < m_TestData.Length; i++)
-			{
-				Gizmos.color = EditorColors.debugBlackWire;
-				Gizmos.DrawLine(m_TestData[i].ray[0], m_TestData[i].ray[1]);
-
-				Transform transform = m_TestData[i].renderer.transform;
-				Gizmos.color = m_TestData[i].pass ? EditorColors.debugBlueFill : EditorColors.debugBlackFill;
-				Mesh mesh = m_TestData[i].renderer.GetComponent<MeshFilter>().sharedMesh;
-				Gizmos.DrawMesh(mesh, transform.position, transform.rotation, transform.lossyScale);
-				Gizmos.color = m_TestData[i].pass ? EditorColors.debugBlueWire : EditorColors.debugBlackWire;
-				Gizmos.DrawWireMesh(mesh, transform.position, transform.rotation, transform.lossyScale);
-			}
-		}
-	}
+    }
 }

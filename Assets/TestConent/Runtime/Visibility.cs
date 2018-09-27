@@ -32,13 +32,13 @@ namespace SimpleTools.Culling.Tests
         private VolumeData m_VolumeData;
 
         [SerializeField]
-        private TestData[] m_TestData;
-
-        [SerializeField]
         private MeshRenderer[] m_StaticRenderers;
 
         [SerializeField]
         private MeshRenderer[] m_PassedRenderers;
+
+        [SerializeField]
+        private VolumeDebugData m_DebugData;
 
         // --------------------------------------------------
         // Debug Data
@@ -56,48 +56,16 @@ namespace SimpleTools.Culling.Tests
         [ExecuteInEditMode]
         public void OnClickGenerate()
         {
-            m_VolumeData = null;
             m_StaticRenderers = Utils.GetStaticRenderers();
             Bounds bounds = Utils.GetSceneBounds(m_StaticRenderers);
             m_VolumeData = Utils.BuildHierarchicalVolumeGrid(bounds, 0);
+            m_PassedRenderers = Utils.BuildVisibilityForVolume(bounds, m_RayDensity, m_StaticRenderers, out m_DebugData, m_FilterAngle);
 
-            List<MeshRenderer> passedRenderers = new List<MeshRenderer>();
-            int rayCount = (int)(m_RayDensity * bounds.size.x * bounds.size.y * bounds.size.z);
-            m_TestData = new TestData[rayCount];
-
-            successfulRays = 0;
-
-            for (int r = 0; r < rayCount; r++)
-            {
-                Vector3 rayPosition = Utils.RandomPointWithinBounds(m_VolumeData.bounds);
-                Vector3 rayDirection = Utils.RandomSphericalDistributionVector();
-
-                bool rayHasHit = false;
-
-                MeshRenderer[] filteredRenderers = Utils.FilterRenderersByConeAngle(m_StaticRenderers, rayPosition, rayDirection, m_FilterAngle);
-                for (int i = 0; i < filteredRenderers.Length; i++)
-                {
-                    bool isHit = Utils.CheckAABBIntersection(rayPosition, rayDirection, filteredRenderers[i].bounds);
-                    if(isHit)
-                    {
-                        rayHasHit = true;
-                        successfulRays++;
-                        isHit = !passedRenderers.Contains(filteredRenderers[i]);
-                        if(isHit)
-                            passedRenderers.Add(filteredRenderers[i]);
-                    }
-                }
-
-                totalBounds = bounds.size;
-                totalRays = rayCount;
-                totalRenderers = m_StaticRenderers.Length;
-                successfulRenderers = passedRenderers.Count;
-
-                Vector3 rayEnd = Vector3.Scale(rayDirection, new Vector3(10, 10, 10));
-                m_TestData[r] = new TestData(new Vector3[2] { rayPosition, rayEnd }, rayHasHit);
-            }
-
-            m_PassedRenderers = passedRenderers.ToArray();
+            totalBounds = bounds.size;
+            totalRays = m_DebugData.rays.Length;
+            successfulRays = m_DebugData.rays.Where(s => s.pass).ToList().Count;
+            totalRenderers = m_StaticRenderers.Length;
+            successfulRenderers = m_PassedRenderers.Length;
             displayDebug = true;
 
             UnityEditor.SceneView.RepaintAll();
@@ -108,25 +76,9 @@ namespace SimpleTools.Culling.Tests
         {
             m_VolumeData = null;
             m_StaticRenderers = null;
-            m_TestData = null;
+            m_DebugData.rays = null;
             displayDebug = false;
             UnityEditor.SceneView.RepaintAll();
-        }
-
-        // --------------------------------------------------
-        // Data Structures
-
-        [Serializable]
-        public struct TestData
-        {
-            public TestData(Vector3[] ray, bool pass)
-            {
-                this.ray = ray;
-                this.pass = pass;
-            }
-
-            public Vector3[] ray;
-            public bool pass;
         }
 
         // ----------------------------------------------------------------------------------------------------//
@@ -137,7 +89,7 @@ namespace SimpleTools.Culling.Tests
         private void OnDrawGizmos()
         {
             DrawHierarchicalVolumeDebug();
-            DrawRendererDebug();
+            DebugUtils.DrawRendererDebug(m_StaticRenderers, m_PassedRenderers);
             DrawRayDebug();
         }
 
@@ -152,35 +104,16 @@ namespace SimpleTools.Culling.Tests
             Gizmos.DrawWireCube(m_VolumeData.bounds.center, m_VolumeData.bounds.size);
         }
 
-        private void DrawRendererDebug()
-        {
-            if (m_StaticRenderers == null)
-                return;
-
-            for (int i = 0; i < m_StaticRenderers.Length; i++)
-            {
-                bool pass = m_PassedRenderers.Contains(m_StaticRenderers[i]);
-                Transform transform = m_StaticRenderers[i].transform;
-                Mesh mesh = m_StaticRenderers[i].GetComponent<MeshFilter>().sharedMesh;
-                
-                Gizmos.color = pass ? EditorColors.occludeePass[0] : EditorColors.occludeeFail[0];
-                Gizmos.DrawWireMesh(mesh, transform.position, transform.rotation, transform.lossyScale);
-
-                Gizmos.color = pass ? EditorColors.occludeePass[1] : EditorColors.occludeeFail[1];
-                Gizmos.DrawMesh(mesh, transform.position, transform.rotation, transform.lossyScale);
-            }
-        }
-
         private void DrawRayDebug()
         {
-            if (m_TestData == null || m_DrawRays == false)
+            if (m_DebugData.rays == null || m_DrawRays == false)
                 return;
 
-            for (int i = 0; i < m_TestData.Length; i++)
+            for (int i = 0; i < m_DebugData.rays.Length; i++)
             {
-                bool pass = m_TestData[i].pass;
+                bool pass = m_DebugData.rays[i].pass;
                 Gizmos.color = pass ? EditorColors.occludeePass[0] : EditorColors.occludeeFail[1];
-                Gizmos.DrawLine(m_TestData[i].ray[0], m_TestData[i].ray[1]);
+                Gizmos.DrawLine(m_DebugData.rays[i].points[0], m_DebugData.rays[i].points[1]);
             }
         }
     }

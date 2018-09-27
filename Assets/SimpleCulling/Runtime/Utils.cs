@@ -152,6 +152,50 @@ namespace SimpleTools.Culling
 		}
 
         // --------------------------------------------------
+        // Visibility
+
+        public static MeshRenderer[] BuildVisibilityForVolume(Bounds bounds, int rayDensity, MeshRenderer[] staticRenderers, int coneAngle = 45)
+        {
+            VolumeDebugData debugData = new VolumeDebugData();
+            return BuildVisibilityForVolume(bounds, rayDensity, staticRenderers, out debugData, coneAngle);
+        }
+
+        public static MeshRenderer[] BuildVisibilityForVolume(Bounds bounds, int rayDensity, MeshRenderer[] staticRenderers, out VolumeDebugData volumeDebugData, int coneAngle = 45)
+        {
+            List<MeshRenderer> passedRenderers = new List<MeshRenderer>();
+            int rayCount = (int)(rayDensity * bounds.size.x * bounds.size.y * bounds.size.z);
+
+            volumeDebugData = new VolumeDebugData();
+            RayDebugData[] rayDebugData = new RayDebugData[rayCount];
+
+            for (int r = 0; r < rayCount; r++)
+            {
+                bool rayHasHit = false;
+
+                Vector3 rayPosition = RandomPointWithinBounds(bounds);
+                Vector3 rayDirection = RandomSphericalDistributionVector();
+
+                MeshRenderer[] filteredRenderers = FilterRenderersByConeAngle(staticRenderers, rayPosition, rayDirection, coneAngle);
+                for (int i = 0; i < filteredRenderers.Length; i++)
+                {
+                    if (CheckAABBIntersection(rayPosition, rayDirection, filteredRenderers[i].bounds))
+                    {
+                        rayHasHit = true;
+                        if (!passedRenderers.Contains(filteredRenderers[i]))
+                            passedRenderers.Add(filteredRenderers[i]);
+                    }
+                }
+
+                Vector3 rayEnd = Vector3.Scale(rayDirection, new Vector3(10, 10, 10));
+                rayDebugData[r] = new RayDebugData(new Vector3[2] { rayPosition, rayEnd }, rayHasHit);
+            }
+
+            volumeDebugData = new VolumeDebugData(rayDebugData, staticRenderers.Length, passedRenderers.Count);
+
+            return passedRenderers.ToArray();
+        }
+
+        // --------------------------------------------------
         // Occlusion
 
         public static string occluderContainerName = "OccluderProxies";
@@ -274,13 +318,75 @@ namespace SimpleTools.Culling
 		public OccluderData data;
 	}
 
-	// --------------------------------------------------
-	// Editor Constants
+    [Serializable]
+    public struct VolumeDebugData
+    {
+        public VolumeDebugData(RayDebugData[] rays, int totalRenderers, int visibleRenderers)
+        {
+            this.rays = rays;
+            this.totalRenderers = totalRenderers;
+            this.visibleRenderers = visibleRenderers;
+        }
+
+        public RayDebugData[] rays;
+        public int totalRenderers;
+        public int visibleRenderers;
+    }
+
+    [Serializable]
+    public struct RayDebugData
+    {
+        public RayDebugData(Vector3[] points, bool pass)
+        {
+            this.points = points;
+            this.pass = pass;
+        }
+
+        public Vector3[] points;
+        public bool pass;
+    }
+
+    // --------------------------------------------------
+    // Editor Constants
+
+    public static class DebugUtils
+    {
+        public static void DrawRendererDebug(MeshRenderer[] allRenderers, MeshRenderer[] passedRenderers)
+        {
+            if (allRenderers == null || passedRenderers == null)
+                return;
+
+            for (int i = 0; i < allRenderers.Length; i++)
+            {
+                bool isPassed = passedRenderers.Contains(allRenderers[i]);
+                Transform transform = allRenderers[i].transform;
+                Mesh mesh = allRenderers[i].GetComponent<MeshFilter>().sharedMesh;
+
+                Gizmos.color = isPassed ? EditorColors.occludeePass[0] : EditorColors.occludeeFail[0];
+                Gizmos.DrawWireMesh(mesh, transform.position, transform.rotation, transform.lossyScale);
+                Gizmos.color = isPassed ? EditorColors.occludeePass[1] : EditorColors.occludeeFail[1];
+                Gizmos.DrawMesh(mesh, transform.position, transform.rotation, transform.lossyScale);
+            }
+        }
+
+        public static void DrawRayDebug(Vector3 position, Vector3 direction)
+        {
+            Gizmos.color = EditorColors.ray[0];
+            Gizmos.DrawLine(position, position + Vector3.Scale(direction, new Vector3(10, 10, 10)));
+        }
+
+        public static void DrawConeDebug(Vector3 position, Vector3 direction, float angle)
+        {
+            DebugExtension.DebugCone(position, Vector3.Scale(direction, new Vector3(10, 10, 10)), EditorColors.visualiser[0], angle, 0);
+        }
+    }
 
 	public static class EditorColors
 	{
-        public static Color[] occludeePass = new Color[2] { new Color(1f, 1f, 1f, 1f), new Color(1f, 1f, 1f, 0.25f) };
-        public static Color[] occludeeFail = new Color[2] { new Color(0f, 0f, 0f, 1f), new Color(0f, 0f, 0f, 0.25f) };
+        public static Color[] ray = new Color[2] { new Color(0f, 1f, 0f, 1f), new Color(0f, 1f, 0f, 0.5f) };
+        public static Color[] visualiser = new Color[2] { new Color(0.5f, 0.5f, 0.5f, 1f), new Color(0.5f, 0.5f, 0.5f, 0.5f) };
+        public static Color[] occludeePass = new Color[2] { new Color(1f, 1f, 1f, 1f), new Color(1f, 1f, 1f, 0.5f) };
+        public static Color[] occludeeFail = new Color[2] { new Color(0f, 0f, 0f, 1f), new Color(0f, 0f, 0f, 0.5f) };
 
         // OLD
         public static Color occluderWire = new Color(0f, 1f, 1f, 0.5f);

@@ -45,7 +45,6 @@ namespace SimpleTools.Culling.Tests
                 string boundsDebug = "Bounds: " + visibility.totalBounds.x + "x" + visibility.totalBounds.x + "x" + visibility.totalBounds.x;
                 string raysDebug = "Rays: " + visibility.successfulRays + " out of " + visibility.totalRays + " hit (" + (int)(((float)visibility.successfulRays / (float)visibility.totalRays) * 100) + "%)";
                 string renderersDebug = "Renderers: " + visibility.successfulRenderers + " out of " + visibility.totalRenderers + " hit (" + (int)(((float)visibility.successfulRenderers / (float)visibility.totalRenderers) * 100) + "%)";
-                string debugString = boundsDebug + " " + raysDebug + " " + renderersDebug;
                 EditorGUILayout.LabelField(new GUIContent(boundsDebug));
                 EditorGUILayout.LabelField(new GUIContent(raysDebug));
                 EditorGUILayout.LabelField(new GUIContent(renderersDebug));

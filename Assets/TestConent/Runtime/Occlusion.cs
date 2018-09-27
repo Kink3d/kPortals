@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace SimpleTools.Culling.Tests
@@ -13,17 +14,17 @@ namespace SimpleTools.Culling.Tests
 		public Transform raySource;
 		public float maxDisatnce = 10;
 
-		// ----------------------------------------------------------------------------------------------------//
-		//                                               TEST                                                  //
-		// ----------------------------------------------------------------------------------------------------//
+        // ----------------------------------------------------------------------------------------------------//
+        //                                               TEST                                                  //
+        // ----------------------------------------------------------------------------------------------------//
 
-		// --------------------------------------------------
-		// Runtime Data
+        // --------------------------------------------------
+        // Runtime Data
 
-		[SerializeField]
-		private TestData[] m_TestData;
+        [SerializeField]
+        private MeshRenderer[] m_StaticRenderers;
 
-		[SerializeField]
+        [SerializeField]
 		private MeshRenderer[] m_PassedRenderers;
 
         [SerializeField]
@@ -34,69 +35,32 @@ namespace SimpleTools.Culling.Tests
 
         private void Update()
 		{
-			MeshRenderer[] staticRenderers = Utils.GetStaticRenderers();
-			m_TestData = new TestData[staticRenderers.Length];
+            m_StaticRenderers = Utils.GetStaticRenderers();
+            List<MeshRenderer> renderers = new List<MeshRenderer>();
 
-            if(m_Occluders == null)
-                m_Occluders = Utils.BuildOccluderProxyGeometry(transform, staticRenderers);
+            if (m_Occluders == null)
+                m_Occluders = Utils.BuildOccluderProxyGeometry(transform, m_StaticRenderers);
 
-            for (int i = 0; i < m_TestData.Length; i++)
+            for (int i = 0; i < m_StaticRenderers.Length; i++)
 			{
-				bool isHit = Utils.CheckAABBIntersection(raySource.position, raySource.forward, staticRenderers[i].bounds);
-				if(isHit)
-					isHit = Utils.CheckOcclusion(m_Occluders, staticRenderers[i], raySource.position, raySource.forward);
-
-				Vector3 rayVector = raySource.position + Vector3.Scale(raySource.forward, new Vector3(maxDisatnce, maxDisatnce, maxDisatnce));
-				Vector3[] rayData = new Vector3[2] {raySource.position, rayVector};
-				m_TestData[i] = new TestData(rayData, staticRenderers[i], isHit);
+				if(Utils.CheckAABBIntersection(raySource.position, raySource.forward, m_StaticRenderers[i].bounds))
+                {
+                    if(Utils.CheckOcclusion(m_Occluders, m_StaticRenderers[i], raySource.position, raySource.forward))
+                        renderers.Add(m_StaticRenderers[i]);
+                }
 			}
-		}
-
-        // --------------------------------------------------
-        // Data Structures
-
-        [Serializable]
-        public struct TestData
-		{
-			public TestData(Vector3[] ray, MeshRenderer renderer, bool pass)
-			{
-				this.ray = ray;
-				this.renderer = renderer;
-				this.pass = pass;
-			}
-
-			public Vector3[] ray;
-			public MeshRenderer renderer;
-			public bool pass;
-		}
-
-		// ----------------------------------------------------------------------------------------------------//
-		//                                              DEBUG                                                  //
-		// ----------------------------------------------------------------------------------------------------//
-
-		[ExecuteInEditMode]
-        private void OnDrawGizmos()
-        {
-			DrawIntersectionDebug();
+            m_PassedRenderers = renderers.ToArray();
         }
 
-		private void DrawIntersectionDebug()
-		{
-			if(m_TestData == null)
-				return;
+        // ----------------------------------------------------------------------------------------------------//
+        //                                              DEBUG                                                  //
+        // ----------------------------------------------------------------------------------------------------//
 
-			for(int i = 0; i < m_TestData.Length; i++)
-			{
-				Gizmos.color = EditorColors.debugBlackWire;
-				Gizmos.DrawLine(m_TestData[i].ray[0], m_TestData[i].ray[1]);
-
-				Transform transform = m_TestData[i].renderer.transform;
-				Gizmos.color = m_TestData[i].pass ? EditorColors.debugBlueFill : EditorColors.debugBlackFill;
-				Mesh mesh = m_TestData[i].renderer.GetComponent<MeshFilter>().sharedMesh;
-				Gizmos.DrawMesh(mesh, transform.position, transform.rotation, transform.lossyScale);
-				Gizmos.color = m_TestData[i].pass ? EditorColors.debugBlueWire : EditorColors.debugBlackWire;
-				Gizmos.DrawWireMesh(mesh, transform.position, transform.rotation, transform.lossyScale);
-			}
-		}
-	}
+        [ExecuteInEditMode]
+        private void OnDrawGizmos()
+        {
+            DebugUtils.DrawRayDebug(raySource.position, raySource.forward);
+            DebugUtils.DrawRendererDebug(m_StaticRenderers, m_PassedRenderers);
+        }
+    }
 }
