@@ -70,6 +70,43 @@ namespace SimpleTools.Culling
 		}
 
 		// --------------------------------------------------
+		// Intersection
+
+		public static bool CheckAABBIntersection(Vector3 position, Vector3 direction, Bounds bounds)
+		{ 
+			Vector3[] minMax = new Vector3[2] { bounds.min, bounds.max };
+
+			Vector3 inverseDirection = new Vector3(1 / direction.x, 1 / direction.y, 1 / direction.z);
+			int signX = (inverseDirection.x < 0 ? 1 : 0);
+			int signY = (inverseDirection.y < 0 ? 1 : 0);
+			int signZ = (inverseDirection.z < 0 ? 1 : 0);
+
+			float tmin = (minMax[signX].x - position.x) * inverseDirection.x; 
+			float tmax = (minMax[1 - signX].x - position.x) * inverseDirection.x; 
+			float tymin = (minMax[signY].y - position.y) * inverseDirection.y; 
+			float tymax = (minMax[1 - signY].y - position.y) * inverseDirection.y; 
+
+			if ((tmin > tymax) || (tymin > tmax)) 
+				return false; 
+			if (tymin > tmin) 
+				tmin = tymin; 
+			if (tymax<tmax) 
+				tmax = tymax; 
+
+			float tzmin = (minMax[signZ].z - position.z) * inverseDirection.z; 
+			float tzmax = (minMax[1 - signZ].z - position.z) * inverseDirection.z; 
+
+			if ((tmin > tzmax) || (tzmin > tmax)) 
+				return false; 
+			if (tzmin > tmin) 
+				tmin = tzmin; 
+			if (tzmax<tmax) 
+				tmax = tzmax; 
+
+			return true; 
+		}
+
+		// --------------------------------------------------
 		// Hirarchical Volume Grid
 
 		public static void IterateHierarchicalVolumeGrid(int count, int density, ref VolumeData data)
