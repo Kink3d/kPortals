@@ -11,19 +11,20 @@ namespace SimpleTools.Culling
 		public enum DebugMode { None, Occluders, Volumes }
 
 		// ----------------------------------------------------------------------------------------------------//
-		//                                              RUNTIME                                                //
+		//                                           PUBLIC FIELDS                                             //
 		// ----------------------------------------------------------------------------------------------------//
 
-		// --------------------------------------------------
-		// Public Fields
-
-		public string occluderTag = "Occluder"; // TD - Add option for layer
+		private string m_OccluderTag = "Occluder"; // TD - Expose and add option for layer
 
 		[SerializeField]
-        int m_VolumeDensity = 4;
+        private int m_VolumeDensity = 4;
 
 		[SerializeField]
-        DebugMode m_DebugMode = DebugMode.None;
+        private DebugMode m_DebugMode = DebugMode.None;
+
+		// ----------------------------------------------------------------------------------------------------//
+		//                                              RUNTIME                                                //
+		// ----------------------------------------------------------------------------------------------------//
 
 		// --------------------------------------------------
 		// Runtime Data
@@ -89,7 +90,7 @@ namespace SimpleTools.Culling
 			m_IsGenerating = true;
 
 			Transform container = Utils.NewObject(occluderContainerName, transform).transform;
-			List<MeshRenderer> occluderRenderers = m_StaticRenderers.Where(s => s.gameObject.tag == occluderTag).ToList();
+			List<MeshRenderer> occluderRenderers = m_StaticRenderers.Where(s => s.gameObject.tag == m_OccluderTag).ToList();
 			m_Occluders = new OccluderData[occluderRenderers.Count];
 			for(int i = 0; i < m_Occluders.Length; i++)
 			{
@@ -126,33 +127,9 @@ namespace SimpleTools.Culling
 			int count = 0;
 			if(count < m_VolumeDensity)
 			{
-				IterateHierarchicalVolumeGrid(count, ref data);
+				Utils.IterateHierarchicalVolumeGrid(count, m_VolumeDensity, ref data);
 			}
 			m_VolumeData = data;
-		}
-
-		[ExecuteInEditMode]
-		private void IterateHierarchicalVolumeGrid(int count, ref VolumeData data)
-		{
-			count++;
-			VolumeData[] childData = new VolumeData[8];
-			Vector3 half = new Vector3(0.5f, 0.5f, 0.5f);
-			for(int i = 0; i < childData.Length; i++)
-			{
-				Vector3 size = new Vector3(data.bounds.size.x * 0.5f, data.bounds.size.y * 0.5f, data.bounds.size.z * 0.5f);
-				float signX = (float)(i + 1) % 2 == 0 ? 1 : -1;  
-				float signY = i == 2 || i == 3 || i == 6 || i == 7 ? 1 : -1; 
-				float signZ = i == 4 || i == 5 || i == 6 || i == 7 ? 1 : -1;//(float)(i + 1) * 0.5f > 4 ? 1 : -1;
-				Vector3 position = data.bounds.center + new Vector3(signX * size.x * 0.5f, signY * size.y * 0.5f, signZ * size.z * 0.5f);
-				Bounds bounds = new Bounds(position, size);
-				childData[i] = new VolumeData(bounds, null, null);
-
-				if(count < m_VolumeDensity)
-				{
-					IterateHierarchicalVolumeGrid(count, ref childData[i]);
-				}
-			}
-			data.children = childData;
 		}
 
 		[ExecuteInEditMode]
@@ -187,7 +164,7 @@ namespace SimpleTools.Culling
             }
 			if (m_DebugMode == DebugMode.Volumes)
             {
-				DrawVolumeDebug();
+				DrawHierarchicalVolumeDebug();
             }
         }
 
@@ -206,28 +183,12 @@ namespace SimpleTools.Culling
 			}
 		}
 
-		private void DrawVolumeDebug()
+		private void DrawHierarchicalVolumeDebug()
 		{
 			if(m_VolumeData == null)
 				return;
 
-			IterateVolumeDebug(m_VolumeData);
-		}
-
-		private void IterateVolumeDebug(VolumeData data)
-		{
-			if(data.children != null && data.children.Length > 0)
-			{
-				for(int i = 0; i < data.children.Length; i++)
-					IterateVolumeDebug(data.children[i]);
-			}
-			else
-			{
-				Gizmos.color = EditorColors.volumeFill;
-				Gizmos.DrawCube(data.bounds.center, data.bounds.size);
-				Gizmos.color = EditorColors.volumeWire;
-				Gizmos.DrawWireCube(data.bounds.center, data.bounds.size);
-			}
+			Utils.IterateHierarchicalVolumeDebug(m_VolumeData);
 		}
 
 #endif
