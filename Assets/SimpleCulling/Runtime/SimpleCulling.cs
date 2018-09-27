@@ -28,6 +28,7 @@ namespace SimpleTools.Culling
 		// --------------------------------------------------
 		// Runtime Data
 
+		[SerializeField]
 		private VolumeData m_VolumeData;
 
 		// ----------------------------------------------------------------------------------------------------//
@@ -48,6 +49,7 @@ namespace SimpleTools.Culling
 		private static string occluderContainerName = "OccluderProxies";
 		private MeshRenderer[] m_StaticRenderers;
 		private OccluderData[] m_Occluders;
+		public OccluderData[] occluders { get { return m_Occluders; } }
 
 		// --------------------------------------------------
 		// Interface
@@ -89,8 +91,7 @@ namespace SimpleTools.Culling
 				GameObject proxyObj = Utils.NewObject(occluderObj.name, container, occluderTransform.position,occluderTransform.rotation, occluderTransform.lossyScale);
 				MeshCollider proxyCollider = proxyObj.AddComponent<MeshCollider>();
 				proxyCollider.sharedMesh = occluderRenderers[i].GetComponent<MeshFilter>().sharedMesh;
-				proxyCollider.enabled = false;
-				m_Occluders[i] = new OccluderData(proxyCollider);
+				m_Occluders[i] = new OccluderData(proxyCollider, occluderRenderers[i]);
 			}
 
 			m_IsGenerating = false;

@@ -25,6 +25,7 @@ namespace SimpleTools.Culling.Tests
 		// Runtime Data
 
 		private TestData[] m_TestData;
+		private MeshRenderer[] m_StaticRenderers;
 		private MeshRenderer[] m_PassedRenderers;
 
 		// --------------------------------------------------
@@ -32,12 +33,12 @@ namespace SimpleTools.Culling.Tests
 
 		private void Update()
 		{
-			MeshRenderer[] staticRenderers = Utils.GetStaticRenderers();
-			m_TestData = new TestData[staticRenderers.Length];
+			m_StaticRenderers = Utils.GetStaticRenderers();
+			m_TestData = new TestData[m_StaticRenderers.Length];
 			for(int i = 0; i < m_TestData.Length; i++)
-				m_TestData[i] = new TestData(new Vector3[3] { staticRenderers[i].bounds.center, raySource.position, raySource.position + raySource.forward}); 
+				m_TestData[i] = new TestData(new Vector3[3] { m_StaticRenderers[i].bounds.center, raySource.position, raySource.position + raySource.forward}); 
 
-			m_PassedRenderers = Utils.FilterRenderersByConeAngle(staticRenderers, raySource.position, raySource.forward, maxAngle);
+			m_PassedRenderers = Utils.FilterRenderersByConeAngle(m_StaticRenderers, raySource.position, raySource.forward, maxAngle);
 		}
 
 		// --------------------------------------------------
@@ -90,13 +91,15 @@ namespace SimpleTools.Culling.Tests
 			if(m_PassedRenderers == null)
 				return;
 					
-			for(int i = 0; i < m_PassedRenderers.Length; i++)
+			for(int i = 0; i < m_StaticRenderers.Length; i++)
 			{
-				Transform transform = m_PassedRenderers[i].transform;
-				Gizmos.color = EditorColors.debugBlueFill;
-				Mesh mesh = m_PassedRenderers[i].GetComponent<MeshFilter>().sharedMesh;
+				bool isPassed = m_PassedRenderers.Contains(m_StaticRenderers[i]);
+
+				Transform transform = m_StaticRenderers[i].transform;
+				Gizmos.color = isPassed ? EditorColors.debugBlueFill : EditorColors.debugBlackFill;
+				Mesh mesh = m_StaticRenderers[i].GetComponent<MeshFilter>().sharedMesh;
 				Gizmos.DrawMesh(mesh, transform.position, transform.rotation, transform.lossyScale);
-				Gizmos.color = EditorColors.debugBlueWire;
+				Gizmos.color = isPassed ? EditorColors.debugBlueWire : EditorColors.debugBlackFill;
 				Gizmos.DrawWireMesh(mesh, transform.position, transform.rotation, transform.lossyScale);
 			}
 		}

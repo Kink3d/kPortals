@@ -155,12 +155,14 @@ namespace SimpleTools.Culling
 	[Serializable]
 	public class OccluderData
 	{
-		public OccluderData(MeshCollider collider)
+		public OccluderData(MeshCollider collider, MeshRenderer renderer)
 		{
 			this.collider = collider;
+			this.renderer = renderer;
 		}
 
 		public MeshCollider collider;
+		public MeshRenderer renderer;
 	}
 
 	[Serializable]
@@ -187,8 +189,6 @@ namespace SimpleTools.Culling
 		public static Color occluderFill = new Color(0f, 1f, 1f, 1f);
 		public static Color volumeWire = new Color(1f, 1f, 1f, 0.5f);
 		public static Color volumeFill = new Color(1f, 1f, 1f, 0.1f);
-
-		// Debug
 		public static Color debugWhiteWire = new Color(1f, 1f, 1f, 1.0f);
 		public static Color debugBlackWire =new Color(0f, 0f, 0f, 1.0f);
 		public static Color debugBlueWire = new Color(0f, 1f, 1f, 1.0f);
