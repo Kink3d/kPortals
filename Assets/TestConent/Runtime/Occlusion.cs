@@ -1,12 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using UnityEngine;
 
 namespace SimpleTools.Culling.Tests
 {
 	[ExecuteInEditMode]
-	[RequireComponent(typeof(SimpleCulling))]
 	public class Occlusion : MonoBehaviour 
 	{
 		// ----------------------------------------------------------------------------------------------------//
@@ -29,30 +26,25 @@ namespace SimpleTools.Culling.Tests
 		[SerializeField]
 		private MeshRenderer[] m_PassedRenderers;
 
-		private SimpleCulling m_SimpleCulling;
-		public SimpleCulling simpleCulling
-		{
-			get
-			{
-				if(m_SimpleCulling == null)
-					m_SimpleCulling = GetComponent<SimpleCulling>();
-				return m_SimpleCulling;
-			}
-		}
+        [SerializeField]
+        private OccluderData[] m_Occluders;
 
-		// --------------------------------------------------
-		// Test Execution
+        // --------------------------------------------------
+        // Test Execution
 
-		private void Update()
+        private void Update()
 		{
 			MeshRenderer[] staticRenderers = Utils.GetStaticRenderers();
 			m_TestData = new TestData[staticRenderers.Length];
 
-			for(int i = 0; i < m_TestData.Length; i++)
+            if(m_Occluders == null)
+                m_Occluders = Utils.BuildOccluderProxyGeometry(transform, staticRenderers);
+
+            for (int i = 0; i < m_TestData.Length; i++)
 			{
 				bool isHit = Utils.CheckAABBIntersection(raySource.position, raySource.forward, staticRenderers[i].bounds);
 				if(isHit)
-					isHit = Utils.CheckOcclusion(simpleCulling.occluders, staticRenderers[i], raySource.position, raySource.forward);
+					isHit = Utils.CheckOcclusion(m_Occluders, staticRenderers[i], raySource.position, raySource.forward);
 
 				Vector3 rayVector = raySource.position + Vector3.Scale(raySource.forward, new Vector3(maxDisatnce, maxDisatnce, maxDisatnce));
 				Vector3[] rayData = new Vector3[2] {raySource.position, rayVector};
@@ -60,10 +52,11 @@ namespace SimpleTools.Culling.Tests
 			}
 		}
 
-		// --------------------------------------------------
-		// Data Structures
+        // --------------------------------------------------
+        // Data Structures
 
-		public struct TestData
+        [Serializable]
+        public struct TestData
 		{
 			public TestData(Vector3[] ray, MeshRenderer renderer, bool pass)
 			{

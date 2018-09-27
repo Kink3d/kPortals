@@ -38,7 +38,6 @@ namespace SimpleTools.Culling
 
 		[SerializeField]
 		private OccluderData[] m_Occluders;
-		public OccluderData[] occluders { get { return m_Occluders; } }
 
 		// ----------------------------------------------------------------------------------------------------//
 		//                                              EDITOR                                                 //
@@ -54,8 +53,7 @@ namespace SimpleTools.Culling
 
 		// --------------------------------------------------
 		// Editor Data
-
-		private static string occluderContainerName = "OccluderProxies";
+        
 		private MeshRenderer[] m_StaticRenderers;
 
 		// --------------------------------------------------
@@ -64,18 +62,21 @@ namespace SimpleTools.Culling
 		[ExecuteInEditMode]
         public void OnClickGenerate()
         {
-			m_StaticRenderers = Utils.GetStaticRenderers();
+            m_IsGenerating = true;
+            m_StaticRenderers = Utils.GetStaticRenderers();
 
 			if(m_GenerateOccluders)
 			{
 				ClearOccluderProxyGeometry();
-            	BuildOccluderProxyGeometry();
+                m_Occluders = Utils.BuildOccluderProxyGeometry(transform, m_StaticRenderers, m_OccluderTag);
 			}
 			if(m_GenerateVolumes)
 			{
 				ClearHierarchicalVolumeGrid();
-				BuildHierarchicalVolumeGrid();
+                Bounds bounds = Utils.GetSceneBounds(m_StaticRenderers);
+				m_VolumeData = Utils.BuildHierarchicalVolumeGrid(bounds, m_VolumeDensity);
 			}
+            m_IsGenerating = false;
         }
 
         [ExecuteInEditMode]
@@ -89,31 +90,10 @@ namespace SimpleTools.Culling
 		// Occluder Proxy Geometry
 
 		[ExecuteInEditMode]
-		private void BuildOccluderProxyGeometry()
-		{
-			m_IsGenerating = true;
-
-			Transform container = Utils.NewObject(occluderContainerName, transform).transform;
-			List<MeshRenderer> occluderRenderers = m_StaticRenderers.Where(s => s.gameObject.tag == m_OccluderTag).ToList();
-			m_Occluders = new OccluderData[occluderRenderers.Count];
-			for(int i = 0; i < m_Occluders.Length; i++)
-			{
-				GameObject occluderObj = occluderRenderers[i].gameObject;
-				Transform occluderTransform = occluderObj.transform;
-				GameObject proxyObj = Utils.NewObject(occluderObj.name, container, occluderTransform.position,occluderTransform.rotation, occluderTransform.lossyScale);
-				MeshCollider proxyCollider = proxyObj.AddComponent<MeshCollider>();
-				proxyCollider.sharedMesh = occluderRenderers[i].GetComponent<MeshFilter>().sharedMesh;
-				m_Occluders[i] = new OccluderData(proxyCollider, occluderRenderers[i]);
-			}
-
-			m_IsGenerating = false;
-		}
-
-		[ExecuteInEditMode]
 		private void ClearOccluderProxyGeometry()
 		{
 			m_Occluders = null;
-			Transform container = transform.Find(occluderContainerName);
+			Transform container = transform.Find(Utils.occluderContainerName);
 			if(container != null)
 			{
 				DestroyImmediate(container.gameObject);
@@ -124,34 +104,9 @@ namespace SimpleTools.Culling
 		// Hirarchical Volume Grid
 
 		[ExecuteInEditMode]
-		private void BuildHierarchicalVolumeGrid()
-		{
-			VolumeData data = new VolumeData(GetSceneBounds(), null, null);
-			int count = 0;
-			if(count < m_VolumeDensity)
-			{
-				Utils.IterateHierarchicalVolumeGrid(count, m_VolumeDensity, ref data);
-			}
-			m_VolumeData = data;
-		}
-
-		[ExecuteInEditMode]
 		private void ClearHierarchicalVolumeGrid()
 		{
 			m_VolumeData = null;
-		}
-
-		[ExecuteInEditMode]
-		private Bounds GetSceneBounds()
-		{
-			Bounds sceneBounds = new Bounds(Vector3.zero, Vector3.zero);
-			for(int i = 0; i < m_StaticRenderers.Length; i++)
-			{
-				sceneBounds.Encapsulate(m_StaticRenderers[i].bounds);
-			}
-			float maxSize = Mathf.Max(Mathf.Max(sceneBounds.size.x, sceneBounds.size.y), sceneBounds.size.z);
-			sceneBounds.size = new Vector3(maxSize, maxSize, maxSize);
-			return sceneBounds;
 		}
 
 		// ----------------------------------------------------------------------------------------------------//
@@ -191,10 +146,26 @@ namespace SimpleTools.Culling
 			if(m_VolumeData == null)
 				return;
 
-			Utils.IterateHierarchicalVolumeDebug(m_VolumeData);
+			IterateHierarchicalVolumeDebug(m_VolumeData);
 		}
 
+        public static void IterateHierarchicalVolumeDebug(VolumeData data)
+        {
+            if (data.children != null && data.children.Length > 0)
+            {
+                for (int i = 0; i < data.children.Length; i++)
+                    IterateHierarchicalVolumeDebug(data.children[i]);
+            }
+            else
+            {
+                Gizmos.color = EditorColors.volumeFill;
+                Gizmos.DrawCube(data.bounds.center, data.bounds.size);
+                Gizmos.color = EditorColors.volumeWire;
+                Gizmos.DrawWireCube(data.bounds.center, data.bounds.size);
+            }
+        }
+
 #endif
-		
-	}
+
+    }
 }

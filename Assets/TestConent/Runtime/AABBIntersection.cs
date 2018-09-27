@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 namespace SimpleTools.Culling.Tests
 {
 	[ExecuteInEditMode]
-	[RequireComponent(typeof(SimpleCulling))]
 	public class AABBIntersection : MonoBehaviour 
 	{
 		// ----------------------------------------------------------------------------------------------------//
@@ -43,10 +41,11 @@ namespace SimpleTools.Culling.Tests
 			}
 		}
 
-		// --------------------------------------------------
-		// Data Structures
+        // --------------------------------------------------
+        // Data Structures
 
-		public struct TestData
+        [Serializable]
+        public struct TestData
 		{
 			public TestData(Vector3[] ray, MeshRenderer renderer, bool pass)
 			{

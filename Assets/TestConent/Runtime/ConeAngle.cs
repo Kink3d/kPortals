@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using UnityEngine;
 
 namespace SimpleTools.Culling.Tests
 {
 	[ExecuteInEditMode]
-	[RequireComponent(typeof(SimpleCulling))]
 	public class ConeAngle : MonoBehaviour 
 	{
 
@@ -46,10 +44,11 @@ namespace SimpleTools.Culling.Tests
 			m_PassedRenderers = Utils.FilterRenderersByConeAngle(m_StaticRenderers, raySource.position, raySource.forward, maxAngle);
 		}
 
-		// --------------------------------------------------
-		// Data Structures
+        // --------------------------------------------------
+        // Data Structures
 
-		public struct TestData
+        [Serializable]
+        public struct TestData
 		{
 			public TestData(Vector3[] points)
 			{
@@ -72,8 +71,8 @@ namespace SimpleTools.Culling.Tests
         }
 
 		private void DrawVectorDebug()
-		{
-			if(m_TestData == null)
+        {
+            if (m_TestData == null)
 				return;
 
 			for(int i = 0; i < m_TestData.Length; i++)

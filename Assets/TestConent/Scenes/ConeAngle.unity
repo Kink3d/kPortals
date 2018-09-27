@@ -750,7 +750,7 @@ GameObject:
   - component: {fileID: 1231971948}
   - component: {fileID: 1231971949}
   m_Layer: 0
-  m_Name: SimpleCulling
+  m_Name: Test
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -782,12 +782,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_VolumeDensity: 2
   m_DebugMode: 0
+  m_GenerateVolumes: 1
+  m_GenerateOccluders: 1
   m_VolumeData:
     bounds:
       m_Center: {x: 0, y: 0, z: 0}
       m_Extent: {x: 0, y: 0, z: 0}
     children: []
     renderers: []
+  m_Occluders: []
 --- !u!114 &1231971949
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -801,6 +804,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   raySource: {fileID: 457652338}
   maxAngle: 45
+  m_StaticRenderers:
+  - {fileID: 431572729}
+  - {fileID: 457688884}
+  - {fileID: 1110372712}
+  - {fileID: 1197619216}
+  - {fileID: 1226219646}
+  m_PassedRenderers:
+  - {fileID: 457688884}
+  - {fileID: 1197619216}
+  - {fileID: 1226219646}
 --- !u!1 &1435618229
 GameObject:
   m_ObjectHideFlags: 0

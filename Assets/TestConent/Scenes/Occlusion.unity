@@ -747,10 +747,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1231971947}
-  - component: {fileID: 1231971948}
   - component: {fileID: 1231971949}
   m_Layer: 0
-  m_Name: SimpleCulling
+  m_Name: Test
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -767,391 +766,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1851626786}
+  - {fileID: 1461408079}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1231971948
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1231971946}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 653893ee17490bb4795c982bbe8d5a3c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_VolumeDensity: 2
-  m_DebugMode: 0
-  m_VolumeData:
-    bounds:
-      m_Center: {x: 0.75000024, y: 1, z: -1.7500005}
-      m_Extent: {x: 4.75, y: 4.75, z: 4.75}
-    children:
-    - bounds:
-        m_Center: {x: -1.6249998, y: -1.375, z: -4.1250005}
-        m_Extent: {x: 2.375, y: 2.375, z: 2.375}
-      children:
-      - bounds:
-          m_Center: {x: -2.8124998, y: -2.5625, z: -5.3125005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: -0.43749976, y: -2.5625, z: -5.3125005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: -2.8124998, y: -0.1875, z: -5.3125005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: -0.43749976, y: -0.1875, z: -5.3125005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: -2.8124998, y: -2.5625, z: -2.9375005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: -0.43749976, y: -2.5625, z: -2.9375005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: -2.8124998, y: -0.1875, z: -2.9375005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: -0.43749976, y: -0.1875, z: -2.9375005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      renderers: []
-    - bounds:
-        m_Center: {x: 3.1250002, y: -1.375, z: -4.1250005}
-        m_Extent: {x: 2.375, y: 2.375, z: 2.375}
-      children:
-      - bounds:
-          m_Center: {x: 1.9375002, y: -2.5625, z: -5.3125005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: 4.3125, y: -2.5625, z: -5.3125005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: 1.9375002, y: -0.1875, z: -5.3125005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: 4.3125, y: -0.1875, z: -5.3125005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: 1.9375002, y: -2.5625, z: -2.9375005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: 4.3125, y: -2.5625, z: -2.9375005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: 1.9375002, y: -0.1875, z: -2.9375005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: 4.3125, y: -0.1875, z: -2.9375005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      renderers: []
-    - bounds:
-        m_Center: {x: -1.6249998, y: 3.375, z: -4.1250005}
-        m_Extent: {x: 2.375, y: 2.375, z: 2.375}
-      children:
-      - bounds:
-          m_Center: {x: -2.8124998, y: 2.1875, z: -5.3125005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: -0.43749976, y: 2.1875, z: -5.3125005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: -2.8124998, y: 4.5625, z: -5.3125005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: -0.43749976, y: 4.5625, z: -5.3125005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: -2.8124998, y: 2.1875, z: -2.9375005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: -0.43749976, y: 2.1875, z: -2.9375005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: -2.8124998, y: 4.5625, z: -2.9375005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: -0.43749976, y: 4.5625, z: -2.9375005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      renderers: []
-    - bounds:
-        m_Center: {x: 3.1250002, y: 3.375, z: -4.1250005}
-        m_Extent: {x: 2.375, y: 2.375, z: 2.375}
-      children:
-      - bounds:
-          m_Center: {x: 1.9375002, y: 2.1875, z: -5.3125005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: 4.3125, y: 2.1875, z: -5.3125005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: 1.9375002, y: 4.5625, z: -5.3125005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: 4.3125, y: 4.5625, z: -5.3125005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: 1.9375002, y: 2.1875, z: -2.9375005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: 4.3125, y: 2.1875, z: -2.9375005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: 1.9375002, y: 4.5625, z: -2.9375005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: 4.3125, y: 4.5625, z: -2.9375005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      renderers: []
-    - bounds:
-        m_Center: {x: -1.6249998, y: -1.375, z: 0.6249995}
-        m_Extent: {x: 2.375, y: 2.375, z: 2.375}
-      children:
-      - bounds:
-          m_Center: {x: -2.8124998, y: -2.5625, z: -0.5625005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: -0.43749976, y: -2.5625, z: -0.5625005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: -2.8124998, y: -0.1875, z: -0.5625005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: -0.43749976, y: -0.1875, z: -0.5625005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: -2.8124998, y: -2.5625, z: 1.8124995}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: -0.43749976, y: -2.5625, z: 1.8124995}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: -2.8124998, y: -0.1875, z: 1.8124995}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: -0.43749976, y: -0.1875, z: 1.8124995}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      renderers: []
-    - bounds:
-        m_Center: {x: 3.1250002, y: -1.375, z: 0.6249995}
-        m_Extent: {x: 2.375, y: 2.375, z: 2.375}
-      children:
-      - bounds:
-          m_Center: {x: 1.9375002, y: -2.5625, z: -0.5625005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: 4.3125, y: -2.5625, z: -0.5625005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: 1.9375002, y: -0.1875, z: -0.5625005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: 4.3125, y: -0.1875, z: -0.5625005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: 1.9375002, y: -2.5625, z: 1.8124995}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: 4.3125, y: -2.5625, z: 1.8124995}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: 1.9375002, y: -0.1875, z: 1.8124995}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: 4.3125, y: -0.1875, z: 1.8124995}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      renderers: []
-    - bounds:
-        m_Center: {x: -1.6249998, y: 3.375, z: 0.6249995}
-        m_Extent: {x: 2.375, y: 2.375, z: 2.375}
-      children:
-      - bounds:
-          m_Center: {x: -2.8124998, y: 2.1875, z: -0.5625005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: -0.43749976, y: 2.1875, z: -0.5625005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: -2.8124998, y: 4.5625, z: -0.5625005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: -0.43749976, y: 4.5625, z: -0.5625005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: -2.8124998, y: 2.1875, z: 1.8124995}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: -0.43749976, y: 2.1875, z: 1.8124995}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: -2.8124998, y: 4.5625, z: 1.8124995}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: -0.43749976, y: 4.5625, z: 1.8124995}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      renderers: []
-    - bounds:
-        m_Center: {x: 3.1250002, y: 3.375, z: 0.6249995}
-        m_Extent: {x: 2.375, y: 2.375, z: 2.375}
-      children:
-      - bounds:
-          m_Center: {x: 1.9375002, y: 2.1875, z: -0.5625005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: 4.3125, y: 2.1875, z: -0.5625005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: 1.9375002, y: 4.5625, z: -0.5625005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: 4.3125, y: 4.5625, z: -0.5625005}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: 1.9375002, y: 2.1875, z: 1.8124995}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: 4.3125, y: 2.1875, z: 1.8124995}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: 1.9375002, y: 4.5625, z: 1.8124995}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      - bounds:
-          m_Center: {x: 4.3125, y: 4.5625, z: 1.8124995}
-          m_Extent: {x: 1.1875, y: 1.1875, z: 1.1875}
-        children: []
-        renderers: []
-      renderers: []
-    renderers: []
-  m_Occluders:
-  - collider: {fileID: 1275026913}
-    renderer: {fileID: 1507893979}
 --- !u!114 &1231971949
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1166,6 +784,9 @@ MonoBehaviour:
   raySource: {fileID: 457652338}
   maxDisatnce: 10
   m_PassedRenderers: []
+  m_Occluders:
+  - collider: {fileID: 1812030215}
+    renderer: {fileID: 1507893979}
 --- !u!1 &1275026912
 GameObject:
   m_ObjectHideFlags: 0
@@ -1241,6 +862,35 @@ Transform:
   - {fileID: 457688882}
   m_Father: {fileID: 0}
   m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1461408078
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1461408079}
+  m_Layer: 0
+  m_Name: OccluderProxies
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1461408079
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1461408078}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1812030216}
+  m_Father: {fileID: 1231971947}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1507893977
 GameObject:
@@ -1327,6 +977,49 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!1 &1812030214
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1812030216}
+  - component: {fileID: 1812030215}
+  m_Layer: 0
+  m_Name: Occluder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!64 &1812030215
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1812030214}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1812030216
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1812030214}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 4, y: 1, z: -2.5}
+  m_LocalScale: {x: 8.000002, y: 2, z: 1.0000002}
+  m_Children: []
+  m_Father: {fileID: 1461408079}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1851626785
 GameObject:
   m_ObjectHideFlags: 0
