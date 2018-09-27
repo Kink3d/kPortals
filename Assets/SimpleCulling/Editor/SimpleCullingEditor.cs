@@ -10,7 +10,11 @@ namespace SimpleTools.Culling
         internal class Styles
         {
 			// Groups
-			public static GUIContent debugSettingsText = EditorGUIUtility.TrTextContent("Debug Settings");
+			public static GUIContent bakeSettingsText = EditorGUIUtility.TrTextContent("Bake Settings");
+            public static GUIContent debugSettingsText = EditorGUIUtility.TrTextContent("Debug Settings");
+
+			// Bake Settings
+            public static GUIContent volumeDensityText = EditorGUIUtility.TrTextContent("Volume Density", "...");
 
             // Debug Settings
             public static GUIContent debugModeText = EditorGUIUtility.TrTextContent("Debug Mode", string.Format("...", Environment.NewLine));
@@ -21,15 +25,17 @@ namespace SimpleTools.Culling
             public static GUIContent clearText = EditorGUIUtility.TrTextContent("Clear", "...");
         }
 
+		bool m_BakeSettingsFoldout = false;
         bool m_DebugSettingsFoldout = false;
 
-		SerializedProperty m_VolumeSizeProp;
+		SerializedProperty m_VolumeDensityProp;
         SerializedProperty m_DebugModeProp;
 
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
 
+			DrawBakeSettings();
             DrawDebugSettings();
             DrawBakeTools();
 
@@ -39,6 +45,19 @@ namespace SimpleTools.Culling
         void OnEnable()
         {
             m_DebugModeProp = serializedObject.FindProperty("m_DebugMode");
+			m_VolumeDensityProp = serializedObject.FindProperty("m_VolumeDensity");
+        }
+
+		void DrawBakeSettings()
+        {
+            m_BakeSettingsFoldout = EditorGUILayout.Foldout(m_BakeSettingsFoldout, Styles.bakeSettingsText, true);
+            if (m_BakeSettingsFoldout)
+            {
+                EditorGUI.indentLevel++;
+                EditorGUILayout.PropertyField(m_VolumeDensityProp, Styles.volumeDensityText, true);
+                EditorGUI.indentLevel--;
+                EditorGUILayout.Space();
+            }
         }
 
         void DrawDebugSettings()

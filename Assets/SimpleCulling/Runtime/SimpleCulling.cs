@@ -8,7 +8,7 @@ namespace SimpleTools.Culling
 {
 	public class SimpleCulling : MonoBehaviour 
 	{
-		public enum DebugMode { None, Occluders }
+		public enum DebugMode { None, Occluders, Volumes }
 
 		// ----------------------------------------------------------------------------------------------------//
 		//                                              RUNTIME                                                //
@@ -20,7 +20,15 @@ namespace SimpleTools.Culling
 		public string occluderTag = "Occluder"; // TD - Add option for layer
 
 		[SerializeField]
+        int m_VolumeDensity = 4;
+
+		[SerializeField]
         DebugMode m_DebugMode = DebugMode.None;
+
+		// --------------------------------------------------
+		// Runtime Data
+
+		private VolumeData m_VolumeData;
 
 		// ----------------------------------------------------------------------------------------------------//
 		//                                              EDITOR                                                 //
@@ -48,14 +56,19 @@ namespace SimpleTools.Culling
         public void OnClickGenerate()
         {
 			m_StaticRenderers = GetStaticRenderers();
-			DeleteOccluderProxyGeometry();
+
+			ClearOccluderProxyGeometry();
             BuildOccluderProxyGeometry();
+
+			ClearHierarchicalVolumeGrid();
+			BuildHierarchicalVolumeGrid();
         }
 
         [ExecuteInEditMode]
         public void OnClickCancel()
         {
-            DeleteOccluderProxyGeometry();
+            ClearOccluderProxyGeometry();
+			ClearHierarchicalVolumeGrid();
         }
 
 		// --------------------------------------------------
@@ -93,7 +106,7 @@ namespace SimpleTools.Culling
 		}
 
 		[ExecuteInEditMode]
-		private void DeleteOccluderProxyGeometry()
+		private void ClearOccluderProxyGeometry()
 		{
 			m_Occluders = null;
 			Transform container = transform.Find(occluderContainerName);
@@ -101,6 +114,64 @@ namespace SimpleTools.Culling
 			{
 				DestroyImmediate(container.gameObject);
 			}
+		}
+
+		// --------------------------------------------------
+		// Hirarchical Volume Grid
+
+		[ExecuteInEditMode]
+		private void BuildHierarchicalVolumeGrid()
+		{
+			VolumeData data = new VolumeData(GetSceneBounds(), null, null);
+			int count = 0;
+			if(count < m_VolumeDensity)
+			{
+				IterateHierarchicalVolumeGrid(count, ref data);
+			}
+			m_VolumeData = data;
+		}
+
+		[ExecuteInEditMode]
+		private void IterateHierarchicalVolumeGrid(int count, ref VolumeData data)
+		{
+			count++;
+			VolumeData[] childData = new VolumeData[8];
+			Vector3 half = new Vector3(0.5f, 0.5f, 0.5f);
+			for(int i = 0; i < childData.Length; i++)
+			{
+				Vector3 size = new Vector3(data.bounds.size.x * 0.5f, data.bounds.size.y * 0.5f, data.bounds.size.z * 0.5f);
+				float signX = (float)(i + 1) % 2 == 0 ? 1 : -1;  
+				float signY = i == 2 || i == 3 || i == 6 || i == 7 ? 1 : -1; 
+				float signZ = i == 4 || i == 5 || i == 6 || i == 7 ? 1 : -1;//(float)(i + 1) * 0.5f > 4 ? 1 : -1;
+				Vector3 position = data.bounds.center + new Vector3(signX * size.x * 0.5f, signY * size.y * 0.5f, signZ * size.z * 0.5f);
+				Bounds bounds = new Bounds(position, size);
+				childData[i] = new VolumeData(bounds, null, null);
+
+				if(count < m_VolumeDensity)
+				{
+					IterateHierarchicalVolumeGrid(count, ref childData[i]);
+				}
+			}
+			data.children = childData;
+		}
+
+		[ExecuteInEditMode]
+		private void ClearHierarchicalVolumeGrid()
+		{
+			m_VolumeData = null;
+		}
+
+		[ExecuteInEditMode]
+		private Bounds GetSceneBounds()
+		{
+			Bounds sceneBounds = new Bounds(Vector3.zero, Vector3.zero);
+			for(int i = 0; i < m_StaticRenderers.Length; i++)
+			{
+				sceneBounds.Encapsulate(m_StaticRenderers[i].bounds);
+			}
+			float maxSize = Mathf.Max(Mathf.Max(sceneBounds.size.x, sceneBounds.size.y), sceneBounds.size.z);
+			sceneBounds.size = new Vector3(maxSize, maxSize, maxSize);
+			return sceneBounds;
 		}
 
 		// ----------------------------------------------------------------------------------------------------//
@@ -113,6 +184,10 @@ namespace SimpleTools.Culling
             if (m_DebugMode == DebugMode.Occluders)
             {
 				DrawOccluderDebug();
+            }
+			if (m_DebugMode == DebugMode.Volumes)
+            {
+				DrawVolumeDebug();
             }
         }
 
@@ -128,6 +203,30 @@ namespace SimpleTools.Culling
 				Gizmos.DrawMesh(m_Occluders[i].collider.sharedMesh, transform.position, transform.rotation, transform.lossyScale);
 				Gizmos.color = EditorColors.occluderWire;
 				Gizmos.DrawWireMesh(m_Occluders[i].collider.sharedMesh, transform.position, transform.rotation, transform.lossyScale);
+			}
+		}
+
+		private void DrawVolumeDebug()
+		{
+			if(m_VolumeData == null)
+				return;
+
+			IterateVolumeDebug(m_VolumeData);
+		}
+
+		private void IterateVolumeDebug(VolumeData data)
+		{
+			if(data.children != null && data.children.Length > 0)
+			{
+				for(int i = 0; i < data.children.Length; i++)
+					IterateVolumeDebug(data.children[i]);
+			}
+			else
+			{
+				Gizmos.color = EditorColors.volumeFill;
+				Gizmos.DrawCube(data.bounds.center, data.bounds.size);
+				Gizmos.color = EditorColors.volumeWire;
+				Gizmos.DrawWireCube(data.bounds.center, data.bounds.size);
 			}
 		}
 

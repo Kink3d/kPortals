@@ -40,9 +40,9 @@ namespace SimpleTools.Culling
 	{
 		public MeshCollider collider;
 
-		public OccluderData(MeshCollider col)
+		public OccluderData(MeshCollider collider)
 		{
-			collider = col;
+			this.collider = collider;
 		}
 	}
 
@@ -52,6 +52,13 @@ namespace SimpleTools.Culling
 		public Bounds bounds;
 		public VolumeData[] children;
 		public Renderer[] renderers;
+
+		public VolumeData(Bounds bounds, VolumeData[] children, Renderer[] renderers)
+		{
+			this.bounds = bounds;
+			this.children = children;
+			this.renderers = renderers;
+		}
 	}
 
 	// --------------------------------------------------
@@ -61,5 +68,7 @@ namespace SimpleTools.Culling
 	{
 		public static Color occluderWire = new Color(0f, 1f, 1f, 0.5f);
 		public static Color occluderFill = new Color(0f, 1f, 1f, 1f);
+		public static Color volumeWire = new Color(1f, 1f, 1f, 0.5f);
+		public static Color volumeFill = new Color(1f, 1f, 1f, 0.1f);
 	}
 }
