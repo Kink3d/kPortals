@@ -29,7 +29,16 @@ namespace SimpleTools.Culling
 		// Runtime Data
 
 		[SerializeField]
+		private bool m_GenerateVolumes = true;
+		[SerializeField]
+		private bool m_GenerateOccluders = true;
+
+		[SerializeField]
 		private VolumeData m_VolumeData;
+
+		[SerializeField]
+		private OccluderData[] m_Occluders;
+		public OccluderData[] occluders { get { return m_Occluders; } }
 
 		// ----------------------------------------------------------------------------------------------------//
 		//                                              EDITOR                                                 //
@@ -48,8 +57,6 @@ namespace SimpleTools.Culling
 
 		private static string occluderContainerName = "OccluderProxies";
 		private MeshRenderer[] m_StaticRenderers;
-		private OccluderData[] m_Occluders;
-		public OccluderData[] occluders { get { return m_Occluders; } }
 
 		// --------------------------------------------------
 		// Interface
@@ -59,11 +66,16 @@ namespace SimpleTools.Culling
         {
 			m_StaticRenderers = Utils.GetStaticRenderers();
 
-			ClearOccluderProxyGeometry();
-            BuildOccluderProxyGeometry();
-
-			ClearHierarchicalVolumeGrid();
-			BuildHierarchicalVolumeGrid();
+			if(m_GenerateOccluders)
+			{
+				ClearOccluderProxyGeometry();
+            	BuildOccluderProxyGeometry();
+			}
+			if(m_GenerateVolumes)
+			{
+				ClearHierarchicalVolumeGrid();
+				BuildHierarchicalVolumeGrid();
+			}
         }
 
         [ExecuteInEditMode]

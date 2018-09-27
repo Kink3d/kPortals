@@ -46,6 +46,23 @@ namespace SimpleTools.Culling
 			return input.Where( s => Utils.AngleBetweenThreePoints(conePosition, rayEnd, s.bounds.center) < Utils.DegreesToRadians(coneAngle)).ToArray();
 		}
 
+		public static OccluderHit[] FilterHitsByOccluders(OccluderData[] occluders, RaycastHit[] hits)
+		{
+			if(occluders.Length == 0 || hits.Length == 0)
+				return null;
+			
+			Dictionary<Collider, OccluderData> occluderDictionary = occluders.ToDictionary(s => s.collider as Collider);
+			List<OccluderHit> occluderHits = new List<OccluderHit>(); // TD - Remove GC
+			foreach(RaycastHit hit in hits)
+			{
+				OccluderData hitOccluder;
+				if(occluderDictionary.TryGetValue(hit.collider, out hitOccluder))
+					occluderHits.Add(new OccluderHit(hit.point, hitOccluder));
+			}
+			
+			return occluderHits.ToArray();
+		}
+
 		// --------------------------------------------------
 		// Geometry
 
@@ -57,10 +74,6 @@ namespace SimpleTools.Culling
 			var cross = Vector3.Cross(v1, v2);
 			var dot = Vector3.Dot(v1, v2);
 			var angle = Mathf.Atan2(cross.magnitude, dot);
-
-			//var test = Vector3.Dot(Vector3.up, cross);
-			//if (test < 0.0) 
-			//	angle = -angle;
 			return (float) angle;
 		}
 
@@ -107,13 +120,35 @@ namespace SimpleTools.Culling
 		}
 
 		// --------------------------------------------------
+		// Occlusion
+
+		public static bool CheckOcclusion(OccluderData[] occluders, MeshRenderer occludee, Vector3 position, Vector3 direction)
+		{
+			if(occluders == null)
+				return true;
+
+			RaycastHit[] allHits = Physics.RaycastAll(position, direction);
+			if(allHits.Length == 0)
+				return true;
+			
+			OccluderHit[] occluderHits = FilterHitsByOccluders(occluders, allHits);
+			if(occluderHits == null || occluderHits.Length == 0)
+				return true;
+
+			occluderHits.OrderBy(s => Vector3.Distance(position, s.point));
+			if(occluderHits[0].data.renderer == occludee)
+				return true;
+
+			return Vector3.Distance(position, occluderHits[0].point) > Vector3.Distance(position, occludee.bounds.center); // TD - Need intersection point with AABB\
+		}
+
+		// --------------------------------------------------
 		// Hirarchical Volume Grid
 
 		public static void IterateHierarchicalVolumeGrid(int count, int density, ref VolumeData data)
 		{
 			count++;
 			VolumeData[] childData = new VolumeData[8];
-			Vector3 half = new Vector3(0.5f, 0.5f, 0.5f);
 			for(int i = 0; i < childData.Length; i++)
 			{
 				Vector3 size = new Vector3(data.bounds.size.x * 0.5f, data.bounds.size.y * 0.5f, data.bounds.size.z * 0.5f);
@@ -153,19 +188,6 @@ namespace SimpleTools.Culling
 	// Data Structures
 
 	[Serializable]
-	public class OccluderData
-	{
-		public OccluderData(MeshCollider collider, MeshRenderer renderer)
-		{
-			this.collider = collider;
-			this.renderer = renderer;
-		}
-
-		public MeshCollider collider;
-		public MeshRenderer renderer;
-	}
-
-	[Serializable]
 	public class VolumeData
 	{
 		public VolumeData(Bounds bounds, VolumeData[] children, Renderer[] renderers)
@@ -178,6 +200,31 @@ namespace SimpleTools.Culling
 		public Bounds bounds;
 		public VolumeData[] children;
 		public Renderer[] renderers;
+	}
+
+	[Serializable]
+	public class OccluderData
+	{
+		public OccluderData(MeshCollider collider, MeshRenderer renderer)
+		{
+			this.collider = collider;
+			this.renderer = renderer;
+		}
+
+		public MeshCollider collider;
+		public MeshRenderer renderer;
+	}
+
+	public struct OccluderHit
+	{
+		public OccluderHit(Vector3 point, OccluderData data)
+		{
+			this.point = point;
+			this.data = data;
+		}
+
+		public Vector3 point;
+		public OccluderData data;
 	}
 
 	// --------------------------------------------------

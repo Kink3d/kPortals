@@ -21,7 +21,10 @@ namespace SimpleTools.Culling.Tests
 		// --------------------------------------------------
 		// Runtime Data
 
+		[SerializeField]		
 		private TestData[] m_TestData;
+
+		[SerializeField]
 		private MeshRenderer[] m_PassedRenderers;
 
 		// --------------------------------------------------

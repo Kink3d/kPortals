@@ -23,8 +23,12 @@ namespace SimpleTools.Culling.Tests
 		// --------------------------------------------------
 		// Runtime Data
 
+		[SerializeField]
 		private TestData[] m_TestData;
+
+		[SerializeField]
 		private MeshRenderer[] m_PassedRenderers;
+
 		private SimpleCulling m_SimpleCulling;
 		public SimpleCulling simpleCulling
 		{
@@ -47,43 +51,13 @@ namespace SimpleTools.Culling.Tests
 			for(int i = 0; i < m_TestData.Length; i++)
 			{
 				bool isHit = Utils.CheckAABBIntersection(raySource.position, raySource.forward, staticRenderers[i].bounds);
-				List<RaycastHit> hits = Physics.RaycastAll(raySource.position, raySource.forward).ToList(); // TD - Remove GC
-				if(isHit && hits.Count > 0)
-				{
-					List<OccluderHit> occluderHits = new List<OccluderHit>(); // TD - Remove GC
-					foreach(OccluderData data in simpleCulling.occluders) // TD - Optimise check
-					{
-						foreach(RaycastHit hit in hits)
-						{
-							if(hit.collider == data.collider)
-								occluderHits.Add(new OccluderHit(hit.point, data));
-						}
-					}
-
-					if(occluderHits.Count > 0) // TD - Too many hit checks
-					{
-						occluderHits.OrderBy(s => Vector3.Distance(raySource.position, s.point));
-						if(occluderHits[0].data.renderer != staticRenderers[i]) // TD - Fix check for matching objects
-							isHit = Vector3.Distance(raySource.position, occluderHits[0].point) > Vector3.Distance(raySource.position, staticRenderers[i].bounds.center); // TD - Need intersection point with AABB
-					}
-				}
+				if(isHit)
+					isHit = Utils.CheckOcclusion(simpleCulling.occluders, staticRenderers[i], raySource.position, raySource.forward);
 
 				Vector3 rayVector = raySource.position + Vector3.Scale(raySource.forward, new Vector3(maxDisatnce, maxDisatnce, maxDisatnce));
 				Vector3[] rayData = new Vector3[2] {raySource.position, rayVector};
 				m_TestData[i] = new TestData(rayData, staticRenderers[i], isHit);
 			}
-		}
-
-		public struct OccluderHit
-		{
-			public OccluderHit(Vector3 point, OccluderData data)
-			{
-				this.point = point;
-				this.data = data;
-			}
-
-			public Vector3 point;
-			public OccluderData data;
 		}
 
 		// --------------------------------------------------
