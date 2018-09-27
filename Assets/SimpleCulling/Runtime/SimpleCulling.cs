@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -56,7 +55,7 @@ namespace SimpleTools.Culling
 		[ExecuteInEditMode]
         public void OnClickGenerate()
         {
-			m_StaticRenderers = GetStaticRenderers();
+			m_StaticRenderers = Utils.GetStaticRenderers();
 
 			ClearOccluderProxyGeometry();
             BuildOccluderProxyGeometry();
@@ -71,15 +70,6 @@ namespace SimpleTools.Culling
             ClearOccluderProxyGeometry();
 			ClearHierarchicalVolumeGrid();
         }
-
-		// --------------------------------------------------
-		// Static Renderers
-
-		[ExecuteInEditMode]
-		private MeshRenderer[] GetStaticRenderers()
-		{
-			return FindObjectsOfType<MeshRenderer>().Where(s => s.gameObject.isStatic).ToArray();
-		}
 
 		// --------------------------------------------------
 		// Occluder Proxy Geometry

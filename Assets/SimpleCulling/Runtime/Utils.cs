@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace SimpleTools.Culling
@@ -29,6 +30,43 @@ namespace SimpleTools.Culling
 			transform.localScale = transform.InverseTransformVector(scale);
 			transform.rotation = rotation;
 			return obj;
+		}
+
+		// --------------------------------------------------
+		// Scene Data
+
+		public static MeshRenderer[] GetStaticRenderers()
+		{
+			return UnityEngine.Object.FindObjectsOfType<MeshRenderer>().Where(s => s.gameObject.isStatic).ToArray();
+		}
+
+		public static MeshRenderer[] FilterRenderersByConeAngle(MeshRenderer[] input, Vector3 conePosition, Vector3 coneDirection, float coneAngle)
+		{
+			Vector3 rayEnd = conePosition + coneDirection; 
+			return input.Where( s => Utils.AngleBetweenThreePoints(conePosition, rayEnd, s.bounds.center) < Utils.DegreesToRadians(coneAngle)).ToArray();
+		}
+
+		// --------------------------------------------------
+		// Geometry
+
+		public static float AngleBetweenThreePoints(Vector3 center, Vector3 pointA, Vector3 pointB)
+		{
+			var v1 = pointA - center;
+			var v2 = pointB - pointA;
+
+			var cross = Vector3.Cross(v1, v2);
+			var dot = Vector3.Dot(v1, v2);
+			var angle = Mathf.Atan2(cross.magnitude, dot);
+
+			//var test = Vector3.Dot(Vector3.up, cross);
+			//if (test < 0.0) 
+			//	angle = -angle;
+			return (float) angle;
+		}
+
+		public static double DegreesToRadians(double angle)
+		{
+			return (Math.PI / 180) * angle;
 		}
 
 		// --------------------------------------------------
@@ -80,27 +118,27 @@ namespace SimpleTools.Culling
 	[Serializable]
 	public class OccluderData
 	{
-		public MeshCollider collider;
-
 		public OccluderData(MeshCollider collider)
 		{
 			this.collider = collider;
 		}
+
+		public MeshCollider collider;
 	}
 
 	[Serializable]
 	public class VolumeData
 	{
-		public Bounds bounds;
-		public VolumeData[] children;
-		public Renderer[] renderers;
-
 		public VolumeData(Bounds bounds, VolumeData[] children, Renderer[] renderers)
 		{
 			this.bounds = bounds;
 			this.children = children;
 			this.renderers = renderers;
 		}
+
+		public Bounds bounds;
+		public VolumeData[] children;
+		public Renderer[] renderers;
 	}
 
 	// --------------------------------------------------
@@ -112,5 +150,12 @@ namespace SimpleTools.Culling
 		public static Color occluderFill = new Color(0f, 1f, 1f, 1f);
 		public static Color volumeWire = new Color(1f, 1f, 1f, 0.5f);
 		public static Color volumeFill = new Color(1f, 1f, 1f, 0.1f);
+
+		// Debug
+		public static Color debugWhiteWire = new Color(1f, 1f, 1f, 1.0f);
+		public static Color debugBlackWire =new Color(0f, 0f, 0f, 1.0f);
+		public static Color debugBlueWire = new Color(0f, 1f, 1f, 1.0f);
+		public static Color debugBlackFill =new Color(0f, 0f, 0f, 0.5f);
+		public static Color debugBlueFill = new Color(1f, 1f, 1f, 0.5f);
 	}
 }
