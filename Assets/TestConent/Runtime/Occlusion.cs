@@ -59,8 +59,9 @@ namespace SimpleTools.Culling.Tests
         [ExecuteInEditMode]
         private void OnDrawGizmos()
         {
-            DebugUtils.DrawRayDebug(raySource.position, raySource.forward);
-            DebugUtils.DrawRendererDebug(m_StaticRenderers, m_PassedRenderers);
+            DebugUtils.DrawRay(raySource.position, raySource.forward);
+            DebugUtils.DrawRenderers(m_StaticRenderers, m_PassedRenderers);
+			DebugUtils.DrawSphere(raySource.position, 0.25f);
         }
     }
 }

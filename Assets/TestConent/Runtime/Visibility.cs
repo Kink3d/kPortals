@@ -89,7 +89,7 @@ namespace SimpleTools.Culling.Tests
         private void OnDrawGizmos()
         {
             DrawHierarchicalVolumeDebug();
-            DebugUtils.DrawRendererDebug(m_StaticRenderers, m_PassedRenderers);
+            DebugUtils.DrawRenderers(m_StaticRenderers, m_PassedRenderers);
             DrawRayDebug();
         }
 

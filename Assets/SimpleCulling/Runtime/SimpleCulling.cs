@@ -122,50 +122,11 @@ namespace SimpleTools.Culling
         {
             if (m_DebugMode == DebugMode.Occluders)
             {
-				DrawOccluderDebug();
+				DebugUtils.DrawOccluders(m_Occluders);
             }
 			if (m_DebugMode == DebugMode.Volumes)
             {
-				DrawHierarchicalVolumeDebug();
-            }
-        }
-
-		private void DrawOccluderDebug()
-		{
-			if(m_Occluders == null)
-				return;
-					
-			for(int i = 0; i < m_Occluders.Length; i++)
-			{
-				Transform transform = m_Occluders[i].collider.transform;
-				Gizmos.color = EditorColors.occluderFill;
-				Gizmos.DrawMesh(m_Occluders[i].collider.sharedMesh, transform.position, transform.rotation, transform.lossyScale);
-				Gizmos.color = EditorColors.occluderWire;
-				Gizmos.DrawWireMesh(m_Occluders[i].collider.sharedMesh, transform.position, transform.rotation, transform.lossyScale);
-			}
-		}
-
-		private void DrawHierarchicalVolumeDebug()
-		{
-			if(m_VolumeData == null)
-				return;
-
-			IterateHierarchicalVolumeDebug(m_VolumeData);
-		}
-
-        public static void IterateHierarchicalVolumeDebug(VolumeData data)
-        {
-            if (data.children != null && data.children.Length > 0)
-            {
-                for (int i = 0; i < data.children.Length; i++)
-                    IterateHierarchicalVolumeDebug(data.children[i]);
-            }
-            else
-            {
-                Gizmos.color = EditorColors.volumeFill;
-                Gizmos.DrawCube(data.bounds.center, data.bounds.size);
-                Gizmos.color = EditorColors.volumeWire;
-                Gizmos.DrawWireCube(data.bounds.center, data.bounds.size);
+				DebugUtils.DrawHierarchicalVolumeGrid(m_VolumeData);
             }
         }
 

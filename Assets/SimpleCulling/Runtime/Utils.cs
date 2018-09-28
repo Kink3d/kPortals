@@ -17,12 +17,15 @@ namespace SimpleTools.Culling
 			if(volumeData.bounds.Contains(position))
 			{
 				// Continue to traverse down the volume hierarchy
-				if(volumeData.children.Length > 0)
+				if(volumeData.children != null && volumeData.children.Length > 0)
 				{
 					for(int i = 0; i < volumeData.children.Length; i++)
-						GetActiveVolumeAtPosition(volumeData.children[i], position, out activeVolume);
+					{
+						if(GetActiveVolumeAtPosition(volumeData.children[i], position, out activeVolume))
+							return true;
+					}
 				}
-				// Active volume at subdivision of volume hierarchy
+				// Active volume at final subdivision of volume hierarchy
 				else
 				{
 					activeVolume = volumeData;
@@ -437,7 +440,7 @@ namespace SimpleTools.Culling
 
     public static class DebugUtils
     {
-        public static void DrawRendererDebug(MeshRenderer[] allRenderers, MeshRenderer[] passedRenderers)
+        public static void DrawRenderers(MeshRenderer[] allRenderers, MeshRenderer[] passedRenderers)
         {
             if (allRenderers == null || passedRenderers == null)
                 return;
@@ -455,15 +458,61 @@ namespace SimpleTools.Culling
             }
         }
 
-        public static void DrawRayDebug(Vector3 position, Vector3 direction)
+		public static void DrawOccluders(OccluderData[] occluders)
+		{
+			if(occluders == null)
+				return;
+					
+			for(int i = 0; i < occluders.Length; i++)
+			{
+				Transform transform = occluders[i].collider.transform;
+				Gizmos.color = EditorColors.occluderFill;
+				Gizmos.DrawMesh(occluders[i].collider.sharedMesh, transform.position, transform.rotation, transform.lossyScale);
+				Gizmos.color = EditorColors.occluderWire;
+				Gizmos.DrawWireMesh(occluders[i].collider.sharedMesh, transform.position, transform.rotation, transform.lossyScale);
+			}
+		}
+
+        public static void DrawRay(Vector3 position, Vector3 direction)
         {
             Gizmos.color = EditorColors.ray[0];
             Gizmos.DrawLine(position, position + Vector3.Scale(direction, new Vector3(10, 10, 10)));
         }
 
-        public static void DrawConeDebug(Vector3 position, Vector3 direction, float angle)
+        public static void DrawCone(Vector3 position, Vector3 direction, float angle)
         {
             DebugExtension.DebugCone(position, Vector3.Scale(direction, new Vector3(10, 10, 10)), EditorColors.visualiser[0], angle, 0);
+        }
+
+		public static void DrawSphere(Vector3 position, float radius)
+		{
+			Gizmos.color = EditorColors.ray[0];
+			Gizmos.DrawSphere(position, radius);
+		}
+
+		public static void DrawHierarchicalVolumeGrid(VolumeData data, VolumeData activeVolume = null)
+		{
+			if(data == null)
+				return;
+
+			DrawHierarchicalVolumeGridRecursive(data, activeVolume);
+		}
+
+        private static void DrawHierarchicalVolumeGridRecursive(VolumeData data, VolumeData activeVolume)
+        {
+            if (data.children != null && data.children.Length > 0)
+            {
+                for (int i = 0; i < data.children.Length; i++)
+                    DrawHierarchicalVolumeGridRecursive(data.children[i], activeVolume);
+            }
+            else
+            {
+				bool isActive = data == activeVolume;
+                Gizmos.color = isActive ? EditorColors.volumeActive[0] : EditorColors.volume[0];
+                Gizmos.DrawWireCube(data.bounds.center, data.bounds.size);
+				Gizmos.color = isActive ? EditorColors.volumeActive[1] : EditorColors.volume[1];
+                Gizmos.DrawCube(data.bounds.center, data.bounds.size);
+            }
         }
     }
 
@@ -473,6 +522,8 @@ namespace SimpleTools.Culling
         public static Color[] visualiser = new Color[2] { new Color(0.5f, 0.5f, 0.5f, 1f), new Color(0.5f, 0.5f, 0.5f, 0.5f) };
         public static Color[] occludeePass = new Color[2] { new Color(1f, 1f, 1f, 1f), new Color(1f, 1f, 1f, 0.5f) };
         public static Color[] occludeeFail = new Color[2] { new Color(0f, 0f, 0f, 1f), new Color(0f, 0f, 0f, 0.5f) };
+		public static Color[] volume = new Color[2] { new Color(0f, 1f, 1f, 0.25f), new Color(0f, 1f, 1f, 0.1f) };
+		public static Color[] volumeActive = new Color[2] { new Color(0f, 1f, 1f, 1f), new Color(0f, 1f, 1f, 0.5f) };
 
         // OLD
         public static Color occluderWire = new Color(0f, 1f, 1f, 0.5f);

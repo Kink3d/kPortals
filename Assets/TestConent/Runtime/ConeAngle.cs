@@ -44,8 +44,9 @@ namespace SimpleTools.Culling.Tests
         private void OnDrawGizmos()
         {
 			DrawVectorDebug();
-            DebugUtils.DrawRendererDebug(m_StaticRenderers, m_PassedRenderers);
-            DebugUtils.DrawConeDebug(raySource.position, raySource.forward, maxAngle);
+            DebugUtils.DrawRenderers(m_StaticRenderers, m_PassedRenderers);
+            DebugUtils.DrawCone(raySource.position, raySource.forward, maxAngle);
+			DebugUtils.DrawSphere(raySource.position, 0.25f);
         }
 
 		private void DrawVectorDebug()
@@ -64,7 +65,5 @@ namespace SimpleTools.Culling.Tests
                 Gizmos.DrawLine(raySource.position, m_StaticRenderers[i].bounds.center);
             }
 		}
-
-		
 	}
 }
