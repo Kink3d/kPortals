@@ -40,6 +40,35 @@ namespace SimpleTools.Culling
 		[SerializeField]
 		private OccluderData[] m_Occluders;
 
+		private MeshRenderer[] m_VisibleRenderers;
+
+		private VolumeData m_ActiveVolume = new VolumeData();
+
+		private void OnEnable()
+		{
+			List<MeshRenderer> renderers = new List<MeshRenderer>();
+			VolumeData[] volumes = Utils.GetLowestSubdivisionVolumes(m_VolumeData, m_VolumeDensity);
+			foreach (VolumeData data in volumes)
+                renderers.AddRange(data.renderers);
+            m_VisibleRenderers = renderers.Distinct().ToArray();
+		}
+
+		private void Update()
+		{
+			if(m_VolumeData == null)
+				return;
+			
+			if(Utils.GetActiveVolumeAtPosition(m_VolumeData, Camera.main.transform.position, out m_ActiveVolume))
+			{
+				foreach (Renderer renderer in m_VisibleRenderers)
+                renderer.enabled = false;
+
+				m_VisibleRenderers = m_ActiveVolume.renderers;
+				foreach (Renderer renderer in m_VisibleRenderers)
+					renderer.enabled = true;
+			}
+		}
+
 		// ----------------------------------------------------------------------------------------------------//
 		//                                              EDITOR                                                 //
 		// ----------------------------------------------------------------------------------------------------//

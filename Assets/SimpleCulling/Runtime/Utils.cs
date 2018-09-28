@@ -369,7 +369,9 @@ namespace SimpleTools.Culling
 	[Serializable]
 	public class VolumeData
 	{
-		public VolumeData(Bounds bounds, VolumeData[] children, Renderer[] renderers)
+		public VolumeData() {}
+
+		public VolumeData(Bounds bounds, VolumeData[] children, MeshRenderer[] renderers)
 		{
 			this.bounds = bounds;
 			this.children = children;
@@ -378,7 +380,7 @@ namespace SimpleTools.Culling
 
 		public Bounds bounds;
 		public VolumeData[] children;
-		public Renderer[] renderers;
+		public MeshRenderer[] renderers;
 	}
 
 	[Serializable]
