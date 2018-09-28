@@ -379,6 +379,49 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 431572726}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &518392600
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 518392602}
+  - component: {fileID: 518392601}
+  m_Layer: 0
+  m_Name: Z
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!64 &518392601
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 518392600}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &518392602
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 518392600}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalScale: {x: 10, y: 2, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1143286717}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &534669902
 GameObject:
   m_ObjectHideFlags: 0
@@ -541,49 +584,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 858052133}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &883203559
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 883203560}
-  - component: {fileID: 883203561}
-  m_Layer: 0
-  m_Name: X
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &883203560
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 883203559}
-  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 10.000002, y: 2, z: 1.0000002}
-  m_Children: []
-  m_Father: {fileID: 1980974177}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!64 &883203561
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 883203559}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_SkinWidth: 0.01
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1110372709
 GameObject:
   m_ObjectHideFlags: 0
@@ -669,6 +669,36 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1110372709}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1143286716
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1143286717}
+  m_Layer: 0
+  m_Name: OccluderProxies
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1143286717
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1143286716}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1371017626}
+  - {fileID: 518392602}
+  m_Father: {fileID: 1231971947}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1197619213
 GameObject:
   m_ObjectHideFlags: 0
@@ -865,7 +895,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1980974177}
+  - {fileID: 1143286717}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -881,9 +911,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_VolumeDensity: 2
+  m_RayDensity: 10
+  m_FilterAngle: 45
   m_DebugMode: 2
-  m_GenerateVolumes: 1
-  m_GenerateOccluders: 1
   m_VolumeData:
     bounds:
       m_Center: {x: 0, y: 1, z: 0}
@@ -897,42 +927,68 @@ MonoBehaviour:
           m_Center: {x: -3.7500005, y: -2.7500005, z: -3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 104119552}
+        - {fileID: 858052136}
       - bounds:
           m_Center: {x: -1.2500001, y: -2.7500005, z: -3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 858052136}
+        - {fileID: 1110372712}
+        - {fileID: 431572729}
+        - {fileID: 104119552}
       - bounds:
           m_Center: {x: -3.7500005, y: -0.25000012, z: -3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 104119552}
+        - {fileID: 858052136}
+        - {fileID: 1197619216}
       - bounds:
           m_Center: {x: -1.2500001, y: -0.25000012, z: -3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 858052136}
+        - {fileID: 104119552}
+        - {fileID: 1197619216}
       - bounds:
           m_Center: {x: -3.7500005, y: -2.7500005, z: -1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 1197619216}
+        - {fileID: 858052136}
+        - {fileID: 1226219646}
+        - {fileID: 104119552}
       - bounds:
           m_Center: {x: -1.2500001, y: -2.7500005, z: -1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 431572729}
+        - {fileID: 104119552}
+        - {fileID: 1226219646}
       - bounds:
           m_Center: {x: -3.7500005, y: -0.25000012, z: -1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 104119552}
+        - {fileID: 858052136}
+        - {fileID: 1197619216}
       - bounds:
           m_Center: {x: -1.2500001, y: -0.25000012, z: -1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 104119552}
+        - {fileID: 1197619216}
+        - {fileID: 858052136}
+        - {fileID: 431572729}
       renderers: []
     - bounds:
         m_Center: {x: 2.5000002, y: -1.5000002, z: -2.5000002}
@@ -942,42 +998,65 @@ MonoBehaviour:
           m_Center: {x: 1.2500001, y: -2.7500005, z: -3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 858052136}
+        - {fileID: 104119552}
       - bounds:
           m_Center: {x: 3.7500005, y: -2.7500005, z: -3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 858052136}
+        - {fileID: 104119552}
+        - {fileID: 431572729}
       - bounds:
           m_Center: {x: 1.2500001, y: -0.25000012, z: -3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 431572729}
+        - {fileID: 858052136}
+        - {fileID: 104119552}
       - bounds:
           m_Center: {x: 3.7500005, y: -0.25000012, z: -3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 431572729}
+        - {fileID: 858052136}
+        - {fileID: 104119552}
       - bounds:
           m_Center: {x: 1.2500001, y: -2.7500005, z: -1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 104119552}
+        - {fileID: 431572729}
+        - {fileID: 858052136}
       - bounds:
           m_Center: {x: 3.7500005, y: -2.7500005, z: -1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 104119552}
+        - {fileID: 858052136}
+        - {fileID: 1110372712}
       - bounds:
           m_Center: {x: 1.2500001, y: -0.25000012, z: -1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 104119552}
+        - {fileID: 858052136}
+        - {fileID: 431572729}
       - bounds:
           m_Center: {x: 3.7500005, y: -0.25000012, z: -1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 431572729}
+        - {fileID: 104119552}
+        - {fileID: 858052136}
       renderers: []
     - bounds:
         m_Center: {x: -2.5000002, y: 3.5000002, z: -2.5000002}
@@ -987,42 +1066,68 @@ MonoBehaviour:
           m_Center: {x: -3.7500005, y: 2.25, z: -3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 104119552}
+        - {fileID: 1197619216}
+        - {fileID: 858052136}
       - bounds:
           m_Center: {x: -1.2500001, y: 2.25, z: -3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 104119552}
+        - {fileID: 858052136}
+        - {fileID: 1197619216}
       - bounds:
           m_Center: {x: -3.7500005, y: 4.7500005, z: -3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 104119552}
+        - {fileID: 858052136}
+        - {fileID: 1197619216}
+        - {fileID: 1110372712}
       - bounds:
           m_Center: {x: -1.2500001, y: 4.7500005, z: -3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 104119552}
+        - {fileID: 1226219646}
+        - {fileID: 858052136}
       - bounds:
           m_Center: {x: -3.7500005, y: 2.25, z: -1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 1197619216}
+        - {fileID: 858052136}
+        - {fileID: 104119552}
       - bounds:
           m_Center: {x: -1.2500001, y: 2.25, z: -1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 1197619216}
+        - {fileID: 1226219646}
+        - {fileID: 104119552}
       - bounds:
           m_Center: {x: -3.7500005, y: 4.7500005, z: -1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 104119552}
+        - {fileID: 1110372712}
+        - {fileID: 1197619216}
+        - {fileID: 858052136}
       - bounds:
           m_Center: {x: -1.2500001, y: 4.7500005, z: -1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 104119552}
+        - {fileID: 1226219646}
+        - {fileID: 858052136}
       renderers: []
     - bounds:
         m_Center: {x: 2.5000002, y: 3.5000002, z: -2.5000002}
@@ -1032,42 +1137,72 @@ MonoBehaviour:
           m_Center: {x: 1.2500001, y: 2.25, z: -3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 431572729}
+        - {fileID: 858052136}
+        - {fileID: 1197619216}
+        - {fileID: 104119552}
       - bounds:
           m_Center: {x: 3.7500005, y: 2.25, z: -3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 858052136}
+        - {fileID: 104119552}
+        - {fileID: 431572729}
       - bounds:
           m_Center: {x: 1.2500001, y: 4.7500005, z: -3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 858052136}
+        - {fileID: 431572729}
+        - {fileID: 104119552}
       - bounds:
           m_Center: {x: 3.7500005, y: 4.7500005, z: -3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 431572729}
+        - {fileID: 104119552}
+        - {fileID: 858052136}
       - bounds:
           m_Center: {x: 1.2500001, y: 2.25, z: -1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 858052136}
+        - {fileID: 1110372712}
+        - {fileID: 104119552}
+        - {fileID: 431572729}
       - bounds:
           m_Center: {x: 3.7500005, y: 2.25, z: -1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 1110372712}
+        - {fileID: 104119552}
+        - {fileID: 858052136}
+        - {fileID: 431572729}
       - bounds:
           m_Center: {x: 1.2500001, y: 4.7500005, z: -1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 431572729}
+        - {fileID: 1226219646}
+        - {fileID: 1197619216}
+        - {fileID: 858052136}
+        - {fileID: 104119552}
+        - {fileID: 1110372712}
       - bounds:
           m_Center: {x: 3.7500005, y: 4.7500005, z: -1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 104119552}
+        - {fileID: 858052136}
+        - {fileID: 431572729}
       renderers: []
     - bounds:
         m_Center: {x: -2.5000002, y: -1.5000002, z: 2.5000002}
@@ -1077,42 +1212,68 @@ MonoBehaviour:
           m_Center: {x: -3.7500005, y: -2.7500005, z: 1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 858052136}
+        - {fileID: 1197619216}
       - bounds:
           m_Center: {x: -1.2500001, y: -2.7500005, z: 1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 1226219646}
+        - {fileID: 858052136}
+        - {fileID: 104119552}
+        - {fileID: 431572729}
       - bounds:
           m_Center: {x: -3.7500005, y: -0.25000012, z: 1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 104119552}
+        - {fileID: 858052136}
+        - {fileID: 1226219646}
       - bounds:
           m_Center: {x: -1.2500001, y: -0.25000012, z: 1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 858052136}
+        - {fileID: 431572729}
+        - {fileID: 1226219646}
+        - {fileID: 104119552}
       - bounds:
           m_Center: {x: -3.7500005, y: -2.7500005, z: 3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 104119552}
+        - {fileID: 858052136}
+        - {fileID: 1226219646}
       - bounds:
           m_Center: {x: -1.2500001, y: -2.7500005, z: 3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 858052136}
+        - {fileID: 1226219646}
+        - {fileID: 104119552}
       - bounds:
           m_Center: {x: -3.7500005, y: -0.25000012, z: 3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 858052136}
+        - {fileID: 104119552}
+        - {fileID: 1226219646}
       - bounds:
           m_Center: {x: -1.2500001, y: -0.25000012, z: 3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 104119552}
+        - {fileID: 858052136}
+        - {fileID: 1226219646}
+        - {fileID: 1110372712}
       renderers: []
     - bounds:
         m_Center: {x: 2.5000002, y: -1.5000002, z: 2.5000002}
@@ -1122,42 +1283,69 @@ MonoBehaviour:
           m_Center: {x: 1.2500001, y: -2.7500005, z: 1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 104119552}
+        - {fileID: 858052136}
+        - {fileID: 1110372712}
+        - {fileID: 1197619216}
       - bounds:
           m_Center: {x: 3.7500005, y: -2.7500005, z: 1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 858052136}
+        - {fileID: 104119552}
       - bounds:
           m_Center: {x: 1.2500001, y: -0.25000012, z: 1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 104119552}
+        - {fileID: 858052136}
+        - {fileID: 431572729}
+        - {fileID: 1110372712}
       - bounds:
           m_Center: {x: 3.7500005, y: -0.25000012, z: 1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 858052136}
+        - {fileID: 104119552}
+        - {fileID: 1110372712}
+        - {fileID: 431572729}
       - bounds:
           m_Center: {x: 1.2500001, y: -2.7500005, z: 3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 104119552}
+        - {fileID: 858052136}
+        - {fileID: 1110372712}
       - bounds:
           m_Center: {x: 3.7500005, y: -2.7500005, z: 3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 104119552}
+        - {fileID: 858052136}
+        - {fileID: 1110372712}
+        - {fileID: 431572729}
       - bounds:
           m_Center: {x: 1.2500001, y: -0.25000012, z: 3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 104119552}
+        - {fileID: 858052136}
+        - {fileID: 1110372712}
       - bounds:
           m_Center: {x: 3.7500005, y: -0.25000012, z: 3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 104119552}
+        - {fileID: 858052136}
+        - {fileID: 1110372712}
       renderers: []
     - bounds:
         m_Center: {x: -2.5000002, y: 3.5000002, z: 2.5000002}
@@ -1167,42 +1355,69 @@ MonoBehaviour:
           m_Center: {x: -3.7500005, y: 2.25, z: 1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 858052136}
+        - {fileID: 1226219646}
+        - {fileID: 1197619216}
+        - {fileID: 104119552}
       - bounds:
           m_Center: {x: -1.2500001, y: 2.25, z: 1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 104119552}
+        - {fileID: 858052136}
+        - {fileID: 1226219646}
+        - {fileID: 1197619216}
       - bounds:
           m_Center: {x: -3.7500005, y: 4.7500005, z: 1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 104119552}
+        - {fileID: 1226219646}
       - bounds:
           m_Center: {x: -1.2500001, y: 4.7500005, z: 1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 858052136}
+        - {fileID: 104119552}
+        - {fileID: 1226219646}
       - bounds:
           m_Center: {x: -3.7500005, y: 2.25, z: 3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 1226219646}
+        - {fileID: 858052136}
+        - {fileID: 104119552}
       - bounds:
           m_Center: {x: -1.2500001, y: 2.25, z: 3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 858052136}
+        - {fileID: 104119552}
+        - {fileID: 1226219646}
+        - {fileID: 1110372712}
       - bounds:
           m_Center: {x: -3.7500005, y: 4.7500005, z: 3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 858052136}
+        - {fileID: 104119552}
+        - {fileID: 1197619216}
+        - {fileID: 1226219646}
       - bounds:
           m_Center: {x: -1.2500001, y: 4.7500005, z: 3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 104119552}
+        - {fileID: 1197619216}
+        - {fileID: 858052136}
       renderers: []
     - bounds:
         m_Center: {x: 2.5000002, y: 3.5000002, z: 2.5000002}
@@ -1212,71 +1427,113 @@ MonoBehaviour:
           m_Center: {x: 1.2500001, y: 2.25, z: 1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 104119552}
+        - {fileID: 858052136}
+        - {fileID: 1110372712}
       - bounds:
           m_Center: {x: 3.7500005, y: 2.25, z: 1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 104119552}
+        - {fileID: 858052136}
+        - {fileID: 1110372712}
       - bounds:
           m_Center: {x: 1.2500001, y: 4.7500005, z: 1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 104119552}
+        - {fileID: 1110372712}
+        - {fileID: 1197619216}
+        - {fileID: 858052136}
       - bounds:
           m_Center: {x: 3.7500005, y: 4.7500005, z: 1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 1110372712}
+        - {fileID: 104119552}
+        - {fileID: 431572729}
+        - {fileID: 858052136}
       - bounds:
           m_Center: {x: 1.2500001, y: 2.25, z: 3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 431572729}
+        - {fileID: 858052136}
+        - {fileID: 104119552}
+        - {fileID: 1110372712}
       - bounds:
           m_Center: {x: 3.7500005, y: 2.25, z: 3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 104119552}
+        - {fileID: 1110372712}
+        - {fileID: 858052136}
+        - {fileID: 1197619216}
       - bounds:
           m_Center: {x: 1.2500001, y: 4.7500005, z: 3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 1110372712}
+        - {fileID: 858052136}
       - bounds:
           m_Center: {x: 3.7500005, y: 4.7500005, z: 3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
-        renderers: []
+        renderers:
+        - {fileID: 104119552}
+        - {fileID: 858052136}
+        - {fileID: 1110372712}
+        - {fileID: 1226219646}
+        - {fileID: 431572729}
       renderers: []
     renderers: []
   m_Occluders:
-  - collider: {fileID: 883203561}
+  - collider: {fileID: 1371017627}
     renderer: {fileID: 104119552}
-  - collider: {fileID: 1343738237}
+  - collider: {fileID: 518392601}
     renderer: {fileID: 858052136}
---- !u!1 &1343738236
+--- !u!1 &1371017625
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1343738238}
-  - component: {fileID: 1343738237}
+  - component: {fileID: 1371017626}
+  - component: {fileID: 1371017627}
   m_Layer: 0
-  m_Name: Z
+  m_Name: X
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!64 &1343738237
+--- !u!4 &1371017626
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1371017625}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalScale: {x: 10.000002, y: 2, z: 1.0000002}
+  m_Children: []
+  m_Father: {fileID: 1143286717}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!64 &1371017627
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1343738236}
+  m_GameObject: {fileID: 1371017625}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
@@ -1285,19 +1542,6 @@ MeshCollider:
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!4 &1343738238
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1343738236}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 10, y: 2, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1980974177}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1435618229
 GameObject:
   m_ObjectHideFlags: 0
@@ -1359,34 +1603,4 @@ Transform:
   - {fileID: 858052134}
   m_Father: {fileID: 0}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1980974176
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1980974177}
-  m_Layer: 0
-  m_Name: OccluderProxies
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1980974177
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1980974176}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 883203560}
-  - {fileID: 1343738238}
-  m_Father: {fileID: 1231971947}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

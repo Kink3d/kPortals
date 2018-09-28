@@ -15,6 +15,8 @@ namespace SimpleTools.Culling
 
 			// Bake Settings
             public static GUIContent volumeDensityText = EditorGUIUtility.TrTextContent("Volume Density", "...");
+            public static GUIContent rayDensityText = EditorGUIUtility.TrTextContent("Ray Density", "...");
+            public static GUIContent filterAngleText = EditorGUIUtility.TrTextContent("Filter Angle", "...");
 
             // Debug Settings
             public static GUIContent debugModeText = EditorGUIUtility.TrTextContent("Debug Mode", string.Format("...", Environment.NewLine));
@@ -29,6 +31,8 @@ namespace SimpleTools.Culling
         bool m_DebugSettingsFoldout = false;
 
 		SerializedProperty m_VolumeDensityProp;
+        SerializedProperty m_RayDensityProp;
+        SerializedProperty m_FilterAngleProp;
         SerializedProperty m_DebugModeProp;
 
         public override void OnInspectorGUI()
@@ -44,8 +48,10 @@ namespace SimpleTools.Culling
 
         void OnEnable()
         {
+            m_VolumeDensityProp = serializedObject.FindProperty("m_VolumeDensity");
+            m_RayDensityProp = serializedObject.FindProperty("m_RayDensity");
+            m_FilterAngleProp = serializedObject.FindProperty("m_FilterAngle");
             m_DebugModeProp = serializedObject.FindProperty("m_DebugMode");
-			m_VolumeDensityProp = serializedObject.FindProperty("m_VolumeDensity");
         }
 
 		void DrawBakeSettings()
@@ -55,6 +61,8 @@ namespace SimpleTools.Culling
             {
                 EditorGUI.indentLevel++;
                 EditorGUILayout.PropertyField(m_VolumeDensityProp, Styles.volumeDensityText, true);
+                EditorGUILayout.PropertyField(m_RayDensityProp, Styles.rayDensityText, true);
+                EditorGUILayout.PropertyField(m_FilterAngleProp, Styles.filterAngleText, true);
                 EditorGUI.indentLevel--;
                 EditorGUILayout.Space();
             }

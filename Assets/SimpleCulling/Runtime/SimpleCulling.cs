@@ -19,6 +19,12 @@ namespace SimpleTools.Culling
         private int m_VolumeDensity = 4;
 
 		[SerializeField]
+        private int m_RayDensity = 1;
+
+		[SerializeField]
+        private int m_FilterAngle = 45;
+
+		[SerializeField]
         private DebugMode m_DebugMode = DebugMode.None;
 
 		// ----------------------------------------------------------------------------------------------------//
@@ -27,11 +33,6 @@ namespace SimpleTools.Culling
 
 		// --------------------------------------------------
 		// Runtime Data
-
-		[SerializeField]
-		private bool m_GenerateVolumes = true;
-		[SerializeField]
-		private bool m_GenerateOccluders = true;
 
 		[SerializeField]
 		private VolumeData m_VolumeData;
@@ -65,17 +66,20 @@ namespace SimpleTools.Culling
             m_IsGenerating = true;
             m_StaticRenderers = Utils.GetStaticRenderers();
 
-			if(m_GenerateOccluders)
-			{
-				ClearOccluderProxyGeometry();
-                m_Occluders = Utils.BuildOccluderProxyGeometry(transform, m_StaticRenderers, m_OccluderTag);
-			}
-			if(m_GenerateVolumes)
-			{
-				ClearHierarchicalVolumeGrid();
-                Bounds bounds = Utils.GetSceneBounds(m_StaticRenderers);
-				m_VolumeData = Utils.BuildHierarchicalVolumeGrid(bounds, m_VolumeDensity);
-			}
+			// Generate Occluder Proxy Geometry
+			ClearOccluderProxyGeometry();
+            m_Occluders = Utils.BuildOccluderProxyGeometry(transform, m_StaticRenderers, m_OccluderTag);
+			
+			// Generate Hierarchical Volume Grid
+			ClearHierarchicalVolumeGrid();
+			Bounds bounds = Utils.GetSceneBounds(m_StaticRenderers);
+			m_VolumeData = Utils.BuildHierarchicalVolumeGrid(bounds, m_VolumeDensity);
+
+			// Generate Occlusion Data
+			VolumeData[] smallestVolumes = Utils.GetLowestSubdivisionVolumes(m_VolumeData, m_VolumeDensity);
+			foreach(VolumeData volume in smallestVolumes)
+				volume.renderers = Utils.BuildOcclusionForVolume(volume.bounds, m_RayDensity, m_StaticRenderers, m_Occluders, m_FilterAngle);
+
             m_IsGenerating = false;
         }
 

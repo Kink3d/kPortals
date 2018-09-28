@@ -8,6 +8,36 @@ namespace SimpleTools.Culling
 {
 	public static class Utils
 	{
+		// ----------------------------------------------------------------------------------------------------//
+		//                                              RUNTIME                                                 //
+		// ----------------------------------------------------------------------------------------------------//
+
+		public static bool GetActiveVolumeAtPosition(VolumeData volumeData, Vector3 position, out VolumeData activeVolume)
+		{
+			if(volumeData.bounds.Contains(position))
+			{
+				// Continue to traverse down the volume hierarchy
+				if(volumeData.children.Length > 0)
+				{
+					for(int i = 0; i < volumeData.children.Length; i++)
+						GetActiveVolumeAtPosition(volumeData.children[i], position, out activeVolume);
+				}
+				// Active volume at subdivision of volume hierarchy
+				else
+				{
+					activeVolume = volumeData;
+					return true;
+				}
+			}
+
+			activeVolume = null;
+			return false;
+		}
+
+		// ----------------------------------------------------------------------------------------------------//
+		//                                               BAKE                                                  //
+		// ----------------------------------------------------------------------------------------------------//
+
 		// --------------------------------------------------
 		// Create Objects
 
@@ -151,73 +181,7 @@ namespace SimpleTools.Culling
 			return true; 
 		}
 
-        // --------------------------------------------------
-        // Visibility
-
-        public static MeshRenderer[] BuildVisibilityForVolume(Bounds bounds, int rayDensity, MeshRenderer[] staticRenderers, int coneAngle = 45)
-        {
-            VolumeDebugData debugData = new VolumeDebugData();
-            return BuildVisibilityForVolume(bounds, rayDensity, staticRenderers, out debugData, coneAngle);
-        }
-
-        public static MeshRenderer[] BuildVisibilityForVolume(Bounds bounds, int rayDensity, MeshRenderer[] staticRenderers, out VolumeDebugData volumeDebugData, int coneAngle = 45)
-        {
-            List<MeshRenderer> passedRenderers = new List<MeshRenderer>();
-            int rayCount = (int)(rayDensity * bounds.size.x * bounds.size.y * bounds.size.z);
-
-            volumeDebugData = new VolumeDebugData();
-            RayDebugData[] rayDebugData = new RayDebugData[rayCount];
-
-            for (int r = 0; r < rayCount; r++)
-            {
-                bool rayHasHit = false;
-
-                Vector3 rayPosition = RandomPointWithinBounds(bounds);
-                Vector3 rayDirection = RandomSphericalDistributionVector();
-
-                MeshRenderer[] filteredRenderers = FilterRenderersByConeAngle(staticRenderers, rayPosition, rayDirection, coneAngle);
-                for (int i = 0; i < filteredRenderers.Length; i++)
-                {
-                    if (CheckAABBIntersection(rayPosition, rayDirection, filteredRenderers[i].bounds))
-                    {
-                        rayHasHit = true;
-                        if (!passedRenderers.Contains(filteredRenderers[i]))
-                            passedRenderers.Add(filteredRenderers[i]);
-                    }
-                }
-
-                Vector3 rayEnd = Vector3.Scale(rayDirection, new Vector3(10, 10, 10));
-                rayDebugData[r] = new RayDebugData(new Vector3[2] { rayPosition, rayEnd }, rayHasHit);
-            }
-
-            volumeDebugData = new VolumeDebugData(rayDebugData, staticRenderers.Length, passedRenderers.Count);
-
-            return passedRenderers.ToArray();
-        }
-
-        // --------------------------------------------------
-        // Occlusion
-
-        public static string occluderContainerName = "OccluderProxies";
-
-        public static OccluderData[] BuildOccluderProxyGeometry(Transform parent, MeshRenderer[] staticRenderers, string tag = "Occluder")
-        {
-            Transform container = Utils.NewObject(occluderContainerName, parent).transform;
-            List<MeshRenderer> occluderRenderers = staticRenderers.Where(s => s.gameObject.tag == tag).ToList();
-            OccluderData[] occluders = new OccluderData[occluderRenderers.Count];
-            for (int i = 0; i < occluders.Length; i++)
-            {
-                GameObject occluderObj = occluderRenderers[i].gameObject;
-                Transform occluderTransform = occluderObj.transform;
-                GameObject proxyObj = NewObject(occluderObj.name, container, occluderTransform.position, occluderTransform.rotation, occluderTransform.lossyScale);
-                MeshCollider proxyCollider = proxyObj.AddComponent<MeshCollider>();
-                proxyCollider.sharedMesh = occluderRenderers[i].GetComponent<MeshFilter>().sharedMesh;
-                occluders[i] = new OccluderData(proxyCollider, occluderRenderers[i]);
-            }
-            return occluders;
-        }
-
-        public static bool CheckOcclusion(OccluderData[] occluders, MeshRenderer occludee, Vector3 position, Vector3 direction)
+		public static bool CheckOcclusion(OccluderData[] occluders, MeshRenderer occludee, Vector3 position, Vector3 direction)
 		{
 			if(occluders == null)
 				return true;
@@ -238,6 +202,100 @@ namespace SimpleTools.Culling
 		}
 
         // --------------------------------------------------
+        // Visibility
+
+		public static MeshRenderer[] BuildOcclusionForVolume(Bounds bounds, int rayDensity, MeshRenderer[] staticRenderers, OccluderData[] occluders, int coneAngle = 45)
+        {
+            VolumeDebugData debugData = new VolumeDebugData();
+            return BuildOcclusionForVolume(bounds, rayDensity, staticRenderers, occluders, out debugData, coneAngle);
+        }
+
+		public static MeshRenderer[] BuildOcclusionForVolume(Bounds bounds, int rayDensity, MeshRenderer[] staticRenderers, OccluderData[] occluders, out VolumeDebugData debugData, int coneAngle = 45)
+        {
+            return BuildVisibilityAndOcclusionForVolume(bounds, rayDensity, staticRenderers, out debugData, coneAngle, occluders);
+        }
+
+        public static MeshRenderer[] BuildVisibilityForVolume(Bounds bounds, int rayDensity, MeshRenderer[] staticRenderers, int coneAngle = 45)
+        {
+            VolumeDebugData debugData = new VolumeDebugData();
+            return BuildVisibilityForVolume(bounds, rayDensity, staticRenderers, out debugData, coneAngle);
+        }
+
+		public static MeshRenderer[] BuildVisibilityForVolume(Bounds bounds, int rayDensity, MeshRenderer[] staticRenderers, out VolumeDebugData debugData, int coneAngle = 45)
+        {
+            return BuildVisibilityAndOcclusionForVolume(bounds, rayDensity, staticRenderers, out debugData, coneAngle);
+        }
+
+        private static MeshRenderer[] BuildVisibilityAndOcclusionForVolume(Bounds bounds, int rayDensity, MeshRenderer[] staticRenderers, out VolumeDebugData debugData, int coneAngle = 45, OccluderData[] occluders = null)
+        {
+            List<MeshRenderer> passedRenderers = new List<MeshRenderer>();
+            int rayCount = (int)(rayDensity * bounds.size.x * bounds.size.y * bounds.size.z);
+
+            debugData = new VolumeDebugData();
+            RayDebugData[] rayDebugData = new RayDebugData[rayCount];
+
+            for (int r = 0; r < rayCount; r++)
+            {
+                bool rayHasHit = false;
+
+                Vector3 rayPosition = RandomPointWithinBounds(bounds);
+                Vector3 rayDirection = RandomSphericalDistributionVector();
+
+                MeshRenderer[] filteredRenderers = FilterRenderersByConeAngle(staticRenderers, rayPosition, rayDirection, coneAngle);
+                for (int i = 0; i < filteredRenderers.Length; i++)
+                {
+                    if (CheckAABBIntersection(rayPosition, rayDirection, filteredRenderers[i].bounds))
+                    {
+						if(occluders != null)
+						{
+							if(CheckOcclusion(occluders, filteredRenderers[i], rayPosition, rayDirection))
+							{
+								rayHasHit = true;
+								if (!passedRenderers.Contains(filteredRenderers[i]))
+									passedRenderers.Add(filteredRenderers[i]);
+							}
+						}
+						else
+						{
+							rayHasHit = true;
+							if (!passedRenderers.Contains(filteredRenderers[i]))
+                            	passedRenderers.Add(filteredRenderers[i]);
+						}
+                    }
+                }
+
+                Vector3 rayEnd = Vector3.Scale(rayDirection, new Vector3(10, 10, 10));
+                rayDebugData[r] = new RayDebugData(new Vector3[2] { rayPosition, rayEnd }, rayHasHit);
+            }
+
+            debugData = new VolumeDebugData(rayDebugData, staticRenderers.Length, passedRenderers.Count);
+
+            return passedRenderers.ToArray();
+        }
+
+        // --------------------------------------------------
+        // Occluder Proxy Geometry
+
+        public static string occluderContainerName = "OccluderProxies";
+
+        public static OccluderData[] BuildOccluderProxyGeometry(Transform parent, MeshRenderer[] staticRenderers, string tag = "Occluder")
+        {
+            Transform container = Utils.NewObject(occluderContainerName, parent).transform;
+            List<MeshRenderer> occluderRenderers = staticRenderers.Where(s => s.gameObject.tag == tag).ToList();
+            OccluderData[] occluders = new OccluderData[occluderRenderers.Count];
+            for (int i = 0; i < occluders.Length; i++)
+            {
+                GameObject occluderObj = occluderRenderers[i].gameObject;
+                Transform occluderTransform = occluderObj.transform;
+                GameObject proxyObj = NewObject(occluderObj.name, container, occluderTransform.position, occluderTransform.rotation, occluderTransform.lossyScale);
+                MeshCollider proxyCollider = proxyObj.AddComponent<MeshCollider>();
+                proxyCollider.sharedMesh = occluderRenderers[i].GetComponent<MeshFilter>().sharedMesh;
+                occluders[i] = new OccluderData(proxyCollider, occluderRenderers[i]);
+            }
+            return occluders;
+        }
+
+        // --------------------------------------------------
         // Hirarchical Volume Grid
         
         public static VolumeData BuildHierarchicalVolumeGrid(Bounds bounds, int density)
@@ -251,7 +309,7 @@ namespace SimpleTools.Culling
             return data;
         }
         
-        public static void BuildHierarchicalVolumeGridRecursive(int count, int density, ref VolumeData data)
+        private static void BuildHierarchicalVolumeGridRecursive(int count, int density, ref VolumeData data)
 		{
 			count++;
 			VolumeData[] childData = new VolumeData[8];
@@ -271,6 +329,34 @@ namespace SimpleTools.Culling
 				}
 			}
 			data.children = childData;
+		}
+
+		public static VolumeData[] GetLowestSubdivisionVolumes(VolumeData data, int density)
+		{
+			int finalSubdivisionVolumeCount = (int)Mathf.Pow(density, 8);
+			List<VolumeData> dataCollection = new List<VolumeData>();
+
+            int count = 0;
+            if (count < density)
+            {
+				for(int i = 0; i < data.children.Length; i++)
+                	GetLowestSubdivisionVolumesRecursive(count, density, data.children[i], ref dataCollection);
+            }
+			else
+				dataCollection.Add(data);
+			return dataCollection.ToArray();
+		}
+
+		private static void GetLowestSubdivisionVolumesRecursive(int count, int density, VolumeData volume, ref List<VolumeData> dataCollection)
+		{
+			count++;
+			if(count < density)
+			{
+				for(int i = 0; i < volume.children.Length; i++)
+                	GetLowestSubdivisionVolumesRecursive(count, density, volume.children[i], ref dataCollection);
+			}
+			else
+				dataCollection.Add(volume);
 		}
 	}
 
@@ -383,7 +469,7 @@ namespace SimpleTools.Culling
 
 	public static class EditorColors
 	{
-        public static Color[] ray = new Color[2] { new Color(0f, 1f, 0f, 1f), new Color(0f, 1f, 0f, 0.5f) };
+        public static Color[] ray = new Color[2] { new Color(0f, 1f, 0f, 1f), new Color(0f, 1f, 0f, 0.1f) };
         public static Color[] visualiser = new Color[2] { new Color(0.5f, 0.5f, 0.5f, 1f), new Color(0.5f, 0.5f, 0.5f, 0.5f) };
         public static Color[] occludeePass = new Color[2] { new Color(1f, 1f, 1f, 1f), new Color(1f, 1f, 1f, 0.5f) };
         public static Color[] occludeeFail = new Color[2] { new Color(0f, 0f, 0f, 1f), new Color(0f, 0f, 0f, 0.5f) };

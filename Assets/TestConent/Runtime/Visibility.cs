@@ -112,7 +112,7 @@ namespace SimpleTools.Culling.Tests
             for (int i = 0; i < m_DebugData.rays.Length; i++)
             {
                 bool pass = m_DebugData.rays[i].pass;
-                Gizmos.color = pass ? EditorColors.occludeePass[0] : EditorColors.occludeeFail[1];
+                Gizmos.color = pass ? EditorColors.ray[0] : EditorColors.ray[1];
                 Gizmos.DrawLine(m_DebugData.rays[i].points[0], m_DebugData.rays[i].points[1]);
             }
         }
