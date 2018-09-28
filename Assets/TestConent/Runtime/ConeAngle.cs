@@ -7,11 +7,13 @@ namespace SimpleTools.Culling.Tests
 	public class ConeAngle : MonoBehaviour 
 	{
 
-		// ----------------------------------------------------------------------------------------------------//
-		//                                           PUBLIC FIELDS                                             //
-		// ----------------------------------------------------------------------------------------------------//
+#if (UNITY_EDITOR)
 
-		public Transform raySource;
+        // ----------------------------------------------------------------------------------------------------//
+        //                                           PUBLIC FIELDS                                             //
+        // ----------------------------------------------------------------------------------------------------//
+
+        public Transform raySource;
 		public float maxAngle;
 
 		// ----------------------------------------------------------------------------------------------------//
@@ -65,5 +67,8 @@ namespace SimpleTools.Culling.Tests
                 Gizmos.DrawLine(raySource.position, m_StaticRenderers[i].bounds.center);
             }
 		}
-	}
+
+#endif
+
+    }
 }

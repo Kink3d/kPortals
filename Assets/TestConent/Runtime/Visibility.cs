@@ -10,6 +10,9 @@ namespace SimpleTools.Culling.Tests
     [ExecuteInEditMode]
     public class Visibility : MonoBehaviour
     {
+
+#if (UNITY_EDITOR)
+
         // ----------------------------------------------------------------------------------------------------//
         //                                           PUBLIC FIELDS                                             //
         // ----------------------------------------------------------------------------------------------------//
@@ -68,7 +71,9 @@ namespace SimpleTools.Culling.Tests
             m_StaticRenderers = null;
             m_DebugData.rays = null;
             displayDebug = false;
+#if (UNITY_EDITOR)
             UnityEditor.SceneView.RepaintAll();
+#endif
         }
 
         private IEnumerator Generate()
@@ -86,7 +91,9 @@ namespace SimpleTools.Culling.Tests
             successfulRenderers = m_PassedRenderers.Length;
             displayDebug = true;
 
+#if (UNITY_EDITOR)
             UnityEditor.SceneView.RepaintAll();
+#endif
         }
 
         // ----------------------------------------------------------------------------------------------------//
@@ -124,5 +131,8 @@ namespace SimpleTools.Culling.Tests
                 Gizmos.DrawLine(m_DebugData.rays[i].points[0], m_DebugData.rays[i].points[1]);
             }
         }
+
+#endif
+
     }
 }

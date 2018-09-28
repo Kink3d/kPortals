@@ -7,11 +7,14 @@ namespace SimpleTools.Culling.Tests
 	[ExecuteInEditMode]
 	public class AABBIntersection : MonoBehaviour 
 	{
-		// ----------------------------------------------------------------------------------------------------//
-		//                                           PUBLIC FIELDS                                             //
-		// ----------------------------------------------------------------------------------------------------//
 
-		public Transform raySource;
+#if (UNITY_EDITOR)
+
+        // ----------------------------------------------------------------------------------------------------//
+        //                                           PUBLIC FIELDS                                             //
+        // ----------------------------------------------------------------------------------------------------//
+
+        public Transform raySource;
 
         // ----------------------------------------------------------------------------------------------------//
         //                                               TEST                                                  //
@@ -53,5 +56,8 @@ namespace SimpleTools.Culling.Tests
             DebugUtils.DrawRenderers(m_StaticRenderers, m_PassedRenderers);
 			DebugUtils.DrawSphere(raySource.position, 0.25f);
         }
+
+#endif
+
     }
 }

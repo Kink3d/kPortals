@@ -8,11 +8,14 @@ namespace SimpleTools.Culling.Tests
 	[ExecuteInEditMode]
 	public class Occlusion : MonoBehaviour 
 	{
-		// ----------------------------------------------------------------------------------------------------//
-		//                                           PUBLIC FIELDS                                             //
-		// ----------------------------------------------------------------------------------------------------//
 
-		public Transform raySource;
+#if (UNITY_EDITOR)
+
+        // ----------------------------------------------------------------------------------------------------//
+        //                                           PUBLIC FIELDS                                             //
+        // ----------------------------------------------------------------------------------------------------//
+
+        public Transform raySource;
 		public float maxDisatnce = 10;
 
         // ----------------------------------------------------------------------------------------------------//
@@ -64,5 +67,8 @@ namespace SimpleTools.Culling.Tests
             DebugUtils.DrawRenderers(m_StaticRenderers, m_PassedRenderers);
 			DebugUtils.DrawSphere(raySource.position, 0.25f);
         }
+
+#endif
+
     }
 }

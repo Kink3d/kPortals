@@ -38,14 +38,44 @@ namespace SimpleTools.Culling
 			return false;
 		}
 
-		// ----------------------------------------------------------------------------------------------------//
-		//                                               BAKE                                                  //
-		// ----------------------------------------------------------------------------------------------------//
+        public static VolumeData[] GetLowestSubdivisionVolumes(VolumeData data, int density)
+        {
+            int finalSubdivisionVolumeCount = (int)Mathf.Pow(density, 8);
+            List<VolumeData> dataCollection = new List<VolumeData>();
 
-		// --------------------------------------------------
-		// Create Objects
+            int count = 0;
+            if (count < density)
+            {
+                for (int i = 0; i < data.children.Length; i++)
+                    GetLowestSubdivisionVolumesRecursive(count, density, data.children[i], ref dataCollection);
+            }
+            else
+                dataCollection.Add(data);
+            return dataCollection.ToArray();
+        }
 
-		public static GameObject NewObject(string name, Transform parent = null, 
+        private static void GetLowestSubdivisionVolumesRecursive(int count, int density, VolumeData volume, ref List<VolumeData> dataCollection)
+        {
+            count++;
+            if (count < density)
+            {
+                for (int i = 0; i < volume.children.Length; i++)
+                    GetLowestSubdivisionVolumesRecursive(count, density, volume.children[i], ref dataCollection);
+            }
+            else
+                dataCollection.Add(volume);
+        }
+
+        // ----------------------------------------------------------------------------------------------------//
+        //                                               BAKE                                                  //
+        // ----------------------------------------------------------------------------------------------------//
+
+#if UNITY_EDITOR
+
+        // --------------------------------------------------
+        // Create Objects
+
+        public static GameObject NewObject(string name, Transform parent = null, 
 			Vector3 position = default(Vector3), Quaternion rotation = default(Quaternion), Vector3 scale = default(Vector3))
 		{
 			if(position == default(Vector3))
@@ -297,10 +327,12 @@ namespace SimpleTools.Culling
                 proxyCollider.sharedMesh = occluderRenderers[i].GetComponent<MeshFilter>().sharedMesh;
                 occluders[i] = new OccluderData(proxyCollider, occluderRenderers[i]);
 
-				if(culling != null)
+#if (UNITY_EDITOR)
+                if (culling != null)
 					culling.completion = (float)(i + 1) / (float)occluders.Length;
-				UnityEditor.SceneView.RepaintAll();
-				yield return null;
+                UnityEditor.SceneView.RepaintAll();
+#endif
+                yield return null;
             }
             result(occluders);
         }
@@ -344,34 +376,9 @@ namespace SimpleTools.Culling
 			result(data);
 		}
 
-		public static VolumeData[] GetLowestSubdivisionVolumes(VolumeData data, int density)
-		{
-			int finalSubdivisionVolumeCount = (int)Mathf.Pow(density, 8);
-			List<VolumeData> dataCollection = new List<VolumeData>();
+#endif
 
-            int count = 0;
-            if (count < density)
-            {
-				for(int i = 0; i < data.children.Length; i++)
-                	GetLowestSubdivisionVolumesRecursive(count, density, data.children[i], ref dataCollection);
-            }
-			else
-				dataCollection.Add(data);
-			return dataCollection.ToArray();
-		}
-
-		private static void GetLowestSubdivisionVolumesRecursive(int count, int density, VolumeData volume, ref List<VolumeData> dataCollection)
-		{
-			count++;
-			if(count < density)
-			{
-				for(int i = 0; i < volume.children.Length; i++)
-                	GetLowestSubdivisionVolumesRecursive(count, density, volume.children[i], ref dataCollection);
-			}
-			else
-				dataCollection.Add(volume);
-		}
-	}
+    }
 
 	// --------------------------------------------------
 	// Data Structures
@@ -449,6 +456,8 @@ namespace SimpleTools.Culling
 
     // --------------------------------------------------
     // Editor Constants
+
+#if (UNITY_EDITOR)
 
     public static class DebugUtils
     {
@@ -548,4 +557,7 @@ namespace SimpleTools.Culling
 		public static Color debugBlackFill =new Color(0f, 0f, 0f, 0.5f);
 		public static Color debugBlueFill = new Color(1f, 1f, 1f, 0.5f);
 	}
+
+#endif
+
 }

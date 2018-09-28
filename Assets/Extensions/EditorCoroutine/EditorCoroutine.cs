@@ -31,6 +31,9 @@ namespace marijnz.EditorCoroutines
 {
     public class EditorCoroutines
     {
+
+#if UNITY_EDITOR
+
         public class EditorCoroutine
         {
             public ICoroutineYield currentYield = new YieldDefault();
@@ -411,5 +414,8 @@ namespace marijnz.EditorCoroutines
             FieldInfo field = type.GetField(fieldName, bindFlags);
             return field.GetValue(instance);
         }
+
+#endif
+
     }
 }
