@@ -42,11 +42,12 @@ namespace SimpleTools.Culling
 			DrawBakeSettings();
             DrawDebugSettings();
             DrawBakeTools();
+            DrawProgressBar();
 
             serializedObject.ApplyModifiedProperties();
         }
 
-        void OnEnable()
+        private void OnEnable()
         {
             m_VolumeDensityProp = serializedObject.FindProperty("m_VolumeDensity");
             m_RayDensityProp = serializedObject.FindProperty("m_RayDensity");
@@ -54,7 +55,7 @@ namespace SimpleTools.Culling
             m_DebugModeProp = serializedObject.FindProperty("m_DebugMode");
         }
 
-		void DrawBakeSettings()
+		private void DrawBakeSettings()
         {
             m_BakeSettingsFoldout = EditorGUILayout.Foldout(m_BakeSettingsFoldout, Styles.bakeSettingsText, true);
             if (m_BakeSettingsFoldout)
@@ -68,7 +69,7 @@ namespace SimpleTools.Culling
             }
         }
 
-        void DrawDebugSettings()
+        private void DrawDebugSettings()
         {
             m_DebugSettingsFoldout = EditorGUILayout.Foldout(m_DebugSettingsFoldout, Styles.debugSettingsText, true);
             if (m_DebugSettingsFoldout)
@@ -80,7 +81,7 @@ namespace SimpleTools.Culling
             }
         }
 
-        void DrawBakeTools()
+        private void DrawBakeTools()
         {
             EditorGUILayout.Space();
             SimpleCulling simpleCulling = (SimpleCulling)target;
@@ -89,17 +90,51 @@ namespace SimpleTools.Culling
 			// Buttons
 
             EditorGUILayout.BeginHorizontal();
-            GUI.enabled = !simpleCulling.isGenerating;
+            bool isGenerating = simpleCulling.bakeState != SimpleCulling.BakeState.Active && simpleCulling.bakeState != SimpleCulling.BakeState.Empty;
+            GUI.enabled = !isGenerating;
             if (GUILayout.Button(Styles.generateText))
             {
                 simpleCulling.OnClickGenerate();
             }
             GUI.enabled = true;
-            if (GUILayout.Button(simpleCulling.isGenerating ? Styles.cancelText : Styles.clearText))
+            if (GUILayout.Button(isGenerating ? Styles.cancelText : Styles.clearText))
             {
                 simpleCulling.OnClickCancel();
             }
             EditorGUILayout.EndHorizontal();
+        }
+
+        private void DrawProgressBar()
+        {
+            SimpleCulling culling = (SimpleCulling)target;
+
+            Rect r = EditorGUILayout.BeginVertical();
+			string label;
+            string completion = string.Format(" {0}%", ((int)(culling.completion * 100)).ToString(), "%");
+
+            switch(culling.bakeState)
+            {
+                case SimpleCulling.BakeState.Occluders:
+                    label = "Processing Occluders" + completion;
+                    break;
+                case SimpleCulling.BakeState.Volumes:
+                    label = "Generating Volumes" + completion;
+                    break;
+                case SimpleCulling.BakeState.Occlusion:
+                    label = "Baking Occlusion" + completion;
+                    break;
+                case SimpleCulling.BakeState.Active:
+                    label = "Active Culling Data";
+                    break;
+                default:
+                    label = "No Culling Data";
+                    break;
+            }
+
+            EditorGUI.ProgressBar(r, culling.completion, label);
+            GUILayout.Space(16);
+            EditorGUILayout.EndVertical();
+            EditorGUILayout.Space();
         }
     }
 }

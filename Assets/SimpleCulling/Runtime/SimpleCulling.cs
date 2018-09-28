@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using marijnz.EditorCoroutines;
 
 namespace SimpleTools.Culling
 {
 	public class SimpleCulling : MonoBehaviour 
 	{
 		public enum DebugMode { None, Occluders, Volumes }
+
+		public enum BakeState { Empty, Occluders, Volumes, Occlusion, Active }
 
 		// ----------------------------------------------------------------------------------------------------//
 		//                                           PUBLIC FIELDS                                             //
@@ -78,8 +81,15 @@ namespace SimpleTools.Culling
 		// --------------------------------------------------
 		// Editor State
 
-		private bool m_IsGenerating;
-		public bool isGenerating { get { return m_IsGenerating; } }
+		private BakeState m_BakeState;
+		public BakeState bakeState { get { return m_BakeState; } }
+		
+		private float m_Completion;
+		public float completion
+		{
+			get { return m_Completion; }
+			set { m_Completion = value; }
+		}
 
 		// --------------------------------------------------
 		// Editor Data
@@ -92,32 +102,49 @@ namespace SimpleTools.Culling
 		[ExecuteInEditMode]
         public void OnClickGenerate()
         {
-            m_IsGenerating = true;
-            m_StaticRenderers = Utils.GetStaticRenderers();
-
-			// Generate Occluder Proxy Geometry
-			ClearOccluderProxyGeometry();
-            m_Occluders = Utils.BuildOccluderProxyGeometry(transform, m_StaticRenderers, m_OccluderTag);
-			
-			// Generate Hierarchical Volume Grid
-			ClearHierarchicalVolumeGrid();
-			Bounds bounds = Utils.GetSceneBounds(m_StaticRenderers);
-			m_VolumeData = Utils.BuildHierarchicalVolumeGrid(bounds, m_VolumeDensity);
-
-			// Generate Occlusion Data
-			VolumeData[] smallestVolumes = Utils.GetLowestSubdivisionVolumes(m_VolumeData, m_VolumeDensity);
-			foreach(VolumeData volume in smallestVolumes)
-				volume.renderers = Utils.BuildOcclusionForVolume(volume.bounds, m_RayDensity, m_StaticRenderers, m_Occluders, m_FilterAngle);
-
-            m_IsGenerating = false;
+			EditorCoroutines.StopAllCoroutines(this);
+			EditorCoroutines.StartCoroutine(Generate(), this);
         }
 
         [ExecuteInEditMode]
         public void OnClickCancel()
         {
+			EditorCoroutines.StopAllCoroutines(this);
             ClearOccluderProxyGeometry();
 			ClearHierarchicalVolumeGrid();
+			m_BakeState = BakeState.Empty;	
+			m_Completion = 0;
         }
+
+		private IEnumerator Generate()
+		{
+            m_StaticRenderers = Utils.GetStaticRenderers();
+
+			// Generate Occluder Proxy Geometry
+			m_BakeState = BakeState.Occluders;
+			ClearOccluderProxyGeometry();
+            yield return EditorCoroutines.StartCoroutine(Utils.BuildOccluderProxyGeometry(transform, m_StaticRenderers, value => m_Occluders = value, this, m_OccluderTag), this);
+			
+			// Generate Hierarchical Volume Grid
+			m_BakeState = BakeState.Volumes;
+			ClearHierarchicalVolumeGrid();
+			Bounds bounds = Utils.GetSceneBounds(m_StaticRenderers);
+			yield return EditorCoroutines.StartCoroutine(Utils.BuildHierarchicalVolumeGrid(bounds, m_VolumeDensity, value => m_VolumeData = value, this), this);
+
+			// Generate Occlusion Data
+			m_BakeState = BakeState.Occlusion;
+			VolumeData[] smallestVolumes = Utils.GetLowestSubdivisionVolumes(m_VolumeData, m_VolumeDensity);
+			for(int i = 0; i < smallestVolumes.Length; i++)
+			{
+				m_Completion = (float)(i + 1) / (float)smallestVolumes.Length;
+				m_ActiveVolume = smallestVolumes[i];
+				yield return EditorCoroutines.StartCoroutine(Utils.BuildOcclusionForVolume(smallestVolumes[i].bounds, m_RayDensity, m_StaticRenderers, m_Occluders, value => smallestVolumes[i].renderers = value, this, m_FilterAngle), this);
+			}
+			
+			m_BakeState = BakeState.Active;
+			m_ActiveVolume = null;
+			yield return null;
+		}
 
 		// --------------------------------------------------
 		// Occluder Proxy Geometry
@@ -155,7 +182,7 @@ namespace SimpleTools.Culling
             }
 			if (m_DebugMode == DebugMode.Volumes)
             {
-				DebugUtils.DrawHierarchicalVolumeGrid(m_VolumeData);
+				DebugUtils.DrawHierarchicalVolumeGrid(m_VolumeData, m_ActiveVolume);
             }
         }
 

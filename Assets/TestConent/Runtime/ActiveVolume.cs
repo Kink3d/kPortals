@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using UnityEngine;
+using marijnz.EditorCoroutines;
 
 namespace SimpleTools.Culling.Tests
 {
@@ -38,7 +39,7 @@ namespace SimpleTools.Culling.Tests
 			m_VolumeData = null;
             MeshRenderer[] staticRenderers = Utils.GetStaticRenderers();
 			Bounds bounds = Utils.GetSceneBounds(staticRenderers);
-			m_VolumeData = Utils.BuildHierarchicalVolumeGrid(bounds, m_VolumeDensity);
+            EditorCoroutines.StartCoroutine(Utils.BuildHierarchicalVolumeGrid(bounds, m_VolumeDensity, value => m_VolumeData = value, this), this);
 
             UnityEditor.SceneView.RepaintAll();
         }

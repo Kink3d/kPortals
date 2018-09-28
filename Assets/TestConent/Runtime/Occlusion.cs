@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using marijnz.EditorCoroutines;
 
 namespace SimpleTools.Culling.Tests
 {
@@ -39,7 +40,7 @@ namespace SimpleTools.Culling.Tests
             List<MeshRenderer> renderers = new List<MeshRenderer>();
 
             if (m_Occluders == null)
-                m_Occluders = Utils.BuildOccluderProxyGeometry(transform, m_StaticRenderers);
+                EditorCoroutines.StartCoroutine(Utils.BuildOccluderProxyGeometry(transform, m_StaticRenderers, value => m_Occluders = value, this), this);
 
             for (int i = 0; i < m_StaticRenderers.Length; i++)
 			{

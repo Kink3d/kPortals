@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using marijnz.EditorCoroutines;
 
 namespace SimpleTools.Culling
 {
@@ -207,34 +208,33 @@ namespace SimpleTools.Culling
         // --------------------------------------------------
         // Visibility
 
-		public static MeshRenderer[] BuildOcclusionForVolume(Bounds bounds, int rayDensity, MeshRenderer[] staticRenderers, OccluderData[] occluders, int coneAngle = 45)
+		public static IEnumerator BuildOcclusionForVolume(Bounds bounds, int rayDensity, MeshRenderer[] staticRenderers, OccluderData[] occluders, Action<MeshRenderer[]> result, object obj, int coneAngle = 45)
         {
             VolumeDebugData debugData = new VolumeDebugData();
-            return BuildOcclusionForVolume(bounds, rayDensity, staticRenderers, occluders, out debugData, coneAngle);
+            yield return EditorCoroutines.StartCoroutine(BuildVisibilityAndOcclusionForVolume(bounds, rayDensity, staticRenderers, result,  value => debugData = value, coneAngle, occluders), obj);
         }
 
-		public static MeshRenderer[] BuildOcclusionForVolume(Bounds bounds, int rayDensity, MeshRenderer[] staticRenderers, OccluderData[] occluders, out VolumeDebugData debugData, int coneAngle = 45)
+		public static IEnumerator BuildOcclusionForVolume(Bounds bounds, int rayDensity, MeshRenderer[] staticRenderers, OccluderData[] occluders, Action<MeshRenderer[]> result, Action<VolumeDebugData> debugData, object obj, int coneAngle = 45)
         {
-            return BuildVisibilityAndOcclusionForVolume(bounds, rayDensity, staticRenderers, out debugData, coneAngle, occluders);
+            yield return EditorCoroutines.StartCoroutine(BuildVisibilityAndOcclusionForVolume(bounds, rayDensity, staticRenderers, result, debugData, coneAngle, occluders), obj);
         }
 
-        public static MeshRenderer[] BuildVisibilityForVolume(Bounds bounds, int rayDensity, MeshRenderer[] staticRenderers, int coneAngle = 45)
+        public static IEnumerator BuildVisibilityForVolume(Bounds bounds, int rayDensity, MeshRenderer[] staticRenderers, Action<MeshRenderer[]> result, object obj, int coneAngle = 45)
         {
             VolumeDebugData debugData = new VolumeDebugData();
-            return BuildVisibilityForVolume(bounds, rayDensity, staticRenderers, out debugData, coneAngle);
+			yield return EditorCoroutines.StartCoroutine(BuildVisibilityAndOcclusionForVolume(bounds, rayDensity, staticRenderers, result,  value => debugData = value, coneAngle), obj);
         }
 
-		public static MeshRenderer[] BuildVisibilityForVolume(Bounds bounds, int rayDensity, MeshRenderer[] staticRenderers, out VolumeDebugData debugData, int coneAngle = 45)
+		public static IEnumerator BuildVisibilityForVolume(Bounds bounds, int rayDensity, MeshRenderer[] staticRenderers, Action<MeshRenderer[]> result, Action<VolumeDebugData> debugData, object obj, int coneAngle = 45)
         {
-            return BuildVisibilityAndOcclusionForVolume(bounds, rayDensity, staticRenderers, out debugData, coneAngle);
+            yield return EditorCoroutines.StartCoroutine(BuildVisibilityAndOcclusionForVolume(bounds, rayDensity, staticRenderers, result, debugData, coneAngle), obj);
         }
 
-        private static MeshRenderer[] BuildVisibilityAndOcclusionForVolume(Bounds bounds, int rayDensity, MeshRenderer[] staticRenderers, out VolumeDebugData debugData, int coneAngle = 45, OccluderData[] occluders = null)
+        private static IEnumerator BuildVisibilityAndOcclusionForVolume(Bounds bounds, int rayDensity, MeshRenderer[] staticRenderers, Action<MeshRenderer[]> result, Action<VolumeDebugData> debugData, int coneAngle = 45, OccluderData[] occluders = null)
         {
             List<MeshRenderer> passedRenderers = new List<MeshRenderer>();
             int rayCount = (int)(rayDensity * bounds.size.x * bounds.size.y * bounds.size.z);
 
-            debugData = new VolumeDebugData();
             RayDebugData[] rayDebugData = new RayDebugData[rayCount];
 
             for (int r = 0; r < rayCount; r++)
@@ -271,9 +271,9 @@ namespace SimpleTools.Culling
                 rayDebugData[r] = new RayDebugData(new Vector3[2] { rayPosition, rayEnd }, rayHasHit);
             }
 
-            debugData = new VolumeDebugData(rayDebugData, staticRenderers.Length, passedRenderers.Count);
-
-            return passedRenderers.ToArray();
+			yield return null;
+			debugData(new VolumeDebugData(rayDebugData, staticRenderers.Length, passedRenderers.Count));
+            result(passedRenderers.ToArray());
         }
 
         // --------------------------------------------------
@@ -281,8 +281,10 @@ namespace SimpleTools.Culling
 
         public static string occluderContainerName = "OccluderProxies";
 
-        public static OccluderData[] BuildOccluderProxyGeometry(Transform parent, MeshRenderer[] staticRenderers, string tag = "Occluder")
+        public static IEnumerator BuildOccluderProxyGeometry(Transform parent, MeshRenderer[] staticRenderers, Action<OccluderData[]> result, Component component, string tag = "Occluder")
         {
+			SimpleCulling culling = component as SimpleCulling;
+
             Transform container = Utils.NewObject(occluderContainerName, parent).transform;
             List<MeshRenderer> occluderRenderers = staticRenderers.Where(s => s.gameObject.tag == tag).ToList();
             OccluderData[] occluders = new OccluderData[occluderRenderers.Count];
@@ -294,25 +296,30 @@ namespace SimpleTools.Culling
                 MeshCollider proxyCollider = proxyObj.AddComponent<MeshCollider>();
                 proxyCollider.sharedMesh = occluderRenderers[i].GetComponent<MeshFilter>().sharedMesh;
                 occluders[i] = new OccluderData(proxyCollider, occluderRenderers[i]);
+
+				if(culling != null)
+					culling.completion = (float)(i + 1) / (float)occluders.Length;
+				UnityEditor.SceneView.RepaintAll();
+				yield return null;
             }
-            return occluders;
+            result(occluders);
         }
 
         // --------------------------------------------------
         // Hirarchical Volume Grid
         
-        public static VolumeData BuildHierarchicalVolumeGrid(Bounds bounds, int density)
+        public static IEnumerator BuildHierarchicalVolumeGrid(Bounds bounds, int density, Action<VolumeData> result, object obj)
         {
             VolumeData data = new VolumeData(bounds, null, null);
             int count = 0;
             if (count < density)
             {
-                BuildHierarchicalVolumeGridRecursive(count, density, ref data);
+                yield return EditorCoroutines.StartCoroutine(BuildHierarchicalVolumeGridRecursive(count, density, data, value => data = value, obj), obj);
             }
-            return data;
+            result(data);
         }
         
-        private static void BuildHierarchicalVolumeGridRecursive(int count, int density, ref VolumeData data)
+        private static IEnumerator BuildHierarchicalVolumeGridRecursive(int count, int density, VolumeData data, Action<VolumeData> result, object obj)
 		{
 			count++;
 			VolumeData[] childData = new VolumeData[8];
@@ -328,10 +335,13 @@ namespace SimpleTools.Culling
 
 				if(count < density)
 				{
-					BuildHierarchicalVolumeGridRecursive(count, density, ref childData[i]);
+					VolumeData childResult = new VolumeData();
+					yield return EditorCoroutines.StartCoroutine(BuildHierarchicalVolumeGridRecursive(count, density, childData[i], value => childResult = value, obj), obj);
+					childData[i] = childResult;
 				}
 			}
 			data.children = childData;
+			result(data);
 		}
 
 		public static VolumeData[] GetLowestSubdivisionVolumes(VolumeData data, int density)

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using marijnz.EditorCoroutines;
 
 namespace SimpleTools.Culling.Tests
 {
@@ -56,19 +58,7 @@ namespace SimpleTools.Culling.Tests
         [ExecuteInEditMode]
         public void OnClickGenerate()
         {
-            m_StaticRenderers = Utils.GetStaticRenderers();
-            Bounds bounds = Utils.GetSceneBounds(m_StaticRenderers);
-            m_VolumeData = Utils.BuildHierarchicalVolumeGrid(bounds, 0);
-            m_PassedRenderers = Utils.BuildVisibilityForVolume(bounds, m_RayDensity, m_StaticRenderers, out m_DebugData, m_FilterAngle);
-
-            totalBounds = bounds.size;
-            totalRays = m_DebugData.rays.Length;
-            successfulRays = m_DebugData.rays.Where(s => s.pass).ToList().Count;
-            totalRenderers = m_StaticRenderers.Length;
-            successfulRenderers = m_PassedRenderers.Length;
-            displayDebug = true;
-
-            UnityEditor.SceneView.RepaintAll();
+            EditorCoroutines.StartCoroutine(Generate(), this);
         }
 
         [ExecuteInEditMode]
@@ -78,6 +68,24 @@ namespace SimpleTools.Culling.Tests
             m_StaticRenderers = null;
             m_DebugData.rays = null;
             displayDebug = false;
+            UnityEditor.SceneView.RepaintAll();
+        }
+
+        private IEnumerator Generate()
+		{
+            m_StaticRenderers = Utils.GetStaticRenderers();
+            Bounds bounds = Utils.GetSceneBounds(m_StaticRenderers);
+
+            yield return EditorCoroutines.StartCoroutine(Utils.BuildHierarchicalVolumeGrid(bounds, 0, value => m_VolumeData = value, this), this);
+            yield return EditorCoroutines.StartCoroutine(Utils.BuildVisibilityForVolume(bounds, m_RayDensity, m_StaticRenderers, value => m_PassedRenderers = value, value => m_DebugData = value, this, m_FilterAngle), this);
+
+            totalBounds = bounds.size;
+            totalRays = m_DebugData.rays.Length;
+            successfulRays = m_DebugData.rays.Where(s => s.pass).ToList().Count;
+            totalRenderers = m_StaticRenderers.Length;
+            successfulRenderers = m_PassedRenderers.Length;
+            displayDebug = true;
+
             UnityEditor.SceneView.RepaintAll();
         }
 
