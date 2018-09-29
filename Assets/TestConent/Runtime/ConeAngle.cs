@@ -7,7 +7,7 @@ namespace SimpleTools.Culling.Tests
 	public class ConeAngle : MonoBehaviour 
 	{
 
-#if (UNITY_EDITOR)
+#if UNITY_EDITOR
 
         // ----------------------------------------------------------------------------------------------------//
         //                                           PUBLIC FIELDS                                             //

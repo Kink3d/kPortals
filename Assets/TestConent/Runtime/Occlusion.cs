@@ -9,7 +9,7 @@ namespace SimpleTools.Culling.Tests
 	public class Occlusion : MonoBehaviour 
 	{
 
-#if (UNITY_EDITOR)
+#if UNITY_EDITOR
 
         // ----------------------------------------------------------------------------------------------------//
         //                                           PUBLIC FIELDS                                             //

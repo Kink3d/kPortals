@@ -8,7 +8,7 @@ namespace SimpleTools.Culling.Tests
 	public class ActiveVolume : MonoBehaviour 
 	{
 
-#if (UNITY_EDITOR)
+#if UNITY_EDITOR
 
         // ----------------------------------------------------------------------------------------------------//
         //                                           PUBLIC FIELDS                                             //
@@ -44,7 +44,7 @@ namespace SimpleTools.Culling.Tests
 			Bounds bounds = Utils.GetSceneBounds(staticRenderers);
             EditorCoroutines.StartCoroutine(Utils.BuildHierarchicalVolumeGrid(bounds, m_VolumeDensity, value => m_VolumeData = value, this), this);
 
-#if (UNITY_EDITOR)
+#if UNITY_EDITOR
             UnityEditor.SceneView.RepaintAll();
 #endif
         }
@@ -53,7 +53,7 @@ namespace SimpleTools.Culling.Tests
         public void OnClickCancel()
         {
             m_VolumeData = null;
-#if (UNITY_EDITOR)
+#if UNITY_EDITOR
             UnityEditor.SceneView.RepaintAll();
 #endif
         }

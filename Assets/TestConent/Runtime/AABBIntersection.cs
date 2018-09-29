@@ -8,7 +8,7 @@ namespace SimpleTools.Culling.Tests
 	public class AABBIntersection : MonoBehaviour 
 	{
 
-#if (UNITY_EDITOR)
+#if UNITY_EDITOR
 
         // ----------------------------------------------------------------------------------------------------//
         //                                           PUBLIC FIELDS                                             //

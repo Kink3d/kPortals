@@ -315,19 +315,23 @@ namespace SimpleTools.Culling
         {
 			SimpleCulling culling = component as SimpleCulling;
 
-            Transform container = Utils.NewObject(occluderContainerName, parent).transform;
+            Transform container = NewObject(occluderContainerName, parent).transform;
             List<MeshRenderer> occluderRenderers = staticRenderers.Where(s => s.gameObject.tag == tag).ToList();
             OccluderData[] occluders = new OccluderData[occluderRenderers.Count];
             for (int i = 0; i < occluders.Length; i++)
             {
+                MeshFilter meshFilter = occluderRenderers[i].GetComponent<MeshFilter>();
+                if (meshFilter == null)
+                    continue;
+
                 GameObject occluderObj = occluderRenderers[i].gameObject;
                 Transform occluderTransform = occluderObj.transform;
                 GameObject proxyObj = NewObject(occluderObj.name, container, occluderTransform.position, occluderTransform.rotation, occluderTransform.lossyScale);
                 MeshCollider proxyCollider = proxyObj.AddComponent<MeshCollider>();
-                proxyCollider.sharedMesh = occluderRenderers[i].GetComponent<MeshFilter>().sharedMesh;
+                proxyCollider.sharedMesh = meshFilter.sharedMesh;
                 occluders[i] = new OccluderData(proxyCollider, occluderRenderers[i]);
 
-#if (UNITY_EDITOR)
+#if UNITY_EDITOR
                 if (culling != null)
 					culling.completion = (float)(i + 1) / (float)occluders.Length;
                 UnityEditor.SceneView.RepaintAll();
@@ -457,7 +461,7 @@ namespace SimpleTools.Culling
     // --------------------------------------------------
     // Editor Constants
 
-#if (UNITY_EDITOR)
+#if UNITY_EDITOR
 
     public static class DebugUtils
     {

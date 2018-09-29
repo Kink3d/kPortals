@@ -63,27 +63,36 @@ namespace SimpleTools.Culling
 			
 			if(Utils.GetActiveVolumeAtPosition(m_VolumeData, Camera.main.transform.position, out m_ActiveVolume))
 			{
-				foreach (Renderer renderer in m_VisibleRenderers)
-                renderer.enabled = false;
+                for (int i = 0; i < m_ActiveVolume.renderers.Length; i++)
+                {
+                    if (!m_VisibleRenderers.Contains(m_ActiveVolume.renderers[i]))
+                        m_ActiveVolume.renderers[i].enabled = true;
+                }
+
+                for (int i = 0; i < m_VisibleRenderers.Length; i++)
+                {
+                    if(!m_ActiveVolume.renderers.Contains(m_VisibleRenderers[i]))
+                        m_VisibleRenderers[i].enabled = false;
+                }
 
 				m_VisibleRenderers = m_ActiveVolume.renderers;
-				foreach (Renderer renderer in m_VisibleRenderers)
-					renderer.enabled = true;
 			}
 		}
 
-		// ----------------------------------------------------------------------------------------------------//
-		//                                              EDITOR                                                 //
-		// ----------------------------------------------------------------------------------------------------//
+        // ----------------------------------------------------------------------------------------------------//
+        //                                              EDITOR                                                 //
+        // ----------------------------------------------------------------------------------------------------//
 
 #if UNITY_EDITOR
 
-		// --------------------------------------------------
-		// Editor State
+        // --------------------------------------------------
+        // Editor State
 
-		private BakeState m_BakeState;
+        [SerializeField]
+        private BakeState m_BakeState;
 		public BakeState bakeState { get { return m_BakeState; } }
 		
+        [SerializeField]
 		private float m_Completion;
 		public float completion
 		{
@@ -91,10 +100,10 @@ namespace SimpleTools.Culling
 			set { m_Completion = value; }
 		}
 
-		// --------------------------------------------------
-		// Editor Data
-        
-		private MeshRenderer[] m_StaticRenderers;
+        // --------------------------------------------------
+        // Editor Data
+
+        private MeshRenderer[] m_StaticRenderers;
 
 		// --------------------------------------------------
 		// Interface
@@ -130,7 +139,7 @@ namespace SimpleTools.Culling
 			ClearHierarchicalVolumeGrid();
 			Bounds bounds = Utils.GetSceneBounds(m_StaticRenderers);
 			yield return EditorCoroutines.StartCoroutine(Utils.BuildHierarchicalVolumeGrid(bounds, m_VolumeDensity, value => m_VolumeData = value, this), this);
-
+            
 			// Generate Occlusion Data
 			m_BakeState = BakeState.Occlusion;
 			VolumeData[] smallestVolumes = Utils.GetLowestSubdivisionVolumes(m_VolumeData, m_VolumeDensity);
@@ -144,12 +153,12 @@ namespace SimpleTools.Culling
 			m_BakeState = BakeState.Active;
 			m_ActiveVolume = null;
 			yield return null;
-		}
+        }
 
-		// --------------------------------------------------
-		// Occluder Proxy Geometry
+        // --------------------------------------------------
+        // Occluder Proxy Geometry
 
-		[ExecuteInEditMode]
+        [ExecuteInEditMode]
 		private void ClearOccluderProxyGeometry()
 		{
 			m_Occluders = null;

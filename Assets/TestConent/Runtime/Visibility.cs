@@ -11,7 +11,7 @@ namespace SimpleTools.Culling.Tests
     public class Visibility : MonoBehaviour
     {
 
-#if (UNITY_EDITOR)
+#if UNITY_EDITOR
 
         // ----------------------------------------------------------------------------------------------------//
         //                                           PUBLIC FIELDS                                             //
@@ -71,7 +71,7 @@ namespace SimpleTools.Culling.Tests
             m_StaticRenderers = null;
             m_DebugData.rays = null;
             displayDebug = false;
-#if (UNITY_EDITOR)
+#if UNITY_EDITOR
             UnityEditor.SceneView.RepaintAll();
 #endif
         }
@@ -91,7 +91,7 @@ namespace SimpleTools.Culling.Tests
             successfulRenderers = m_PassedRenderers.Length;
             displayDebug = true;
 
-#if (UNITY_EDITOR)
+#if UNITY_EDITOR
             UnityEditor.SceneView.RepaintAll();
 #endif
         }
