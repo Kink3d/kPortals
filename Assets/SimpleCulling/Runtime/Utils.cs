@@ -128,7 +128,7 @@ namespace SimpleTools.Culling
 				return null;
 			
 			Dictionary<Collider, OccluderData> occluderDictionary = occluders.ToDictionary(s => s.collider as Collider);
-			List<OccluderHit> occluderHits = new List<OccluderHit>(); // TD - Remove GC
+			List<OccluderHit> occluderHits = new List<OccluderHit>(); // TODO - Remove GC
 			foreach(RaycastHit hit in hits)
 			{
 				OccluderData hitOccluder;
@@ -232,7 +232,7 @@ namespace SimpleTools.Culling
 			if(occluderHits[0].data.renderer == occludee)
 				return true;
 
-			return Vector3.Distance(position, occluderHits[0].point) > Vector3.Distance(position, occludee.bounds.center); // TD - Need intersection point with AABB\
+			return Vector3.Distance(position, occluderHits[0].point) > Vector3.Distance(position, occludee.bounds.center); // TODO - Need intersection point with AABB\
 		}
 
         // --------------------------------------------------
@@ -341,6 +341,28 @@ namespace SimpleTools.Culling
             result(occluders);
         }
 
+		// --------------------------------------------------
+        // Manual Volume Grid
+
+		public static IEnumerator BuildManualVolumeGrid(BoxCollider[] manualVolumes, Action<VolumeData> result)
+        {
+			VolumeData data = null;
+			if(manualVolumes.Length == 0)
+				result(data);
+
+			Bounds bounds = new Bounds();
+			for(int i = 0; i < manualVolumes.Length; i++)
+				bounds.Encapsulate(manualVolumes[i].bounds);
+            
+            List<VolumeData> volumes = new List<VolumeData>();
+			for(int i = 0; i < manualVolumes.Length; i++)
+				volumes.Add(new VolumeData(manualVolumes[i].bounds, null, null));
+			
+			data = new VolumeData(bounds, volumes.ToArray(), null);
+			yield return null;
+			result(data);
+        }
+
         // --------------------------------------------------
         // Hirarchical Volume Grid
         
@@ -363,8 +385,8 @@ namespace SimpleTools.Culling
 			{
 				Vector3 size = new Vector3(data.bounds.size.x * 0.5f, data.bounds.size.y * 0.5f, data.bounds.size.z * 0.5f);
 				float signX = (float)(i + 1) % 2 == 0 ? 1 : -1;  
-				float signY = i == 2 || i == 3 || i == 6 || i == 7 ? 1 : -1; // TD - Maths
-				float signZ = i == 4 || i == 5 || i == 6 || i == 7 ? 1 : -1; //(float)(i + 1) * 0.5f > 4 ? 1 : -1; // TD - Maths
+				float signY = i == 2 || i == 3 || i == 6 || i == 7 ? 1 : -1; // TODO - Maths
+				float signZ = i == 4 || i == 5 || i == 6 || i == 7 ? 1 : -1; //(float)(i + 1) * 0.5f > 4 ? 1 : -1; // TODO - Maths
 				Vector3 position = data.bounds.center + new Vector3(signX * size.x * 0.5f, signY * size.y * 0.5f, signZ * size.z * 0.5f);
 				Bounds bounds = new Bounds(position, size);
 				childData[i] = new VolumeData(bounds, null, null);

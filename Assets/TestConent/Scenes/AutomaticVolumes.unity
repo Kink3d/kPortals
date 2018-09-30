@@ -113,49 +113,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &52052222
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 52052224}
-  - component: {fileID: 52052223}
-  m_Layer: 0
-  m_Name: Z
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!64 &52052223
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 52052222}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_SkinWidth: 0.01
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!4 &52052224
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 52052222}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 10, y: 5, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1109389891}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &104119549
 GameObject:
   m_ObjectHideFlags: 0
@@ -499,6 +456,79 @@ Transform:
   m_Father: {fileID: 318831962}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -45.000004, z: 0}
+--- !u!1 &546673089
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 546673090}
+  m_Layer: 0
+  m_Name: OccluderProxies
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &546673090
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 546673089}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 807144545}
+  - {fileID: 1028151169}
+  m_Father: {fileID: 1231971947}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &807144544
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 807144545}
+  - component: {fileID: 807144546}
+  m_Layer: 0
+  m_Name: X
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &807144545
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 807144544}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalScale: {x: 10.000002, y: 5, z: 1.0000002}
+  m_Children: []
+  m_Father: {fileID: 546673090}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!64 &807144546
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 807144544}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &858052133
 GameObject:
   m_ObjectHideFlags: 0
@@ -584,35 +614,48 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 858052133}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1109389890
+--- !u!1 &1028151167
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1109389891}
+  - component: {fileID: 1028151169}
+  - component: {fileID: 1028151168}
   m_Layer: 0
-  m_Name: OccluderProxies
+  m_Name: Z
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1109389891
+--- !u!64 &1028151168
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1028151167}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1028151169
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1109389890}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 2042145408}
-  - {fileID: 52052224}
-  m_Father: {fileID: 1231971947}
-  m_RootOrder: 0
+  m_GameObject: {fileID: 1028151167}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalScale: {x: 10, y: 5, z: 1}
+  m_Children: []
+  m_Father: {fileID: 546673090}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1110372709
 GameObject:
@@ -895,7 +938,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1109389891}
+  - {fileID: 546673090}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -910,8 +953,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 653893ee17490bb4795c982bbe8d5a3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_VolumeMode: 0
+  m_ManualVolumes: []
   m_VolumeDensity: 2
-  m_RayDensity: 1000
+  m_RayDensity: 100
   m_FilterAngle: 45
   m_DebugMode: 2
   m_VolumeData:
@@ -928,16 +973,16 @@ MonoBehaviour:
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
-        - {fileID: 858052136}
         - {fileID: 104119552}
+        - {fileID: 858052136}
         - {fileID: 1197619216}
       - bounds:
           m_Center: {x: -1.2500001, y: -2.7500005, z: -3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
-        - {fileID: 858052136}
         - {fileID: 104119552}
+        - {fileID: 858052136}
         - {fileID: 1197619216}
         - {fileID: 431572729}
       - bounds:
@@ -953,19 +998,19 @@ MonoBehaviour:
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
-        - {fileID: 858052136}
-        - {fileID: 431572729}
         - {fileID: 104119552}
+        - {fileID: 858052136}
         - {fileID: 1197619216}
+        - {fileID: 431572729}
       - bounds:
           m_Center: {x: -3.7500005, y: -2.7500005, z: -1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
-        - {fileID: 1197619216}
-        - {fileID: 858052136}
         - {fileID: 104119552}
+        - {fileID: 858052136}
         - {fileID: 1226219646}
+        - {fileID: 1197619216}
       - bounds:
           m_Center: {x: -1.2500001, y: -2.7500005, z: -1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
@@ -973,18 +1018,15 @@ MonoBehaviour:
         renderers:
         - {fileID: 858052136}
         - {fileID: 104119552}
-        - {fileID: 1226219646}
         - {fileID: 1197619216}
-        - {fileID: 431572729}
-        - {fileID: 1110372712}
       - bounds:
           m_Center: {x: -3.7500005, y: -0.25000012, z: -1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
+        - {fileID: 1197619216}
         - {fileID: 104119552}
         - {fileID: 858052136}
-        - {fileID: 1197619216}
         - {fileID: 1226219646}
       - bounds:
           m_Center: {x: -1.2500001, y: -0.25000012, z: -1.2500001}
@@ -993,9 +1035,8 @@ MonoBehaviour:
         renderers:
         - {fileID: 858052136}
         - {fileID: 104119552}
-        - {fileID: 1197619216}
-        - {fileID: 1110372712}
         - {fileID: 1226219646}
+        - {fileID: 1197619216}
         - {fileID: 431572729}
       renderers: []
     - bounds:
@@ -1016,8 +1057,8 @@ MonoBehaviour:
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
-        - {fileID: 104119552}
         - {fileID: 858052136}
+        - {fileID: 104119552}
         - {fileID: 431572729}
       - bounds:
           m_Center: {x: 1.2500001, y: -0.25000012, z: -3.7500005}
@@ -1045,17 +1086,14 @@ MonoBehaviour:
         - {fileID: 104119552}
         - {fileID: 431572729}
         - {fileID: 1110372712}
-        - {fileID: 1197619216}
-        - {fileID: 1226219646}
       - bounds:
           m_Center: {x: 3.7500005, y: -2.7500005, z: -1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
-        - {fileID: 104119552}
         - {fileID: 858052136}
+        - {fileID: 104119552}
         - {fileID: 431572729}
-        - {fileID: 1110372712}
       - bounds:
           m_Center: {x: 1.2500001, y: -0.25000012, z: -1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
@@ -1063,8 +1101,8 @@ MonoBehaviour:
         renderers:
         - {fileID: 858052136}
         - {fileID: 431572729}
-        - {fileID: 1110372712}
         - {fileID: 104119552}
+        - {fileID: 1110372712}
         - {fileID: 1197619216}
         - {fileID: 1226219646}
       - bounds:
@@ -1072,9 +1110,9 @@ MonoBehaviour:
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
-        - {fileID: 858052136}
-        - {fileID: 431572729}
         - {fileID: 104119552}
+        - {fileID: 431572729}
+        - {fileID: 858052136}
         - {fileID: 1110372712}
       renderers: []
     - bounds:
@@ -1086,9 +1124,9 @@ MonoBehaviour:
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
+        - {fileID: 104119552}
         - {fileID: 858052136}
         - {fileID: 1197619216}
-        - {fileID: 104119552}
       - bounds:
           m_Center: {x: -1.2500001, y: 2.25, z: -3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
@@ -1097,14 +1135,13 @@ MonoBehaviour:
         - {fileID: 858052136}
         - {fileID: 104119552}
         - {fileID: 1197619216}
-        - {fileID: 431572729}
       - bounds:
           m_Center: {x: -3.7500005, y: 4.7500005, z: -3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
-        - {fileID: 858052136}
         - {fileID: 104119552}
+        - {fileID: 858052136}
         - {fileID: 1197619216}
       - bounds:
           m_Center: {x: -1.2500001, y: 4.7500005, z: -3.7500005}
@@ -1121,20 +1158,19 @@ MonoBehaviour:
         children: []
         renderers:
         - {fileID: 104119552}
-        - {fileID: 1197619216}
         - {fileID: 858052136}
+        - {fileID: 1197619216}
         - {fileID: 1226219646}
       - bounds:
           m_Center: {x: -1.2500001, y: 2.25, z: -1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
-        - {fileID: 1226219646}
-        - {fileID: 1197619216}
-        - {fileID: 858052136}
         - {fileID: 104119552}
+        - {fileID: 858052136}
+        - {fileID: 1197619216}
+        - {fileID: 1226219646}
         - {fileID: 431572729}
-        - {fileID: 1110372712}
       - bounds:
           m_Center: {x: -3.7500005, y: 4.7500005, z: -1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
@@ -1143,18 +1179,15 @@ MonoBehaviour:
         - {fileID: 104119552}
         - {fileID: 858052136}
         - {fileID: 1197619216}
-        - {fileID: 1226219646}
       - bounds:
           m_Center: {x: -1.2500001, y: 4.7500005, z: -1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
+        - {fileID: 104119552}
         - {fileID: 858052136}
         - {fileID: 1197619216}
-        - {fileID: 104119552}
         - {fileID: 1226219646}
-        - {fileID: 431572729}
-        - {fileID: 1110372712}
       renderers: []
     - bounds:
         m_Center: {x: 2.5000002, y: 3.5000002, z: -2.5000002}
@@ -1165,9 +1198,9 @@ MonoBehaviour:
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
+        - {fileID: 104119552}
         - {fileID: 858052136}
         - {fileID: 431572729}
-        - {fileID: 104119552}
         - {fileID: 1197619216}
       - bounds:
           m_Center: {x: 3.7500005, y: 2.25, z: -3.7500005}
@@ -1182,37 +1215,37 @@ MonoBehaviour:
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
-        - {fileID: 104119552}
         - {fileID: 858052136}
         - {fileID: 431572729}
         - {fileID: 1197619216}
+        - {fileID: 104119552}
       - bounds:
           m_Center: {x: 3.7500005, y: 4.7500005, z: -3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
-        - {fileID: 858052136}
         - {fileID: 104119552}
+        - {fileID: 858052136}
         - {fileID: 431572729}
       - bounds:
           m_Center: {x: 1.2500001, y: 2.25, z: -1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
-        - {fileID: 431572729}
-        - {fileID: 104119552}
         - {fileID: 858052136}
-        - {fileID: 1197619216}
+        - {fileID: 104119552}
+        - {fileID: 431572729}
         - {fileID: 1110372712}
         - {fileID: 1226219646}
+        - {fileID: 1197619216}
       - bounds:
           m_Center: {x: 3.7500005, y: 2.25, z: -1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
-        - {fileID: 858052136}
-        - {fileID: 104119552}
         - {fileID: 431572729}
+        - {fileID: 104119552}
+        - {fileID: 858052136}
         - {fileID: 1110372712}
       - bounds:
           m_Center: {x: 1.2500001, y: 4.7500005, z: -1.2500001}
@@ -1220,20 +1253,19 @@ MonoBehaviour:
         children: []
         renderers:
         - {fileID: 858052136}
-        - {fileID: 431572729}
         - {fileID: 104119552}
-        - {fileID: 1197619216}
-        - {fileID: 1226219646}
         - {fileID: 1110372712}
+        - {fileID: 431572729}
+        - {fileID: 1197619216}
       - bounds:
           m_Center: {x: 3.7500005, y: 4.7500005, z: -1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
         - {fileID: 858052136}
-        - {fileID: 1110372712}
         - {fileID: 104119552}
         - {fileID: 431572729}
+        - {fileID: 1110372712}
       renderers: []
     - bounds:
         m_Center: {x: -2.5000002, y: -1.5000002, z: 2.5000002}
@@ -1244,40 +1276,39 @@ MonoBehaviour:
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
-        - {fileID: 858052136}
+        - {fileID: 1197619216}
         - {fileID: 104119552}
         - {fileID: 1226219646}
-        - {fileID: 1197619216}
+        - {fileID: 858052136}
       - bounds:
           m_Center: {x: -1.2500001, y: -2.7500005, z: 1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
-        - {fileID: 104119552}
         - {fileID: 858052136}
+        - {fileID: 104119552}
         - {fileID: 1226219646}
         - {fileID: 1197619216}
-        - {fileID: 431572729}
         - {fileID: 1110372712}
       - bounds:
           m_Center: {x: -3.7500005, y: -0.25000012, z: 1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
-        - {fileID: 858052136}
-        - {fileID: 1226219646}
         - {fileID: 104119552}
         - {fileID: 1197619216}
+        - {fileID: 1226219646}
+        - {fileID: 858052136}
       - bounds:
           m_Center: {x: -1.2500001, y: -0.25000012, z: 1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
+        - {fileID: 104119552}
         - {fileID: 858052136}
         - {fileID: 1226219646}
-        - {fileID: 104119552}
-        - {fileID: 1197619216}
         - {fileID: 1110372712}
+        - {fileID: 1197619216}
         - {fileID: 431572729}
       - bounds:
           m_Center: {x: -3.7500005, y: -2.7500005, z: 3.7500005}
@@ -1301,16 +1332,16 @@ MonoBehaviour:
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
+        - {fileID: 858052136}
         - {fileID: 104119552}
         - {fileID: 1226219646}
-        - {fileID: 858052136}
       - bounds:
           m_Center: {x: -1.2500001, y: -0.25000012, z: 3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
-        - {fileID: 1226219646}
         - {fileID: 858052136}
+        - {fileID: 1226219646}
         - {fileID: 104119552}
         - {fileID: 1110372712}
       renderers: []
@@ -1323,20 +1354,17 @@ MonoBehaviour:
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
-        - {fileID: 1110372712}
         - {fileID: 858052136}
         - {fileID: 104119552}
-        - {fileID: 431572729}
-        - {fileID: 1226219646}
-        - {fileID: 1197619216}
+        - {fileID: 1110372712}
       - bounds:
           m_Center: {x: 3.7500005, y: -2.7500005, z: 1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
         - {fileID: 858052136}
-        - {fileID: 104119552}
         - {fileID: 1110372712}
+        - {fileID: 104119552}
         - {fileID: 431572729}
       - bounds:
           m_Center: {x: 1.2500001, y: -0.25000012, z: 1.2500001}
@@ -1344,18 +1372,17 @@ MonoBehaviour:
         children: []
         renderers:
         - {fileID: 858052136}
+        - {fileID: 431572729}
         - {fileID: 1110372712}
         - {fileID: 104119552}
-        - {fileID: 431572729}
         - {fileID: 1226219646}
-        - {fileID: 1197619216}
       - bounds:
           m_Center: {x: 3.7500005, y: -0.25000012, z: 1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
-        - {fileID: 1110372712}
         - {fileID: 858052136}
+        - {fileID: 1110372712}
         - {fileID: 104119552}
         - {fileID: 431572729}
       - bounds:
@@ -1363,27 +1390,25 @@ MonoBehaviour:
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
-        - {fileID: 858052136}
         - {fileID: 104119552}
-        - {fileID: 1226219646}
+        - {fileID: 858052136}
         - {fileID: 1110372712}
       - bounds:
           m_Center: {x: 3.7500005, y: -2.7500005, z: 3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
-        - {fileID: 858052136}
         - {fileID: 104119552}
+        - {fileID: 858052136}
         - {fileID: 1110372712}
-        - {fileID: 1226219646}
       - bounds:
           m_Center: {x: 1.2500001, y: -0.25000012, z: 3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
         - {fileID: 858052136}
-        - {fileID: 104119552}
         - {fileID: 1110372712}
+        - {fileID: 104119552}
         - {fileID: 1226219646}
       - bounds:
           m_Center: {x: 3.7500005, y: -0.25000012, z: 3.7500005}
@@ -1391,9 +1416,8 @@ MonoBehaviour:
         children: []
         renderers:
         - {fileID: 858052136}
-        - {fileID: 1110372712}
         - {fileID: 104119552}
-        - {fileID: 1226219646}
+        - {fileID: 1110372712}
       renderers: []
     - bounds:
         m_Center: {x: -2.5000002, y: 3.5000002, z: 2.5000002}
@@ -1405,20 +1429,19 @@ MonoBehaviour:
         children: []
         renderers:
         - {fileID: 858052136}
-        - {fileID: 1197619216}
         - {fileID: 104119552}
         - {fileID: 1226219646}
+        - {fileID: 1197619216}
       - bounds:
           m_Center: {x: -1.2500001, y: 2.25, z: 1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
-        - {fileID: 1226219646}
-        - {fileID: 104119552}
         - {fileID: 858052136}
-        - {fileID: 1197619216}
+        - {fileID: 104119552}
+        - {fileID: 1226219646}
         - {fileID: 1110372712}
-        - {fileID: 431572729}
+        - {fileID: 1197619216}
       - bounds:
           m_Center: {x: -3.7500005, y: 4.7500005, z: 1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
@@ -1427,7 +1450,6 @@ MonoBehaviour:
         - {fileID: 858052136}
         - {fileID: 104119552}
         - {fileID: 1226219646}
-        - {fileID: 1197619216}
       - bounds:
           m_Center: {x: -1.2500001, y: 4.7500005, z: 1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
@@ -1437,8 +1459,6 @@ MonoBehaviour:
         - {fileID: 104119552}
         - {fileID: 1226219646}
         - {fileID: 1197619216}
-        - {fileID: 1110372712}
-        - {fileID: 431572729}
       - bounds:
           m_Center: {x: -3.7500005, y: 2.25, z: 3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
@@ -1447,7 +1467,6 @@ MonoBehaviour:
         - {fileID: 858052136}
         - {fileID: 104119552}
         - {fileID: 1226219646}
-        - {fileID: 1110372712}
       - bounds:
           m_Center: {x: -1.2500001, y: 2.25, z: 3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
@@ -1470,10 +1489,9 @@ MonoBehaviour:
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
-        - {fileID: 104119552}
         - {fileID: 858052136}
+        - {fileID: 104119552}
         - {fileID: 1226219646}
-        - {fileID: 1110372712}
       renderers: []
     - bounds:
         m_Center: {x: 2.5000002, y: 3.5000002, z: 2.5000002}
@@ -1484,11 +1502,11 @@ MonoBehaviour:
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
-        - {fileID: 858052136}
         - {fileID: 1110372712}
+        - {fileID: 858052136}
         - {fileID: 104119552}
-        - {fileID: 1226219646}
         - {fileID: 431572729}
+        - {fileID: 1226219646}
         - {fileID: 1197619216}
       - bounds:
           m_Center: {x: 3.7500005, y: 2.25, z: 1.2500001}
@@ -1507,35 +1525,34 @@ MonoBehaviour:
         - {fileID: 104119552}
         - {fileID: 858052136}
         - {fileID: 1110372712}
-        - {fileID: 1197619216}
-        - {fileID: 431572729}
         - {fileID: 1226219646}
+        - {fileID: 431572729}
       - bounds:
           m_Center: {x: 3.7500005, y: 4.7500005, z: 1.2500001}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
         - {fileID: 858052136}
-        - {fileID: 1110372712}
         - {fileID: 104119552}
+        - {fileID: 1110372712}
         - {fileID: 431572729}
       - bounds:
           m_Center: {x: 1.2500001, y: 2.25, z: 3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
-        - {fileID: 104119552}
         - {fileID: 858052136}
-        - {fileID: 1110372712}
+        - {fileID: 104119552}
         - {fileID: 1226219646}
+        - {fileID: 1110372712}
       - bounds:
           m_Center: {x: 3.7500005, y: 2.25, z: 3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
         - {fileID: 858052136}
-        - {fileID: 1110372712}
         - {fileID: 104119552}
+        - {fileID: 1110372712}
       - bounds:
           m_Center: {x: 1.2500001, y: 4.7500005, z: 3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
@@ -1544,22 +1561,23 @@ MonoBehaviour:
         - {fileID: 104119552}
         - {fileID: 858052136}
         - {fileID: 1110372712}
-        - {fileID: 1226219646}
       - bounds:
           m_Center: {x: 3.7500005, y: 4.7500005, z: 3.7500005}
           m_Extent: {x: 1.2500001, y: 1.2500001, z: 1.2500001}
         children: []
         renderers:
+        - {fileID: 1110372712}
         - {fileID: 858052136}
         - {fileID: 104119552}
-        - {fileID: 1110372712}
       renderers: []
     renderers: []
   m_Occluders:
-  - collider: {fileID: 2042145409}
+  - collider: {fileID: 807144546}
     renderer: {fileID: 104119552}
-  - collider: {fileID: 52052223}
+  - collider: {fileID: 1028151168}
     renderer: {fileID: 858052136}
+  m_BakeState: 4
+  m_Completion: 1
 --- !u!1 &1435618229
 GameObject:
   m_ObjectHideFlags: 0
@@ -1622,46 +1640,3 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2042145407
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2042145408}
-  - component: {fileID: 2042145409}
-  m_Layer: 0
-  m_Name: X
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2042145408
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2042145407}
-  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 10.000002, y: 5, z: 1.0000002}
-  m_Children: []
-  m_Father: {fileID: 1109389891}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!64 &2042145409
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2042145407}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_SkinWidth: 0.01
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}

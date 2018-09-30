@@ -14,6 +14,8 @@ namespace SimpleTools.Culling
             public static GUIContent debugSettingsText = EditorGUIUtility.TrTextContent("Debug Settings");
 
 			// Bake Settings
+            public static GUIContent volumeModeText = EditorGUIUtility.TrTextContent("Generation Mode", string.Format("Manual: Use user-defined volumes for visibility.{0}Automatic: Generate a grid of volumes for visibility.", Environment.NewLine));
+            public static GUIContent manualVolumesText = EditorGUIUtility.TrTextContent("Manual Volumes", "List of user defined volumes used for visibility.");
             public static GUIContent volumeDensityText = EditorGUIUtility.TrTextContent("Volume Density", "...");
             public static GUIContent rayDensityText = EditorGUIUtility.TrTextContent("Ray Density", "...");
             public static GUIContent filterAngleText = EditorGUIUtility.TrTextContent("Filter Angle", "...");
@@ -30,6 +32,8 @@ namespace SimpleTools.Culling
 		bool m_BakeSettingsFoldout = false;
         bool m_DebugSettingsFoldout = false;
 
+        SerializedProperty m_VolumeModeProp;
+        SerializedProperty m_ManualVolumesProp;
 		SerializedProperty m_VolumeDensityProp;
         SerializedProperty m_RayDensityProp;
         SerializedProperty m_FilterAngleProp;
@@ -49,6 +53,8 @@ namespace SimpleTools.Culling
 
         private void OnEnable()
         {
+            m_VolumeModeProp = serializedObject.FindProperty("m_VolumeMode");
+            m_ManualVolumesProp = serializedObject.FindProperty("m_ManualVolumes");
             m_VolumeDensityProp = serializedObject.FindProperty("m_VolumeDensity");
             m_RayDensityProp = serializedObject.FindProperty("m_RayDensity");
             m_FilterAngleProp = serializedObject.FindProperty("m_FilterAngle");
@@ -61,7 +67,11 @@ namespace SimpleTools.Culling
             if (m_BakeSettingsFoldout)
             {
                 EditorGUI.indentLevel++;
-                EditorGUILayout.PropertyField(m_VolumeDensityProp, Styles.volumeDensityText, true);
+                EditorGUILayout.PropertyField(m_VolumeModeProp, Styles.volumeModeText);
+                if (m_VolumeModeProp.enumValueIndex == (int)SimpleCulling.VolumeMode.Manual)
+                    EditorGUILayout.PropertyField(m_ManualVolumesProp, Styles.manualVolumesText, true);
+                else if (m_VolumeModeProp.enumValueIndex == (int)SimpleCulling.VolumeMode.Automatic)
+                    EditorGUILayout.PropertyField(m_VolumeDensityProp, Styles.volumeDensityText, true);
                 EditorGUILayout.PropertyField(m_RayDensityProp, Styles.rayDensityText, true);
                 EditorGUILayout.PropertyField(m_FilterAngleProp, Styles.filterAngleText, true);
                 EditorGUI.indentLevel--;
