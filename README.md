@@ -1,5 +1,5 @@
 # SimpleCulling
-### A Simple Pre-calculated Portal Visibility System for Occlusion Culling
+### A simple pre-calculated Portal Visibility System for Occlusion Culling
 
 ![alt text](https://github.com/Kink3d/SimpleCulling/blob/master/Images/00.png?raw=true)
 *An example of Manual Volume mode culling.*
