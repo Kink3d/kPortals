@@ -75,7 +75,7 @@ namespace SimpleTools.Culling
 			
 			if(Utils.GetActiveVolumeAtPosition(m_VolumeData, Camera.main.transform.position, out m_ActiveVolume))
 			{
-				//if(m_ActiveVolume != m_PreviousVolume) // TODO - Enable after runtime optimisation
+				if(m_ActiveVolume != m_PreviousVolume) // TODO - Disable for runtime optimisation
 				{
 					m_PreviousVolume = m_ActiveVolume;
 					UpdateOcclusion();
