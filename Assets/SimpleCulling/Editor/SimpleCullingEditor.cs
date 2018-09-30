@@ -16,18 +16,18 @@ namespace SimpleTools.Culling
 			// Bake Settings
             public static GUIContent volumeModeText = EditorGUIUtility.TrTextContent("Generation Mode", string.Format("Manual: Use user-defined volumes for visibility.{0}Automatic: Generate a grid of volumes for visibility.", Environment.NewLine));
             public static GUIContent manualVolumesText = EditorGUIUtility.TrTextContent("Manual Volumes", "List of user defined volumes used for visibility.");
-            public static GUIContent volumeDensityText = EditorGUIUtility.TrTextContent("Volume Density", "...");
-            public static GUIContent rayDensityText = EditorGUIUtility.TrTextContent("Ray Density", "...");
-            public static GUIContent filterAngleText = EditorGUIUtility.TrTextContent("Filter Angle", "...");
-            public static GUIContent occluderTagText = EditorGUIUtility.TrTextContent("Occluder Tag", "...");
+            public static GUIContent volumeDensityText = EditorGUIUtility.TrTextContent("Volume Density", "Amount of subdivisions to use when generating automatic volume grid.");
+            public static GUIContent rayDensityText = EditorGUIUtility.TrTextContent("Ray Density", "Amount of rays to use per cubic unit. Lower values result in faster bake time but less visibility accuracy.");
+            public static GUIContent filterAngleText = EditorGUIUtility.TrTextContent("Filter Angle", "Objects outside this angle from a ray is discarded. Lower values result in faster bake time but less visibility accuracy.");
+            public static GUIContent occluderTagText = EditorGUIUtility.TrTextContent("Occluder Tag", "Tag used for filtering occluder objects.");
 
             // Debug Settings
             public static GUIContent debugModeText = EditorGUIUtility.TrTextContent("Debug Mode", string.Format("...", Environment.NewLine));
 
             // Bake Tools
-            public static GUIContent generateText = EditorGUIUtility.TrTextContent("Generate", "...");
-            public static GUIContent cancelText = EditorGUIUtility.TrTextContent("Cancel", "...");
-            public static GUIContent clearText = EditorGUIUtility.TrTextContent("Clear", "...");
+            public static GUIContent generateText = EditorGUIUtility.TrTextContent("Generate", "Generate new culling data.");
+            public static GUIContent cancelText = EditorGUIUtility.TrTextContent("Cancel", "Cancel current bake operation.");
+            public static GUIContent clearText = EditorGUIUtility.TrTextContent("Clear", "Clear active culling data.");
         }
 
 		bool m_BakeSettingsFoldout = false;
