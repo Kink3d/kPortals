@@ -19,6 +19,7 @@ namespace SimpleTools.Culling
             public static GUIContent volumeDensityText = EditorGUIUtility.TrTextContent("Volume Density", "...");
             public static GUIContent rayDensityText = EditorGUIUtility.TrTextContent("Ray Density", "...");
             public static GUIContent filterAngleText = EditorGUIUtility.TrTextContent("Filter Angle", "...");
+            public static GUIContent occluderTagText = EditorGUIUtility.TrTextContent("Occluder Tag", "...");
 
             // Debug Settings
             public static GUIContent debugModeText = EditorGUIUtility.TrTextContent("Debug Mode", string.Format("...", Environment.NewLine));
@@ -37,6 +38,7 @@ namespace SimpleTools.Culling
 		SerializedProperty m_VolumeDensityProp;
         SerializedProperty m_RayDensityProp;
         SerializedProperty m_FilterAngleProp;
+        SerializedProperty m_OccluderTagProp;
         SerializedProperty m_DebugModeProp;
 
         public override void OnInspectorGUI()
@@ -58,6 +60,7 @@ namespace SimpleTools.Culling
             m_VolumeDensityProp = serializedObject.FindProperty("m_VolumeDensity");
             m_RayDensityProp = serializedObject.FindProperty("m_RayDensity");
             m_FilterAngleProp = serializedObject.FindProperty("m_FilterAngle");
+            m_OccluderTagProp = serializedObject.FindProperty("m_OccluderTag");
             m_DebugModeProp = serializedObject.FindProperty("m_DebugMode");
         }
 
@@ -74,6 +77,7 @@ namespace SimpleTools.Culling
                     EditorGUILayout.PropertyField(m_VolumeDensityProp, Styles.volumeDensityText, true);
                 EditorGUILayout.PropertyField(m_RayDensityProp, Styles.rayDensityText, true);
                 EditorGUILayout.PropertyField(m_FilterAngleProp, Styles.filterAngleText, true);
+                EditorGUILayout.PropertyField(m_OccluderTagProp, Styles.occluderTagText, true);
                 EditorGUI.indentLevel--;
                 EditorGUILayout.Space();
             }

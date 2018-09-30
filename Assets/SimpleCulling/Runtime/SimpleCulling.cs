@@ -18,7 +18,8 @@ namespace SimpleTools.Culling
 		//                                           PUBLIC FIELDS                                             //
 		// ----------------------------------------------------------------------------------------------------//
 
-		private string m_OccluderTag = "Occluder"; // TODO - Expose and add option for layer
+		[SerializeField]
+		private string m_OccluderTag = "Occluder";
 
 		[SerializeField]
         private VolumeMode m_VolumeMode = VolumeMode.Automatic;
