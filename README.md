@@ -6,7 +6,7 @@
 
 Simple Culling is a pre-calculated volume visibility system. It offer both manual and automatic volume modes, where manual mode gives the user ability to generate very aggressive culling and automatic requires zero user setup but provides more conservative culling. Bake time can be offset against visibility accuracy using parameters on the component.
 
-Refer to the Wiki for more information.
+Refer to the [Wiki](https://github.com/Kink3d/SimpleCulling/wiki/Home) for more information.
 
 ## Requirements
 - Unity 2018.2.10f1 or higher
