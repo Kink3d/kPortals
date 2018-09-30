@@ -23,9 +23,6 @@ namespace SimpleTools.Culling.Tests
         [SerializeField]
         private int m_FilterAngle;
 
-        [SerializeField]
-        private bool m_DrawRays;
-
         // ----------------------------------------------------------------------------------------------------//
         //                                               TEST                                                  //
         // ----------------------------------------------------------------------------------------------------//
@@ -71,9 +68,7 @@ namespace SimpleTools.Culling.Tests
             m_StaticRenderers = null;
             m_DebugData.rays = null;
             displayDebug = false;
-#if UNITY_EDITOR
             UnityEditor.SceneView.RepaintAll();
-#endif
         }
 
         private IEnumerator Generate()
@@ -90,10 +85,7 @@ namespace SimpleTools.Culling.Tests
             totalRenderers = m_StaticRenderers.Length;
             successfulRenderers = m_PassedRenderers.Length;
             displayDebug = true;
-
-#if UNITY_EDITOR
             UnityEditor.SceneView.RepaintAll();
-#endif
         }
 
         // ----------------------------------------------------------------------------------------------------//
@@ -103,32 +95,16 @@ namespace SimpleTools.Culling.Tests
         [ExecuteInEditMode]
         private void OnDrawGizmos()
         {
-            DrawHierarchicalVolumeDebug();
+            DebugUtils.DrawHierarchicalVolumeGrid(m_VolumeData);
             DebugUtils.DrawRenderers(m_StaticRenderers, m_PassedRenderers);
-            DrawRayDebug();
-        }
 
-        private void DrawHierarchicalVolumeDebug()
-        {
-            if (m_VolumeData == null)
+            if(m_DebugData.rays == null)
                 return;
 
-            Gizmos.color = EditorColors.volumeFill;
-            Gizmos.DrawCube(m_VolumeData.bounds.center, m_VolumeData.bounds.size);
-            Gizmos.color = EditorColors.volumeWire;
-            Gizmos.DrawWireCube(m_VolumeData.bounds.center, m_VolumeData.bounds.size);
-        }
-
-        private void DrawRayDebug()
-        {
-            if (m_DebugData.rays == null || m_DrawRays == false)
-                return;
-
-            for (int i = 0; i < m_DebugData.rays.Length; i++)
+            foreach(RayDebugData ray in m_DebugData.rays)
             {
-                bool pass = m_DebugData.rays[i].pass;
-                Gizmos.color = pass ? EditorColors.ray[0] : EditorColors.ray[1];
-                Gizmos.DrawLine(m_DebugData.rays[i].points[0], m_DebugData.rays[i].points[1]);
+                DebugUtils.DrawSphere(ray.position, 0.1f);
+                DebugUtils.DrawRay(ray.position, ray.direction, ray.pass);
             }
         }
 

@@ -43,19 +43,14 @@ namespace SimpleTools.Culling.Tests
             MeshRenderer[] staticRenderers = Utils.GetStaticRenderers();
 			Bounds bounds = Utils.GetSceneBounds(staticRenderers);
             EditorCoroutines.StartCoroutine(Utils.BuildHierarchicalVolumeGrid(bounds, m_VolumeDensity, value => m_VolumeData = value, this), this);
-
-#if UNITY_EDITOR
             UnityEditor.SceneView.RepaintAll();
-#endif
         }
 
         [ExecuteInEditMode]
         public void OnClickCancel()
         {
             m_VolumeData = null;
-#if UNITY_EDITOR
             UnityEditor.SceneView.RepaintAll();
-#endif
         }
 
         private void Update()

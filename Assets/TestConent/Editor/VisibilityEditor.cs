@@ -9,13 +9,11 @@ namespace SimpleTools.Culling.Tests
     {
         SerializedProperty m_RayDensityProp;
         SerializedProperty m_FilterAngleProp;
-        SerializedProperty m_DrawRaysProp;
 
         void OnEnable()
         {
             m_RayDensityProp = serializedObject.FindProperty("m_RayDensity");
             m_FilterAngleProp = serializedObject.FindProperty("m_FilterAngle");
-            m_DrawRaysProp = serializedObject.FindProperty("m_DrawRays");
         }
 
         public override void OnInspectorGUI()
@@ -24,7 +22,6 @@ namespace SimpleTools.Culling.Tests
 
             EditorGUILayout.PropertyField(m_RayDensityProp, new GUIContent("Ray Density"), true);
             EditorGUILayout.PropertyField(m_FilterAngleProp, new GUIContent("Filter Angle"), true);
-            EditorGUILayout.PropertyField(m_DrawRaysProp, new GUIContent("Draw Rays"), true);
 
             EditorGUILayout.Space();
             Visibility visibility = (Visibility)target;

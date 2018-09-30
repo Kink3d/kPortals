@@ -43,7 +43,7 @@ namespace SimpleTools.Culling
 		[SerializeField]
 		private OccluderData[] m_Occluders;
 
-		private MeshRenderer[] m_VisibleRenderers;
+		private Dictionary<int, MeshRenderer> m_VisibleRenderers = new Dictionary<int, MeshRenderer>();
 
 		private VolumeData m_ActiveVolume = new VolumeData();
 
@@ -53,7 +53,7 @@ namespace SimpleTools.Culling
 			VolumeData[] volumes = Utils.GetLowestSubdivisionVolumes(m_VolumeData, m_VolumeDensity);
 			foreach (VolumeData data in volumes)
                 renderers.AddRange(data.renderers);
-            m_VisibleRenderers = renderers.Distinct().ToArray();
+            m_VisibleRenderers = renderers.Distinct().ToDictionary(s => s.GetInstanceID());
 		}
 
 		private void Update()
@@ -63,19 +63,27 @@ namespace SimpleTools.Culling
 			
 			if(Utils.GetActiveVolumeAtPosition(m_VolumeData, Camera.main.transform.position, out m_ActiveVolume))
 			{
-                for (int i = 0; i < m_ActiveVolume.renderers.Length; i++)
+				/*List<MeshRenderer> visibleRenderers = m_VisibleRenderers.Values.ToList();
+				for (int i = 0; i < visibleRenderers.Count; i++)
                 {
-                    if (!m_VisibleRenderers.Contains(m_ActiveVolume.renderers[i]))
+                    if (!m_ActiveVolume.renderers.Contains(visibleRenderers[i]))
+                        visibleRenderers[i].enabled = false;
+                }*/
+
+				MeshRenderer renderer;
+				int[] IDs = new int[m_ActiveVolume.renderers.Length];
+				for (int i = 0; i < m_ActiveVolume.renderers.Length; i++)
+                {
+					IDs[i] = m_ActiveVolume.renderers[i].GetInstanceID();
+                    if (!m_VisibleRenderers.TryGetValue(m_ActiveVolume.renderers[i].gameObject.GetInstanceID(), out renderer))
                         m_ActiveVolume.renderers[i].enabled = true;
                 }
 
-                for (int i = 0; i < m_VisibleRenderers.Length; i++)
+				m_VisibleRenderers.Clear();
+				for (int i = 0; i < m_ActiveVolume.renderers.Length; i++)
                 {
-                    if(!m_ActiveVolume.renderers.Contains(m_VisibleRenderers[i]))
-                        m_VisibleRenderers[i].enabled = false;
-                }
-
-				m_VisibleRenderers = m_ActiveVolume.renderers;
+					m_VisibleRenderers.Add(IDs[i], m_ActiveVolume.renderers[i]);
+				}
 			}
 		}
 
