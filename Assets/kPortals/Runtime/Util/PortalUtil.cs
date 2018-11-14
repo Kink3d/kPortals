@@ -101,7 +101,7 @@ namespace kTools.Portals
         /// <param name="serializableVolumes">Data to filter.</param>
         public static SerializableVolume[] FilterVolumeDataNoChildren(SerializableVolume[] serializableVolumes)
         {
-            return serializableVolumes.Where(s => s.childIDs == null).ToArray();
+            return serializableVolumes.Where(s => s.childIDs == null || s.childIDs.Length == 0).ToArray();
         }
 #endif
 
