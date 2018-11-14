@@ -3,7 +3,7 @@
 namespace kTools.Portals
 {
 	[ExecuteInEditMode]
-    [AddComponentMenu("kTools/Portals/PortalOccluder")]
+    [AddComponentMenu("kTools/Portals/Portal Occluder")]
 	public sealed class PortalOccluder : MonoBehaviour 
 	{
 		// -------------------------------------------------- //

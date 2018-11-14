@@ -7,6 +7,8 @@ using UnityEngine;
 
 namespace kTools.Portals
 {
+    public enum VolumeMode { Auto, Manual, Hybrid }
+
     public static class PortalUtil 
 	{
         // -------------------------------------------------- //
@@ -43,15 +45,19 @@ namespace kTools.Portals
 
 #if UNITY_EDITOR
         /// <summary>
-        /// Get SerialableOccluder data for all active occluders in the scene. Editor only.
+        /// Get SerializableOccluder data for all active occluders in the scene. Editor only.
         /// </summary>
         public static SerializableOccluder[] GetOccluderData()
         {
             var staticOccluders = GetStaticOccluderData();
-            var customOccluders = GetCustomOccludeeData();
+            var customOccluders = GetCustomOccluderData();
             return staticOccluders.Concat(customOccluders).ToArray();
         }
 
+        /// <summary>
+        /// Build an array of Occluder proxies from serialized Occluder data. Editor only.
+        /// </summary>
+        /// <param name="occluders">Serialized data to use.</param>
         public static MeshCollider[] GetOccluderProxies(SerializableOccluder[] occluders)
         {
             var colliders = new MeshCollider[occluders.Length];
@@ -70,6 +76,26 @@ namespace kTools.Portals
                 colliders[i] = collider;
             }
             return colliders;
+        }
+        
+        /// <summary>
+        /// Get SerializableVolume data based on Volume mode. Editor only.
+        /// </summary>
+        /// <param name="mode">Mode for generating Volumes.</param>
+        public static SerializableVolume[] GetVolumeData(VolumeMode mode)
+        {
+            switch(mode)
+            {
+                case VolumeMode.Auto:
+                    return GetVolumeDataAuto();
+                case VolumeMode.Manual:
+                    return GetVolumeDataManual();
+                case VolumeMode.Hybrid:
+                    return GetVolumeDataAuto().Concat(GetVolumeDataManual()).ToArray();
+                default:
+                    Debug.LogError("Not a valid Volume mode!");
+                    return null;
+            }
         }
 #endif
 
@@ -101,7 +127,7 @@ namespace kTools.Portals
             return customOccluderData;
 		}
 
-        private static SerializableOccluder[] GetCustomOccludeeData()
+        private static SerializableOccluder[] GetCustomOccluderData()
         {
             // Get all PortalOccluders in scene
             var customOccluderObjects = UnityEngine.Object.FindObjectsOfType<PortalOccluder>();
@@ -125,6 +151,23 @@ namespace kTools.Portals
                 scaleWS = transform.lossyScale,
                 mesh = filter.sharedMesh
             };
+        }
+
+        private static SerializableVolume[] GetVolumeDataManual()
+        {
+            // Get all VolumeOccluders in scene
+            var manualVolumeObjects = UnityEngine.Object.FindObjectsOfType<PortalVolume>();
+
+			// Serialize
+            var manualVolumeData = new SerializableVolume[manualVolumeObjects.Length];
+            for(int i = 0; i < manualVolumeData.Length; i++)
+                manualVolumeData[i] = manualVolumeObjects[i].Serialize();
+            return manualVolumeData;
+        }
+
+        private static SerializableVolume[] GetVolumeDataAuto()
+        {
+            return null;
         }
 #endif
 	}

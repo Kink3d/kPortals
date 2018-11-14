@@ -3,9 +3,28 @@
 namespace kTools.Portals
 {
 	[ExecuteInEditMode]
-    [AddComponentMenu("kTools/Portals/PortalVolume")]
+    [AddComponentMenu("kTools/Portals/Portal Volume")]
 	public sealed class PortalVolume : MonoBehaviour 
 	{
+		// -------------------------------------------------- //
+        //                   PUBLIC METHODS                   //
+        // -------------------------------------------------- //
+
+		/// <summary>
+        /// Converts this Monobehaviour to a SerializableVolume struct for storage.
+        /// </summary>
+		public SerializableVolume Serialize()
+		{
+			return new SerializableVolume()
+			{
+				positionWS = transform.position,
+				rotationWS = transform.rotation,
+				scaleWS = transform.lossyScale,
+				parentID = -1,
+				childIDs = null
+			};
+		}
+
 		// -------------------------------------------------- //
         //                       GIZMOS                       //
         // -------------------------------------------------- //

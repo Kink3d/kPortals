@@ -28,7 +28,6 @@ namespace kTools.PortalsEditor
 		public static void DrawBakeTools(IBake target)
         {
 			// Draw buttons
-			EditorGUILayout.Space();
             EditorGUILayout.BeginHorizontal();
             bool isGenerating = target.bakeState != BakeState.Active && target.bakeState != BakeState.Empty;
             GUI.enabled = !isGenerating;

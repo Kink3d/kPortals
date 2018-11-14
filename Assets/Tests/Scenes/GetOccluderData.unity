@@ -382,7 +382,7 @@ MeshFilter:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 529225313}
-  m_Mesh: {fileID: 1600615225}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!4 &529225317
 Transform:
   m_ObjectHideFlags: 0
@@ -1169,7 +1169,7 @@ MeshFilter:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2040409804}
-  m_Mesh: {fileID: 1600615225}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!4 &2040409808
 Transform:
   m_ObjectHideFlags: 0
