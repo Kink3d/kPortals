@@ -32,7 +32,7 @@ namespace kTools.Portals
         private void OnDrawGizmos()
         {
 			Gizmos.DrawIcon(transform.position, "kTools/Portals/PortalVolume icon.png", true);
-			PortalDebugUtils.DrawDebugCube(transform.position, transform.rotation, transform.lossyScale, PortalDebugColors.occluder);
+			PortalDebugUtil.DrawCube(transform.position, transform.rotation, transform.lossyScale, PortalDebugColors.occluder);
         }
 #endif
 	}

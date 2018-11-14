@@ -2,9 +2,9 @@
 
 namespace kTools.Portals
 {
-	public static class PortalDebugUtils
+	public static class PortalDebugUtil
 	{
-		public static void DrawDebugCube(Vector3 position, Quaternion rotation, Vector3 scale, PortalDebugColor color)
+		public static void DrawCube(Vector3 position, Quaternion rotation, Vector3 scale, PortalDebugColor color)
 		{
 			Matrix4x4 cubeTransform = Matrix4x4.TRS(position, rotation, scale);
 			Matrix4x4 oldGizmosMatrix = Gizmos.matrix;
@@ -14,6 +14,14 @@ namespace kTools.Portals
 			Gizmos.color = color.wire;
 			Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
 			Gizmos.matrix = oldGizmosMatrix;
+		}
+
+		public static void DrawMesh(Vector3 position, Quaternion rotation, Vector3 scale, Mesh mesh, PortalDebugColor color, int submeshIndex = 0)
+		{
+			Gizmos.color = color.fill;
+			Gizmos.DrawMesh(mesh, submeshIndex, position, rotation, scale);
+			Gizmos.color = color.wire;
+			Gizmos.DrawWireMesh(mesh, submeshIndex, position, rotation, scale);
 		}
 	}
 
