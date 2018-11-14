@@ -69,12 +69,10 @@ namespace kTools.Portals
 #if UNITY_EDITOR
         private static SerializableOccluder[] GetStaticOccluderData()
 		{
-            // TODO
-            // - Handle bitwise
-         
             // Get all renderers in scene with correct static flags
+            var occluderFlag = (int)StaticEditorFlags.OccluderStatic;
 			var staticOccluderObjects = UnityEngine.Object.FindObjectsOfType<MeshRenderer>().Where(
-                s => UnityEditor.GameObjectUtility.GetStaticEditorFlags(s.gameObject) == StaticEditorFlags.OccluderStatic).ToArray();
+                s => (occluderFlag & (int)UnityEditor.GameObjectUtility.GetStaticEditorFlags(s.gameObject)) == occluderFlag).ToArray();
 
             // Serialize
             var customOccluderData = new SerializableOccluder[staticOccluderObjects.Length];
