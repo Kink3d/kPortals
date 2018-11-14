@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 using marijnz.EditorCoroutines;
 
-namespace kTools.Portals.Tests
+namespace kTools.PortalsOld.Tests
 {
 	[ExecuteInEditMode]
     [AddComponentMenu("kTools/Tests/Portals/Occlusion")]

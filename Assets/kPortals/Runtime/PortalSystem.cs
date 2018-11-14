@@ -4,9 +4,9 @@ using System.Linq;
 using UnityEngine;
 using marijnz.EditorCoroutines;
 
-namespace kTools.Portals
+namespace kTools.PortalsOld
 {
-    [AddComponentMenu("kTools/Portals/PortalSystem")]
+    [AddComponentMenu("kTools/Portals/Old/PortalSystem")]
 	public class PortalSystem : MonoBehaviour 
 	{
 		// -------------------------------------------------- //

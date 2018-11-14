@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace kTools.Portals
+namespace kTools.PortalsOld
 {
 	[ExecuteInEditMode]
     [AddComponentMenu("kTools/Portals/PortalOccluder")]

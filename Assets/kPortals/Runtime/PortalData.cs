@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace kTools.Portals
+namespace kTools.PortalsOld
 {
 	// TODO
 	// - This should be a struct

@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace kTools.Portals.Tests
+namespace kTools.PortalsOld.Tests
 {
     [CustomEditor(typeof(ActiveVolume))]
     public class ActiveVolumeEditor : Editor

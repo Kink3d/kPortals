@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-namespace kTools.Portals.Tests
+namespace kTools.PortalsOld.Tests
 {
 	[ExecuteInEditMode]
 	[AddComponentMenu("kTools/Tests/Portals/ConeAngle")]

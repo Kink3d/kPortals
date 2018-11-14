@@ -1,9 +1,9 @@
 ﻿using System;
 using UnityEditor;
 using UnityEngine;
-using kTools.Portals;
+using kTools.PortalsOld;
 
-namespace kTools.PortalsEditor
+namespace kTools.PortalsOldEditor
 {
     [CustomEditor(typeof(PortalSystem))]
     public class PortalSystemEditor : Editor

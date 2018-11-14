@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using marijnz.EditorCoroutines;
 
-namespace kTools.Portals
+namespace kTools.PortalsOld
 {
 	public static class PortalUtils
 	{

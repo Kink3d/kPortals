@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace kTools.Portals
+namespace kTools.PortalsOld
 {
 #if UNITY_EDITOR
     public static class PortalDebugUtils
