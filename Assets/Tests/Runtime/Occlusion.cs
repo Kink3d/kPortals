@@ -6,7 +6,7 @@ using marijnz.EditorCoroutines;
 namespace kTools.PortalsOld.Tests
 {
 	[ExecuteInEditMode]
-    [AddComponentMenu("kTools/Tests/Portals/Occlusion")]
+    [AddComponentMenu("kTools/Old/Tests/Portals/Occlusion")]
 	public class Occlusion : MonoBehaviour 
 	{
         public Transform raySource;

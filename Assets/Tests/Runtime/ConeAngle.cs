@@ -4,7 +4,7 @@ using UnityEngine;
 namespace kTools.PortalsOld.Tests
 {
 	[ExecuteInEditMode]
-	[AddComponentMenu("kTools/Tests/Portals/ConeAngle")]
+	[AddComponentMenu("kTools/Old/Tests/Portals/ConeAngle")]
 	public class ConeAngle : MonoBehaviour 
 	{
         public Transform raySource;

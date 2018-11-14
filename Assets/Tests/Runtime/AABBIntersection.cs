@@ -5,7 +5,7 @@ using UnityEngine;
 namespace kTools.PortalsOld.Tests
 {
 	[ExecuteInEditMode]
-    [AddComponentMenu("kTools/Tests/Portals/AABBIntersection")]
+    [AddComponentMenu("kTools/Old/Tests/Portals/AABBIntersection")]
 	public class AABBIntersection : MonoBehaviour 
 	{
         public Transform raySource;

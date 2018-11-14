@@ -5,7 +5,7 @@ using marijnz.EditorCoroutines;
 namespace kTools.PortalsOld.Tests
 {
 	[ExecuteInEditMode]
-    [AddComponentMenu("kTools/Tests/Portals/Occluders")]
+    [AddComponentMenu("kTools/Old/Tests/Portals/Occluders")]
 	public class Occluders : MonoBehaviour 
 	{
         [SerializeField] private MeshRenderer[] m_StaticRenderers;

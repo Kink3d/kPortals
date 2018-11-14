@@ -7,7 +7,7 @@ using marijnz.EditorCoroutines;
 namespace kTools.PortalsOld.Tests
 {
     [ExecuteInEditMode]
-    [AddComponentMenu("kTools/Tests/Portals/Visibility")]
+    [AddComponentMenu("kTools/Old/Tests/Portals/Visibility")]
     public class Visibility : MonoBehaviour
     {
         [SerializeField] private int m_RayDensity;

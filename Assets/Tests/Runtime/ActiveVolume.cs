@@ -5,7 +5,7 @@ using marijnz.EditorCoroutines;
 namespace kTools.PortalsOld.Tests
 {
 	[ExecuteInEditMode]
-    [AddComponentMenu("kTools/Tests/Portals/ActiveVolume")]
+    [AddComponentMenu("kTools/Old/Tests/Portals/ActiveVolume")]
 	public class ActiveVolume : MonoBehaviour 
 	{
         [SerializeField] private Transform m_Target;
