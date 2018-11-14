@@ -40,7 +40,7 @@ namespace kTools.Portals.Tests
             for (int i = 0; i < m_StaticRenderers.Length; i++)
             {
                 bool isPassed = m_PassedRenderers.Contains(m_StaticRenderers[i]);
-                Gizmos.color = isPassed ? DebugColors.occludeePass[0] : DebugColors.occludeeFail[0];
+                Gizmos.color = isPassed ? DebugColorsOld.occludeePass[0] : DebugColorsOld.occludeeFail[0];
                 Gizmos.DrawLine(raySource.position, m_StaticRenderers[i].bounds.center);
             }
 		}

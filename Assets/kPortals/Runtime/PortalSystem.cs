@@ -25,6 +25,7 @@ namespace kTools.Portals
 
 		// TODO
 		// - Revisit Volumes as scripted
+		// - Change occluder tag > static flag
 		[SerializeField] private string m_OccluderTag = "Occluder";
 		[SerializeField] private VolumeMode m_VolumeMode = VolumeMode.Automatic;
 		[SerializeField] private BoxCollider[] m_ManualVolumes;

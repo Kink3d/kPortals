@@ -278,10 +278,8 @@ namespace kTools.Portals
 		{
 			if(position == default(Vector3))
 				position = Vector3.zero;
-			
 			if(rotation == default(Quaternion))
 				rotation = Quaternion.identity;
-
 			if(scale == default(Vector3))
 				scale = Vector3.one;
 

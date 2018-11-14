@@ -23,9 +23,9 @@ namespace kTools.Portals
                 Transform transform = allRenderers[i].transform;
                 Mesh mesh = allRenderers[i].GetComponent<MeshFilter>().sharedMesh;
 
-                Gizmos.color = isPassed ? DebugColors.occludeePass[0] : DebugColors.occludeeFail[0];
+                Gizmos.color = isPassed ? DebugColorsOld.occludeePass[0] : DebugColorsOld.occludeeFail[0];
                 Gizmos.DrawWireMesh(mesh, transform.position, transform.rotation, transform.lossyScale);
-                Gizmos.color = isPassed ? DebugColors.occludeePass[1] : DebugColors.occludeeFail[1];
+                Gizmos.color = isPassed ? DebugColorsOld.occludeePass[1] : DebugColorsOld.occludeeFail[1];
                 Gizmos.DrawMesh(mesh, transform.position, transform.rotation, transform.lossyScale);
             }
         }
@@ -38,27 +38,27 @@ namespace kTools.Portals
 			for(int i = 0; i < occluders.Length; i++)
 			{
 				Transform transform = occluders[i].collider.transform;
-				Gizmos.color = DebugColors.occluder[0];
+				Gizmos.color = DebugColorsOld.occluder[0];
 				Gizmos.DrawWireMesh(occluders[i].collider.sharedMesh, transform.position, transform.rotation, transform.lossyScale);
-				Gizmos.color = DebugColors.occluder[1];
+				Gizmos.color = DebugColorsOld.occluder[1];
 				Gizmos.DrawMesh(occluders[i].collider.sharedMesh, transform.position, transform.rotation, transform.lossyScale);
 			}
 		}
 
         public static void DrawRay(Vector3 position, Vector3 direction, bool pass = true)
         {
-            Gizmos.color = pass ? DebugColors.ray[0] : DebugColors.ray[1];
+            Gizmos.color = pass ? DebugColorsOld.ray[0] : DebugColorsOld.ray[1];
             Gizmos.DrawLine(position, position + Vector3.Scale(direction, new Vector3(10, 10, 10)));
         }
 
         public static void DrawCone(Vector3 position, Vector3 direction, float angle)
         {
-            DebugExtension.DebugCone(position, Vector3.Scale(direction, new Vector3(10, 10, 10)), DebugColors.visualiser[0], angle, 0);
+            DebugExtension.DebugCone(position, Vector3.Scale(direction, new Vector3(10, 10, 10)), DebugColorsOld.visualiser[0], angle, 0);
         }
 
 		public static void DrawSphere(Vector3 position, float radius)
 		{
-			Gizmos.color = DebugColors.ray[0];
+			Gizmos.color = DebugColorsOld.ray[0];
 			Gizmos.DrawSphere(position, radius);
 		}
 
@@ -84,9 +84,9 @@ namespace kTools.Portals
             else
             {
 				bool isActive = data == activeVolume;
-                Gizmos.color = isActive ? DebugColors.volumeActive[0] : DebugColors.volume[0];
+                Gizmos.color = isActive ? DebugColorsOld.volumeActive[0] : DebugColorsOld.volume[0];
                 Gizmos.DrawWireCube(data.bounds.center, data.bounds.size);
-				Gizmos.color = isActive ? DebugColors.volumeActive[1] : DebugColors.volume[1];
+				Gizmos.color = isActive ? DebugColorsOld.volumeActive[1] : DebugColorsOld.volume[1];
                 Gizmos.DrawCube(data.bounds.center, data.bounds.size);
             }
         }
@@ -96,7 +96,34 @@ namespace kTools.Portals
     //                   DEBUG RESOURCES                  //
     // -------------------------------------------------- //
 
-	public static class DebugColors
+    public static class DebugColors
+    {
+        public static DebugColor volume = new DebugColor(new Vector4(0.43f, 0.81f, 0.96f, 1.0f), new Vector4(0.43f, 0.81f, 0.96f, 0.5f));
+        public static DebugColor occluder = new DebugColor(new Vector4(0.99f, 0.82f, 0.64f, 1.0f), new Vector4(0.99f, 0.82f, 0.64f, 0.5f));
+    }
+
+    public struct DebugColor
+    {
+        public DebugColor(Vector4 wire, Vector4 fill)
+        {
+            m_Wire = wire;
+            m_Fill = fill;
+        }
+
+        private Vector4 m_Wire;
+        public Vector4 wire 
+        { 
+            get { return m_Wire; }
+        }
+
+        private Vector4 m_Fill;
+        public Vector4 fill 
+        { 
+            get { return m_Fill; }
+        }
+    }
+
+	public static class DebugColorsOld
 	{
         public static Color[] ray = new Color[2] { new Color(0f, 1f, 0f, 1f), new Color(0f, 1f, 0f, 0.1f) };
         public static Color[] visualiser = new Color[2] { new Color(0.5f, 0.5f, 0.5f, 1f), new Color(0.5f, 0.5f, 0.5f, 0.5f) };
