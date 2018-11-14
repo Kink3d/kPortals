@@ -1,12 +1,16 @@
 ﻿using UnityEngine;
 
-namespace kTools.PortalsOld
+namespace kTools.Portals
 {
 	[ExecuteInEditMode]
     [AddComponentMenu("kTools/Portals/PortalVolume")]
 	[RequireComponent(typeof(BoxCollider))]
 	public sealed class PortalVolume : MonoBehaviour 
 	{
+		// -------------------------------------------------- //
+        //                   PRIVATE FIELDS                   //
+        // -------------------------------------------------- //
+		
 		private BoxCollider m_BoxCollider;
 		public BoxCollider boxCollider
 		{
@@ -17,6 +21,10 @@ namespace kTools.PortalsOld
 				return m_BoxCollider;
 			}
 		}
+
+		// -------------------------------------------------- //
+        //                ENGINE LOOP METHODS                 //
+        // -------------------------------------------------- //
 
 		private void OnEnable()
 		{
