@@ -58,10 +58,10 @@ namespace kTools.PortalsEditor
                     label = "Processing Occluders" + completion;
                     break;
                 case BakeState.Volumes:
-                    label = "Generating Volumes" + completion;
+                    label = "Generating Volume Data" + completion;
                     break;
-                case BakeState.Occlusion:
-                    label = "Baking Occlusion" + completion;
+                case BakeState.Visibility:
+                    label = "Calculating Visibility" + completion;
                     break;
                 case BakeState.Active:
                     label = "Active Data";

@@ -16,6 +16,7 @@ namespace kTools.PortalsEditor.Tests
         {
             public static GUIContent propertiesText = EditorGUIUtility.TrTextContent("Properties");
 			public static GUIContent modeText = EditorGUIUtility.TrTextContent("Mode");
+            public static GUIContent subdivisionsText = EditorGUIUtility.TrTextContent("Subdivisions");
 			public static GUIContent bakeToolsText = EditorGUIUtility.TrTextContent("Bake Tools");
         }
 
@@ -24,6 +25,7 @@ namespace kTools.PortalsEditor.Tests
         // -------------------------------------------------- //
 		
 		SerializedProperty m_VolumeModeProp;
+        SerializedProperty m_SubdivisionsProp;
 
 		// -------------------------------------------------- //
         //                   PUBLIC METHODS                   //
@@ -34,6 +36,8 @@ namespace kTools.PortalsEditor.Tests
             serializedObject.Update();
             EditorGUILayout.LabelField(Styles.propertiesText, EditorStyles.boldLabel);
             EditorGUILayout.PropertyField(m_VolumeModeProp, Styles.modeText);
+            if(m_VolumeModeProp.enumValueIndex != (int)VolumeMode.Manual)
+                EditorGUILayout.PropertyField(m_SubdivisionsProp, Styles.subdivisionsText);
             EditorGUILayout.Space();
 			EditorGUILayout.LabelField(Styles.bakeToolsText, EditorStyles.boldLabel);
             BakeEditor.DrawBakeTools(target as IBake);
@@ -47,6 +51,7 @@ namespace kTools.PortalsEditor.Tests
         private void OnEnable()
         {
             m_VolumeModeProp = serializedObject.FindProperty("m_VolumeMode");
+            m_SubdivisionsProp = serializedObject.FindProperty("m_Subdivisions");
         }
 	}
 }

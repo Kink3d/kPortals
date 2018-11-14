@@ -6,7 +6,7 @@ namespace kTools.Portals
 	//                        ENUM                        //
 	// -------------------------------------------------- //
 
-	public enum BakeState { Empty, Occluders, Volumes, Occlusion, Active }
+	public enum BakeState { Empty, Occluders, Volumes, Visibility, Active }
 
 	public interface IBake
 	{
