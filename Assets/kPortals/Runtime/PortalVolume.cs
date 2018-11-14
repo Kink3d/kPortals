@@ -41,18 +41,8 @@ namespace kTools.Portals
 #if UNITY_EDITOR
         private void OnDrawGizmos()
         {
-			// Draw Icon
 			Gizmos.DrawIcon(transform.position, "kTools/Portals/PortalVolume icon.png", true);
-
-			// Draw Gizmos
-			Matrix4x4 cubeTransform = Matrix4x4.TRS(transform.position, transform.rotation, transform.lossyScale);
-			Matrix4x4 oldGizmosMatrix = Gizmos.matrix;
-			Gizmos.matrix = Gizmos.matrix * cubeTransform;
-			Gizmos.color = DebugColors.volume.fill;
-			Gizmos.DrawCube(Vector3.zero, Vector3.one);
-			Gizmos.color = DebugColors.volume.wire;
-			Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
-			Gizmos.matrix = oldGizmosMatrix;
+			PortalDebugUtils.DrawDebugCube(transform.position, transform.rotation, transform.lossyScale, PortalDebugColors.volume);
         }
 #endif
 	}
