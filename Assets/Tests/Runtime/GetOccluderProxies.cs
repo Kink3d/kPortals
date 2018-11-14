@@ -5,10 +5,11 @@ using UnityEngine;
 namespace kTools.Portals.Tests
 {
 	[ExecuteInEditMode]
-    [AddComponentMenu("kTools/Tests/Portals/GetOccluderData")]
-	public class GetOccluderData : MonoBehaviour, IBake 
+    [AddComponentMenu("kTools/Tests/Portals/GetOccluderProxies")]
+	public class GetOccluderProxies : MonoBehaviour, IBake 
 	{	
 		[SerializeField] private SerializableOccluder[] m_SerializableOccluders;
+		[SerializeField] private Collider[] m_OccluderProxies;
 
 		[SerializeField] private BakeState m_BakeState;
 		public BakeState bakeState
@@ -25,9 +26,11 @@ namespace kTools.Portals.Tests
 #if UNITY_EDITOR
 		public void OnClickBake()
 		{
+			ClearOccluderProxies();
 			m_Completion = 0.0f;
 			m_BakeState = BakeState.Occluders;
 			m_SerializableOccluders = PortalUtil.GetOccluderData();
+			m_OccluderProxies = PortalUtil.GetOccluderProxies(m_SerializableOccluders);
 			m_BakeState = BakeState.Active;
 			m_Completion = 1.0f;
 			UnityEditor.SceneView.RepaintAll();
@@ -36,6 +39,7 @@ namespace kTools.Portals.Tests
 
 		public void OnClickCancel()
 		{
+			ClearOccluderProxies();
 			m_SerializableOccluders = null;
 			m_BakeState = BakeState.Empty;
 			m_Completion = 0.0f;
@@ -43,15 +47,26 @@ namespace kTools.Portals.Tests
             UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
 		}
 
+		private void ClearOccluderProxies()
+		{
+			if(m_OccluderProxies != null)
+			{
+				for(int i = 0; i < m_OccluderProxies.Length; i++)
+					PortalUtil.Destroy(m_OccluderProxies[i].gameObject);
+				m_OccluderProxies = null;
+			}
+		}
+
         private void OnDrawGizmos()
         {
-			if(m_SerializableOccluders == null)
+			if(m_OccluderProxies == null)
 				return;
 
-			foreach(SerializableOccluder occluder in m_SerializableOccluders)
+			foreach(MeshCollider proxy in m_OccluderProxies)
 			{
-				PortalDebugUtil.DrawMesh(occluder.positionWS, occluder.rotationWS, occluder.scaleWS, 
-					occluder.mesh, PortalDebugColors.occluder);
+				var transform = proxy.transform;
+				PortalDebugUtil.DrawMesh(transform.position, transform.rotation, transform.lossyScale, 
+					proxy.sharedMesh, PortalDebugColors.occluder);
 			}
         }
 #endif

@@ -51,6 +51,26 @@ namespace kTools.Portals
             var customOccluders = GetCustomOccludeeData();
             return staticOccluders.Concat(customOccluders).ToArray();
         }
+
+        public static MeshCollider[] GetOccluderProxies(SerializableOccluder[] occluders)
+        {
+            var colliders = new MeshCollider[occluders.Length];
+            for(int i = 0; i < occluders.Length; i++)
+            {
+                // Initialize proxy object
+                var go = new GameObject("OccluderProxy", typeof(MeshCollider));
+                var transform = go.transform;
+                var collider = go.GetComponent<MeshCollider>();
+
+                // Set occluder data
+                transform.position = occluders[i].positionWS;
+                transform.rotation = occluders[i].rotationWS;
+                transform.localScale = occluders[i].scaleWS;
+                collider.sharedMesh = occluders[i].mesh;
+                colliders[i] = collider;
+            }
+            return colliders;
+        }
 #endif
 
         // -------------------------------------------------- //

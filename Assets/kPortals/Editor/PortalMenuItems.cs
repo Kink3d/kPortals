@@ -7,7 +7,7 @@ namespace kTools.PortalsEditor
     public class DecalMenuItems
     {
         // Create a new PortalVolume object from Hierarchy window
-        [MenuItem("GameObject/kTools/Portals/PortalVolume", false, 10)]
+        [MenuItem("GameObject/kTools/Portals/Portal Volume", false, 10)]
         static void CreatePortalVolumeObject(MenuCommand menuCommand)
         {
             GameObject go = new GameObject();
@@ -19,7 +19,7 @@ namespace kTools.PortalsEditor
         }
 
 		// Create a new PortalOccluder object from Hierarchy window
-        [MenuItem("GameObject/kTools/Portals/PortalOccluder", false, 10)]
+        [MenuItem("GameObject/kTools/Portals/Portal Occluder", false, 10)]
         static void CreatePortalOccluderObject(MenuCommand menuCommand)
         {
             GameObject go = new GameObject();

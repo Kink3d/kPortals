@@ -21,7 +21,9 @@ namespace kTools.Portals
         //                       METHODS                      //
         // -------------------------------------------------- //
 
+#if UNITY_EDITOR
 		void OnClickBake();
 		void OnClickCancel();
+#endif
 	}
 }
