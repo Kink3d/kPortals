@@ -18,8 +18,8 @@ namespace kTools.Portals.Tests
 			if(raySource == null)
                 return;
 
-			m_StaticRenderers = Utils.GetStaticRenderers();
-			m_PassedRenderers = Utils.FilterRenderersByConeAngle(m_StaticRenderers, raySource.position, raySource.forward, maxAngle);
+			m_StaticRenderers = PortalUtils.GetStaticRenderers();
+			m_PassedRenderers = PortalUtils.FilterRenderersByConeAngle(m_StaticRenderers, raySource.position, raySource.forward, maxAngle);
 		}
 
 #if UNITY_EDITOR
@@ -29,10 +29,10 @@ namespace kTools.Portals.Tests
                 return;
 
 			DrawVectorDebug();
-			DebugUtils.DrawRay(raySource.position, raySource.forward);
-            DebugUtils.DrawRenderers(m_StaticRenderers, m_PassedRenderers);
-            DebugUtils.DrawCone(raySource.position, raySource.forward, maxAngle);
-			DebugUtils.DrawSphere(raySource.position, 0.25f);
+			PortalDebugUtils.DrawRay(raySource.position, raySource.forward);
+            PortalDebugUtils.DrawRenderers(m_StaticRenderers, m_PassedRenderers);
+            PortalDebugUtils.DrawCone(raySource.position, raySource.forward, maxAngle);
+			PortalDebugUtils.DrawSphere(raySource.position, 0.25f);
         }
 
 		private void DrawVectorDebug()

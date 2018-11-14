@@ -24,7 +24,7 @@ namespace kTools.Portals.Tests
 			EditorCoroutines.StopAllCoroutines(this);
             m_Occluders = null;
             m_StaticRenderers = null;
-			Transform container = transform.Find(Utils.occluderContainerName);
+			Transform container = transform.Find(PortalUtils.occluderContainerName);
 			if(container != null)
 				DestroyImmediate(container.gameObject);
             UnityEditor.SceneView.RepaintAll();
@@ -35,8 +35,8 @@ namespace kTools.Portals.Tests
 #if UNITY_EDITOR
         private IEnumerator Generate()
 		{
-            m_StaticRenderers = Utils.GetStaticRenderers();
-            yield return EditorCoroutines.StartCoroutine(Utils.BuildOccluderProxyGeometry(transform, m_StaticRenderers, value => m_Occluders = value, this, "Occluder"), this);
+            m_StaticRenderers = PortalUtils.GetStaticRenderers();
+            yield return EditorCoroutines.StartCoroutine(PortalUtils.BuildOccluderProxyGeometry(transform, m_StaticRenderers, value => m_Occluders = value, this, "Occluder"), this);
             UnityEditor.SceneView.RepaintAll();
             UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
         }
@@ -46,7 +46,7 @@ namespace kTools.Portals.Tests
             if(m_Occluders == null)
                 return;
 
-            DebugUtils.DrawOccluders(m_Occluders);
+            PortalDebugUtils.DrawOccluders(m_Occluders);
         }
 #endif
 

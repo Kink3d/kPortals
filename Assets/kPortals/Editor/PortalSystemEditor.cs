@@ -1,12 +1,17 @@
 ﻿using System;
 using UnityEditor;
 using UnityEngine;
+using kTools.Portals;
 
-namespace kTools.Portals
+namespace kTools.PortalsEditor
 {
-    [CustomEditor(typeof(SimpleCulling))]
-    public class SimpleCullingSystemEditor : Editor
+    [CustomEditor(typeof(PortalSystem))]
+    public class PortalSystemEditor : Editor
     {
+        // -------------------------------------------------- //
+        //                    EDITOR STYLES                   //
+        // -------------------------------------------------- //
+
         internal class Styles
         {
 			// Groups
@@ -30,8 +35,17 @@ namespace kTools.Portals
             public static GUIContent clearText = EditorGUIUtility.TrTextContent("Clear", "Clear active culling data.");
         }
 
+        // -------------------------------------------------- //
+        //                   PRIVATE FIELDS                   //
+        // -------------------------------------------------- //
+
+        PortalSystem m_ActualTarget;
 		bool m_BakeSettingsFoldout = false;
         bool m_DebugSettingsFoldout = false;
+
+        // -------------------------------------------------- //
+        //               SERIALIZED PROPERTIES                //
+        // -------------------------------------------------- //
 
         SerializedProperty m_VolumeModeProp;
         SerializedProperty m_ManualVolumesProp;
@@ -41,20 +55,27 @@ namespace kTools.Portals
         SerializedProperty m_OccluderTagProp;
         SerializedProperty m_DebugModeProp;
 
+        // -------------------------------------------------- //
+        //                   PUBLIC METHODS                   //
+        // -------------------------------------------------- //
+
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-
 			DrawBakeSettings();
             DrawDebugSettings();
             DrawBakeTools();
             DrawProgressBar();
-
             serializedObject.ApplyModifiedProperties();
         }
 
+        // -------------------------------------------------- //
+        //                   PRIVATE METHODS                  //
+        // -------------------------------------------------- //
+
         private void OnEnable()
         {
+            m_ActualTarget = (PortalSystem)target;
             m_VolumeModeProp = serializedObject.FindProperty("m_VolumeMode");
             m_ManualVolumesProp = serializedObject.FindProperty("m_ManualVolumes");
             m_VolumeDensityProp = serializedObject.FindProperty("m_VolumeDensity");
@@ -64,6 +85,7 @@ namespace kTools.Portals
             m_DebugModeProp = serializedObject.FindProperty("m_DebugMode");
         }
 
+        // Draw bake settings section
 		private void DrawBakeSettings()
         {
             m_BakeSettingsFoldout = EditorGUILayout.Foldout(m_BakeSettingsFoldout, Styles.bakeSettingsText, true);
@@ -71,9 +93,9 @@ namespace kTools.Portals
             {
                 EditorGUI.indentLevel++;
                 EditorGUILayout.PropertyField(m_VolumeModeProp, Styles.volumeModeText);
-                if (m_VolumeModeProp.enumValueIndex == (int)SimpleCulling.VolumeMode.Manual)
+                if (m_VolumeModeProp.enumValueIndex == (int)PortalSystem.VolumeMode.Manual)
                     EditorGUILayout.PropertyField(m_ManualVolumesProp, Styles.manualVolumesText, true);
-                else if (m_VolumeModeProp.enumValueIndex == (int)SimpleCulling.VolumeMode.Automatic)
+                else if (m_VolumeModeProp.enumValueIndex == (int)PortalSystem.VolumeMode.Automatic)
                     EditorGUILayout.PropertyField(m_VolumeDensityProp, Styles.volumeDensityText, true);
                 EditorGUILayout.PropertyField(m_RayDensityProp, Styles.rayDensityText, true);
                 EditorGUILayout.PropertyField(m_FilterAngleProp, Styles.filterAngleText, true);
@@ -83,6 +105,7 @@ namespace kTools.Portals
             }
         }
 
+        // Draw debug settings section
         private void DrawDebugSettings()
         {
             m_DebugSettingsFoldout = EditorGUILayout.Foldout(m_DebugSettingsFoldout, Styles.debugSettingsText, true);
@@ -95,49 +118,44 @@ namespace kTools.Portals
             }
         }
 
+        // Draw bake tools section
         private void DrawBakeTools()
         {
             EditorGUILayout.Space();
-            SimpleCulling simpleCulling = (SimpleCulling)target;
-
-			// --------------------------------------------------
-			// Buttons
-
             EditorGUILayout.BeginHorizontal();
-            bool isGenerating = simpleCulling.bakeState != SimpleCulling.BakeState.Active && simpleCulling.bakeState != SimpleCulling.BakeState.Empty;
+            bool isGenerating = m_ActualTarget.bakeState != PortalSystem.BakeState.Active && m_ActualTarget.bakeState != PortalSystem.BakeState.Empty;
             GUI.enabled = !isGenerating;
             if (GUILayout.Button(Styles.generateText))
             {
-                simpleCulling.OnClickGenerate();
+                m_ActualTarget.OnClickGenerate();
             }
             GUI.enabled = true;
             if (GUILayout.Button(isGenerating ? Styles.cancelText : Styles.clearText))
             {
-                simpleCulling.OnClickCancel();
+                m_ActualTarget.OnClickCancel();
             }
             EditorGUILayout.EndHorizontal();
         }
 
+        // Draw progress bar
         private void DrawProgressBar()
         {
-            SimpleCulling culling = (SimpleCulling)target;
-
             Rect r = EditorGUILayout.BeginVertical();
 			string label;
-            string completion = string.Format(" {0}%", ((int)(culling.completion * 100)).ToString(), "%");
+            string completion = string.Format(" {0}%", ((int)(m_ActualTarget.completion * 100)).ToString(), "%");
 
-            switch(culling.bakeState)
+            switch(m_ActualTarget.bakeState)
             {
-                case SimpleCulling.BakeState.Occluders:
+                case PortalSystem.BakeState.Occluders:
                     label = "Processing Occluders" + completion;
                     break;
-                case SimpleCulling.BakeState.Volumes:
+                case PortalSystem.BakeState.Volumes:
                     label = "Generating Volumes" + completion;
                     break;
-                case SimpleCulling.BakeState.Occlusion:
+                case PortalSystem.BakeState.Occlusion:
                     label = "Baking Occlusion" + completion;
                     break;
-                case SimpleCulling.BakeState.Active:
+                case PortalSystem.BakeState.Active:
                     label = "Active Culling Data";
                     break;
                 default:
@@ -145,7 +163,7 @@ namespace kTools.Portals
                     break;
             }
 
-            EditorGUI.ProgressBar(r, culling.completion, label);
+            EditorGUI.ProgressBar(r, m_ActualTarget.completion, label);
             GUILayout.Space(16);
             EditorGUILayout.EndVertical();
             EditorGUILayout.Space();

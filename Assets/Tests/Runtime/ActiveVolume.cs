@@ -18,10 +18,10 @@ namespace kTools.Portals.Tests
         {
 #if UNITY_EDITOR
 			m_VolumeData = null;
-            MeshRenderer[] staticRenderers = Utils.GetStaticRenderers();
-			Bounds bounds = Utils.GetSceneBounds(staticRenderers);
+            MeshRenderer[] staticRenderers = PortalUtils.GetStaticRenderers();
+			Bounds bounds = PortalUtils.GetSceneBounds(staticRenderers);
 
-            EditorCoroutines.StartCoroutine(Utils.BuildHierarchicalVolumeGrid(bounds, m_VolumeDensity, value => m_VolumeData = value, this), this);
+            EditorCoroutines.StartCoroutine(PortalUtils.BuildHierarchicalVolumeGrid(bounds, m_VolumeDensity, value => m_VolumeData = value, this), this);
             UnityEditor.SceneView.RepaintAll();
             UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
 #endif
@@ -41,7 +41,7 @@ namespace kTools.Portals.Tests
 			if(m_VolumeData == null || m_Target == null)
                 return;
                 
-			Utils.GetActiveVolumeAtPosition(m_VolumeData, m_Target.position, out m_ActiveVolume);
+			PortalUtils.GetActiveVolumeAtPosition(m_VolumeData, m_Target.position, out m_ActiveVolume);
 		}
 
 #if UNITY_EDITOR
@@ -50,8 +50,8 @@ namespace kTools.Portals.Tests
             if(m_VolumeData == null || m_ActiveVolume == null || m_Target == null)
                 return;
 
-            DebugUtils.DrawHierarchicalVolumeGrid(m_VolumeData, m_ActiveVolume);
-			DebugUtils.DrawSphere(m_Target.position, 0.25f);
+            PortalDebugUtils.DrawHierarchicalVolumeGrid(m_VolumeData, m_ActiveVolume);
+			PortalDebugUtils.DrawSphere(m_Target.position, 0.25f);
         }
 #endif
 

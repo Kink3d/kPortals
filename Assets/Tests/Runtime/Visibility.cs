@@ -47,10 +47,10 @@ namespace kTools.Portals.Tests
 #if UNITY_EDITOR   
         private IEnumerator Generate()
 		{
-            m_StaticRenderers = Utils.GetStaticRenderers();
-            Bounds bounds = Utils.GetSceneBounds(m_StaticRenderers);
-            yield return EditorCoroutines.StartCoroutine(Utils.BuildHierarchicalVolumeGrid(bounds, 0, value => m_VolumeData = value, this), this);
-            yield return EditorCoroutines.StartCoroutine(Utils.BuildVisibilityForVolume(bounds, m_RayDensity, m_StaticRenderers, value => m_PassedRenderers = value, value => m_DebugData = value, this, m_FilterAngle), this);
+            m_StaticRenderers = PortalUtils.GetStaticRenderers();
+            Bounds bounds = PortalUtils.GetSceneBounds(m_StaticRenderers);
+            yield return EditorCoroutines.StartCoroutine(PortalUtils.BuildHierarchicalVolumeGrid(bounds, 0, value => m_VolumeData = value, this), this);
+            yield return EditorCoroutines.StartCoroutine(PortalUtils.BuildVisibilityForVolume(bounds, m_RayDensity, m_StaticRenderers, value => m_PassedRenderers = value, value => m_DebugData = value, this, m_FilterAngle), this);
 
             totalBounds = bounds.size;
             totalRays = m_DebugData.rays.Length;
@@ -69,13 +69,13 @@ namespace kTools.Portals.Tests
             if(m_StaticRenderers == null ||  m_PassedRenderers == null || m_VolumeData == null || m_DebugData.rays == null)
                 return;
 
-            DebugUtils.DrawHierarchicalVolumeGrid(m_VolumeData);
-            DebugUtils.DrawRenderers(m_StaticRenderers, m_PassedRenderers);
+            PortalDebugUtils.DrawHierarchicalVolumeGrid(m_VolumeData);
+            PortalDebugUtils.DrawRenderers(m_StaticRenderers, m_PassedRenderers);
 
             foreach(RayDebugData ray in m_DebugData.rays)
             {
-                DebugUtils.DrawSphere(ray.position, 0.1f);
-                DebugUtils.DrawRay(ray.position, ray.direction, ray.pass);
+                PortalDebugUtils.DrawSphere(ray.position, 0.1f);
+                PortalDebugUtils.DrawRay(ray.position, ray.direction, ray.pass);
             }
         }
 #endif

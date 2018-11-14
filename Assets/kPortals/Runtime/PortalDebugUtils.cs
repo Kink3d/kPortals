@@ -5,10 +5,13 @@ using UnityEngine;
 
 namespace kTools.Portals
 {
-	#if UNITY_EDITOR
-
-    public static class DebugUtils
+#if UNITY_EDITOR
+    public static class PortalDebugUtils
     {
+        // -------------------------------------------------- //
+        //                    PUBLIC METHODS                  //
+        // -------------------------------------------------- //
+
         public static void DrawRenderers(MeshRenderer[] allRenderers, MeshRenderer[] passedRenderers)
         {
             if (allRenderers == null || passedRenderers == null)
@@ -67,6 +70,10 @@ namespace kTools.Portals
 			DrawHierarchicalVolumeGridRecursive(data, activeVolume);
 		}
 
+        // -------------------------------------------------- //
+        //                  INTERNAL METHODS                  //
+        // -------------------------------------------------- //
+
         private static void DrawHierarchicalVolumeGridRecursive(VolumeData data, VolumeData activeVolume)
         {
             if (data.children != null && data.children.Length > 0)
@@ -85,6 +92,10 @@ namespace kTools.Portals
         }
     }
 
+    // -------------------------------------------------- //
+    //                   DEBUG RESOURCES                  //
+    // -------------------------------------------------- //
+
 	public static class DebugColors
 	{
         public static Color[] ray = new Color[2] { new Color(0f, 1f, 0f, 1f), new Color(0f, 1f, 0f, 0.1f) };
@@ -95,7 +106,5 @@ namespace kTools.Portals
 		public static Color[] volume = new Color[2] { new Color(0f, 1f, 1f, 0.25f), new Color(0f, 1f, 1f, 0.1f) };
 		public static Color[] volumeActive = new Color[2] { new Color(0f, 1f, 1f, 1f), new Color(0f, 1f, 1f, 0.5f) };
 	}
-
 #endif
-
 }
