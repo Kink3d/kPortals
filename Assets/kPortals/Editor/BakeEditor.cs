@@ -22,7 +22,7 @@ namespace kTools.PortalsEditor
         // -------------------------------------------------- //
 
 		/// <summary>
-        /// Draw the Bake tools section for IBake. Editor Only.
+        /// Draw the Bake tools section for IBake. Editor only.
         /// </summary>
         /// <param name="target">Target Object as IBake interface.</param>
 		public static void DrawBakeTools(IBake target)

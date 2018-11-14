@@ -28,9 +28,22 @@ namespace kTools.Portals
         //                   PUBLIC METHODS                   //
         // -------------------------------------------------- //
 
+        /// <summary>
+        /// Safely destroy an Object.
+        /// </summary>
+        /// <param name="obj">Object to destroy.</param>
+        public static void Destroy(UnityEngine.Object obj)
+        {
+            #if UNITY_EDITOR
+                UnityEngine.Object.DestroyImmediate(obj);
+            #else
+                UnityEngine.Destroy(obj);
+            #endif
+        }
+
 #if UNITY_EDITOR
         /// <summary>
-        /// Get SerialableOccluder data for all active occluders in the scene
+        /// Get SerialableOccluder data for all active occluders in the scene. Editor only.
         /// </summary>
         public static SerializableOccluder[] GetOccluderData()
         {
@@ -44,15 +57,16 @@ namespace kTools.Portals
         //                  INTERNAL METHODS                  //
         // -------------------------------------------------- //
 
-#if UNITY_EDITOR
         private static Mesh CreatePrimitiveMesh(PrimitiveType type)
         {
+            // Get a Mesh of a Unity primitive type
             var gameObject = GameObject.CreatePrimitive(type);
             var mesh = gameObject.GetComponent<MeshFilter>().sharedMesh;
-            GameObject.DestroyImmediate(gameObject);
+            Destroy(gameObject);
             return mesh;
         }
 
+#if UNITY_EDITOR
         private static SerializableOccluder[] GetStaticOccluderData()
 		{
             // TODO

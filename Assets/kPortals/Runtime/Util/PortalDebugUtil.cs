@@ -4,9 +4,21 @@ namespace kTools.Portals
 {
 	public static class PortalDebugUtil
 	{
-		public static void DrawCube(Vector3 position, Quaternion rotation, Vector3 scale, PortalDebugColor color)
+		// -------------------------------------------------- //
+        //                   PUBLIC METHODS                   //
+        // -------------------------------------------------- //
+
+#if UNITY_EDITOR
+		/// <summary>
+        /// Draw a cube gizmo with a specified transformation. Editor only.
+        /// </summary>
+        /// <param name="positionWS">Gizmo position in world space.</param>
+		/// <param name="rotationWS">Gizmo rotation in world space.</param>
+		/// <param name="scaleWS">Gizmo space in world space.</param>
+		/// <param name="color">Gizmo colors.</param>
+		public static void DrawCube(Vector3 positionWS, Quaternion rotationWS, Vector3 scaleWS, PortalDebugColor color)
 		{
-			Matrix4x4 cubeTransform = Matrix4x4.TRS(position, rotation, scale);
+			Matrix4x4 cubeTransform = Matrix4x4.TRS(positionWS, rotationWS, scaleWS);
 			Matrix4x4 oldGizmosMatrix = Gizmos.matrix;
 			Gizmos.matrix = Gizmos.matrix * cubeTransform;
 			Gizmos.color = color.fill;
@@ -16,13 +28,23 @@ namespace kTools.Portals
 			Gizmos.matrix = oldGizmosMatrix;
 		}
 
-		public static void DrawMesh(Vector3 position, Quaternion rotation, Vector3 scale, Mesh mesh, PortalDebugColor color, int submeshIndex = 0)
+		/// <summary>
+        /// Draw a gizmo with a given mesh and specified transformation. Editor only.
+        /// </summary>
+        /// <param name="positionWS">Gizmo position in world space.</param>
+		/// <param name="rotationWS">Gizmo rotation in world space.</param>
+		/// <param name="scaleWS">Gizmo space in world space.</param>
+		/// <param name="mesh">Gizmo mesh.</param>
+		/// <param name="color">Gizmo colors.</param>
+		/// <param name="submeshIndex">Index for submesh to use.</param>
+		public static void DrawMesh(Vector3 positionWS, Quaternion rotationWS, Vector3 scaleWS, Mesh mesh, PortalDebugColor color, int submeshIndex = 0)
 		{
 			Gizmos.color = color.fill;
-			Gizmos.DrawMesh(mesh, submeshIndex, position, rotation, scale);
+			Gizmos.DrawMesh(mesh, submeshIndex, positionWS, rotationWS, scaleWS);
 			Gizmos.color = color.wire;
-			Gizmos.DrawWireMesh(mesh, submeshIndex, position, rotation, scale);
+			Gizmos.DrawWireMesh(mesh, submeshIndex, positionWS, rotationWS, scaleWS);
 		}
+#endif
 	}
 
 	public static class PortalDebugColors
