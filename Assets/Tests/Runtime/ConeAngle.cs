@@ -1,50 +1,33 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-namespace SimpleTools.Culling.Tests
+namespace kTools.Portals.Tests
 {
 	[ExecuteInEditMode]
+	[AddComponentMenu("kTools/Tests/Portals/ConeAngle")]
 	public class ConeAngle : MonoBehaviour 
 	{
-
-#if UNITY_EDITOR
-
-        // ----------------------------------------------------------------------------------------------------//
-        //                                           PUBLIC FIELDS                                             //
-        // ----------------------------------------------------------------------------------------------------//
-
         public Transform raySource;
-		public float maxAngle;
+		public float maxAngle = 45;
 
-		// ----------------------------------------------------------------------------------------------------//
-		//                                               TEST                                                  //
-		// ----------------------------------------------------------------------------------------------------//
-
-		// --------------------------------------------------
-		// Runtime Data
-
-		[SerializeField]
 		private MeshRenderer[] m_StaticRenderers;
-		
-		[SerializeField]
 		private MeshRenderer[] m_PassedRenderers;
-
-		// --------------------------------------------------
-		// Test Execution
 
 		private void Update()
 		{
+			if(raySource == null)
+                return;
+
 			m_StaticRenderers = Utils.GetStaticRenderers();
 			m_PassedRenderers = Utils.FilterRenderersByConeAngle(m_StaticRenderers, raySource.position, raySource.forward, maxAngle);
 		}
 
-		// ----------------------------------------------------------------------------------------------------//
-		//                                              DEBUG                                                  //
-		// ----------------------------------------------------------------------------------------------------//
-
-		[ExecuteInEditMode]
+#if UNITY_EDITOR
         private void OnDrawGizmos()
         {
+			if(raySource == null || m_StaticRenderers == null || m_PassedRenderers == null)
+                return;
+
 			DrawVectorDebug();
 			DebugUtils.DrawRay(raySource.position, raySource.forward);
             DebugUtils.DrawRenderers(m_StaticRenderers, m_PassedRenderers);
@@ -54,9 +37,6 @@ namespace SimpleTools.Culling.Tests
 
 		private void DrawVectorDebug()
         {
-            if (m_StaticRenderers == null || m_PassedRenderers == null)
-                return;
-
             for (int i = 0; i < m_StaticRenderers.Length; i++)
             {
                 bool isPassed = m_PassedRenderers.Contains(m_StaticRenderers[i]);
@@ -64,7 +44,6 @@ namespace SimpleTools.Culling.Tests
                 Gizmos.DrawLine(raySource.position, m_StaticRenderers[i].bounds.center);
             }
 		}
-
 #endif
 
     }

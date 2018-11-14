@@ -1,27 +1,27 @@
-﻿using System;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
-namespace SimpleTools.Culling.Tests
+namespace kTools.Portals.Tests
 {
     [CustomEditor(typeof(Occluders))]
     public class OccludersEditor : Editor
     {
+        Occluders m_ActualTarget;
+
+        void OnEnable()
+        {
+            m_ActualTarget = (Occluders)target;
+        }
+
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
 
-            Occluders occluders = (Occluders)target;
-
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button(new GUIContent("Generate")))
-            {
-                occluders.OnClickGenerate();
-            }
+                m_ActualTarget.OnClickGenerate();
             if (GUILayout.Button(new GUIContent("Clear")))
-            {
-                occluders.OnClickCancel();
-            }
+                m_ActualTarget.OnClickCancel();
             EditorGUILayout.EndHorizontal();
 
             serializedObject.ApplyModifiedProperties();

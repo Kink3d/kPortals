@@ -1,49 +1,22 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using marijnz.EditorCoroutines;
 
-namespace SimpleTools.Culling.Tests
+namespace kTools.Portals.Tests
 {
     [ExecuteInEditMode]
+    [AddComponentMenu("kTools/Tests/Portals/Visibility")]
     public class Visibility : MonoBehaviour
     {
+        [SerializeField] private int m_RayDensity;
+        [SerializeField] private int m_FilterAngle;
 
-#if UNITY_EDITOR
-
-        // ----------------------------------------------------------------------------------------------------//
-        //                                           PUBLIC FIELDS                                             //
-        // ----------------------------------------------------------------------------------------------------//
-
-        [SerializeField]
-        private int m_RayDensity;
-
-        [SerializeField]
-        private int m_FilterAngle;
-
-        // ----------------------------------------------------------------------------------------------------//
-        //                                               TEST                                                  //
-        // ----------------------------------------------------------------------------------------------------//
-
-        // --------------------------------------------------
-        // Runtime Data
-
-        [SerializeField]
-        private VolumeData m_VolumeData;
-
-        [SerializeField]
-        private MeshRenderer[] m_StaticRenderers;
-
-        [SerializeField]
-        private MeshRenderer[] m_PassedRenderers;
-
-        [SerializeField]
-        private VolumeDebugData m_DebugData;
-
-        // --------------------------------------------------
-        // Debug Data
+        [SerializeField] private VolumeData m_VolumeData;
+        [SerializeField] private MeshRenderer[] m_StaticRenderers;
+        [SerializeField] private MeshRenderer[] m_PassedRenderers;
+        [SerializeField] private VolumeDebugData m_DebugData;
 
         public bool displayDebug;
         public Vector3 totalBounds;
@@ -52,30 +25,30 @@ namespace SimpleTools.Culling.Tests
         public int totalRenderers;
         public int successfulRenderers;
 
-        // --------------------------------------------------
-        // Test Execution
-
-        [ExecuteInEditMode]
         public void OnClickGenerate()
         {
+#if UNITY_EDITOR 
             EditorCoroutines.StartCoroutine(Generate(), this);
+#endif
         }
 
-        [ExecuteInEditMode]
         public void OnClickCancel()
         {
+#if UNITY_EDITOR 
             m_VolumeData = null;
             m_StaticRenderers = null;
             m_DebugData.rays = null;
             displayDebug = false;
             UnityEditor.SceneView.RepaintAll();
+            UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
+#endif
         }
 
+#if UNITY_EDITOR   
         private IEnumerator Generate()
 		{
             m_StaticRenderers = Utils.GetStaticRenderers();
             Bounds bounds = Utils.GetSceneBounds(m_StaticRenderers);
-
             yield return EditorCoroutines.StartCoroutine(Utils.BuildHierarchicalVolumeGrid(bounds, 0, value => m_VolumeData = value, this), this);
             yield return EditorCoroutines.StartCoroutine(Utils.BuildVisibilityForVolume(bounds, m_RayDensity, m_StaticRenderers, value => m_PassedRenderers = value, value => m_DebugData = value, this, m_FilterAngle), this);
 
@@ -85,21 +58,19 @@ namespace SimpleTools.Culling.Tests
             totalRenderers = m_StaticRenderers.Length;
             successfulRenderers = m_PassedRenderers.Length;
             displayDebug = true;
+
             UnityEditor.SceneView.RepaintAll();
+            UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
+
         }
 
-        // ----------------------------------------------------------------------------------------------------//
-        //                                              DEBUG                                                  //
-        // ----------------------------------------------------------------------------------------------------//
-
-        [ExecuteInEditMode]
         private void OnDrawGizmos()
         {
+            if(m_StaticRenderers == null ||  m_PassedRenderers == null || m_VolumeData == null || m_DebugData.rays == null)
+                return;
+
             DebugUtils.DrawHierarchicalVolumeGrid(m_VolumeData);
             DebugUtils.DrawRenderers(m_StaticRenderers, m_PassedRenderers);
-
-            if(m_DebugData.rays == null)
-                return;
 
             foreach(RayDebugData ray in m_DebugData.rays)
             {
@@ -107,7 +78,6 @@ namespace SimpleTools.Culling.Tests
                 DebugUtils.DrawRay(ray.position, ray.direction, ray.pass);
             }
         }
-
 #endif
 
     }

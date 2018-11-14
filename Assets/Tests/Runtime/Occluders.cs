@@ -1,77 +1,53 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using marijnz.EditorCoroutines;
 
-namespace SimpleTools.Culling.Tests
+namespace kTools.Portals.Tests
 {
 	[ExecuteInEditMode]
+    [AddComponentMenu("kTools/Tests/Portals/Occluders")]
 	public class Occluders : MonoBehaviour 
 	{
-
-#if UNITY_EDITOR
-
-        // ----------------------------------------------------------------------------------------------------//
-        //                                               TEST                                                  //
-        // ----------------------------------------------------------------------------------------------------//
-
-        // --------------------------------------------------
-        // Runtime Data
-
-        [SerializeField]
-        private MeshRenderer[] m_StaticRenderers;
-
-		[SerializeField]
-		private OccluderData[] m_Occluders;
-
-		// --------------------------------------------------
-        // Test Execution
-
-        [ExecuteInEditMode]
+        [SerializeField] private MeshRenderer[] m_StaticRenderers;
+		[SerializeField] private OccluderData[] m_Occluders;
+        
         public void OnClickGenerate()
         {
+#if UNITY_EDITOR
             EditorCoroutines.StartCoroutine(Generate(), this);
+#endif
         }
 
-        [ExecuteInEditMode]
         public void OnClickCancel()
         {
+#if UNITY_EDITOR
 			EditorCoroutines.StopAllCoroutines(this);
-            ClearOccluderData();
             m_Occluders = null;
             m_StaticRenderers = null;
+			Transform container = transform.Find(Utils.occluderContainerName);
+			if(container != null)
+				DestroyImmediate(container.gameObject);
             UnityEditor.SceneView.RepaintAll();
+            UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
+#endif
         }
 
+#if UNITY_EDITOR
         private IEnumerator Generate()
 		{
             m_StaticRenderers = Utils.GetStaticRenderers();
             yield return EditorCoroutines.StartCoroutine(Utils.BuildOccluderProxyGeometry(transform, m_StaticRenderers, value => m_Occluders = value, this, "Occluder"), this);
             UnityEditor.SceneView.RepaintAll();
+            UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
         }
 
-		[ExecuteInEditMode]
-		private void ClearOccluderData()
-		{
-			m_Occluders = null;
-			Transform container = transform.Find(Utils.occluderContainerName);
-			if(container != null)
-			{
-				DestroyImmediate(container.gameObject);
-			}
-		}
-
-		// ----------------------------------------------------------------------------------------------------//
-		//                                              DEBUG                                                  //
-		// ----------------------------------------------------------------------------------------------------//
-
-		[ExecuteInEditMode]
         private void OnDrawGizmos()
         {
+            if(m_Occluders == null)
+                return;
+
             DebugUtils.DrawOccluders(m_Occluders);
         }
-
 #endif
 
     }

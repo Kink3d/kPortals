@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace SimpleTools.Culling
+namespace kTools.Portals
 {
     [CustomEditor(typeof(SimpleCulling))]
     public class SimpleCullingSystemEditor : Editor

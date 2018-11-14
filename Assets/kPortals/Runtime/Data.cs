@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace SimpleTools.Culling
+namespace kTools.Portals
 {
 	[Serializable]
 	public class VolumeData

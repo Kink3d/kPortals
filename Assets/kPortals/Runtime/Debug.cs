@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace SimpleTools.Culling
+namespace kTools.Portals
 {
 	#if UNITY_EDITOR
 

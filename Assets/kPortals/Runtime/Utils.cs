@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using marijnz.EditorCoroutines;
 
-namespace SimpleTools.Culling
+namespace kTools.Portals
 {
 	public static class Utils
 	{
