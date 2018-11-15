@@ -405,7 +405,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_VolumeMode: 1
   m_Subdivisions: 0
-  m_RayDensity: 1000
+  m_RayDensity: 10
   m_ConeAngle: 45
   m_PortalData:
     volumes:
@@ -452,6 +452,7 @@ MonoBehaviour:
         childIDs: 
       objects:
       - {fileID: 431572726}
+      - {fileID: 1197619213}
     - volume:
         positionWS: {x: -2.9, y: 1, z: 2.9}
         rotationWS: {x: -0, y: -0, z: -0, w: 1}

@@ -265,7 +265,7 @@ namespace kTools.Portals
 				var passedObjects = new List<GameObject>();
 
 				// Iterate random rays based on volume density
-				var rayCount = PortalVisibilityUtil.CalculateRayCount(m_RayDensity, lowestSubdivisionVolumes.Length);
+				var rayCount = PortalVisibilityUtil.CalculateRayCount(m_RayDensity, volume.scaleWS);
 				for(int r = 0; r < rayCount; r++)
 				{
 					// Get a random ray and a list of cone filtered renderers to test

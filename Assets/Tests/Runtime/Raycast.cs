@@ -37,7 +37,7 @@ namespace kTools.Portals.Tests
 			m_SerializableVolumes = PortalPrepareUtil.GetVolumeData(VolumeMode.Auto, 0);
 
             m_BakeState = BakeState.Visibility;
-            var rayCount = PortalVisibilityUtil.CalculateRayCount(m_RayDensity, m_SerializableVolumes.Length);
+            var rayCount = PortalVisibilityUtil.CalculateRayCount(m_RayDensity, m_SerializableVolumes[0].scaleWS);
             for(int r = 0; r < rayCount; r++)
             {
                 var rayPosition = PortalVisibilityUtil.RandomPointWithinVolume(m_SerializableVolumes[0]);

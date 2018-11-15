@@ -16,11 +16,10 @@ namespace kTools.Portals
         // -------------------------------------------------- //
 
 #if UNITY_EDITOR
-		public static int CalculateRayCount(int density, int volumeCount)
+		public static int CalculateRayCount(int density, Vector3 volumeScale)
 		{
-			// TODO
-			// - Calculate and TEST
-			return density;
+			int rayCount = (int)(density * volumeScale.x * volumeScale.y * volumeScale.z);
+			return rayCount;
 		}
 
 		public static Vector3 RandomPointWithinVolume(SerializableVolume volume)
