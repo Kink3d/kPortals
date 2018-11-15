@@ -88,7 +88,7 @@ namespace kTools.Portals
 			m_BakeState = BakeState.Volumes;
 			var volumes = PortalPrepareUtil.GetVolumeData(m_VolumeMode, m_Subdivisions);
 			m_BakeState = BakeState.Visibility;
-			List<SerializableKeyValuePair<SerializableVolume, GameObject[]>> visibilityTable = null;
+			List<VisbilityData> visibilityTable = null;
 			yield return EditorCoroutines.StartCoroutine(GenerateVisibilityTable(occluders, volumes, value => visibilityTable = value), this);
 
 			// Serialize
@@ -106,7 +106,7 @@ namespace kTools.Portals
             UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
 		}
 
-		private IEnumerator GenerateVisibilityTable(SerializableOccluder[] occluders, SerializableVolume[] volumes, Action<List<SerializableKeyValuePair<SerializableVolume, GameObject[]>>> result)
+		private IEnumerator GenerateVisibilityTable(SerializableOccluder[] occluders, SerializableVolume[] volumes, Action<List<VisbilityData>> result)
 		{
 			// Abort bake if input data is invalid
 			if(occluders == null || volumes == null)
@@ -119,7 +119,7 @@ namespace kTools.Portals
 
 			// Setup
 			m_BakeState = BakeState.Visibility;
-			var visibilityTable = new List<SerializableKeyValuePair<SerializableVolume, GameObject[]>>();
+			var visibilityTable = new List<VisbilityData>();
 
 			// Get Occluder proxies
 			var occluderProxies = PortalPrepareUtil.GetOccluderProxies(occluders);
@@ -140,10 +140,9 @@ namespace kTools.Portals
 				var passedObjects = new List<GameObject>();
 
 				// Iterate random rays based on volume density
-				var rayCount = m_RayDensity; // TODO - Calculate
+				var rayCount = PortalVisibilityUtil.CalculateRayCount(m_RayDensity, lowestSubdivisionVolumes.Length);
 				for(int r = 0; r < rayCount; r++)
 				{
-					Debug.Log("Ray");
 					// Get a random ray and a list of cone filtered renderers to test
 					var rayPosition = PortalVisibilityUtil.RandomPointWithinVolume(volume);
 					var rayDirection = PortalVisibilityUtil.RandomSphericalDistributionVector();
@@ -160,7 +159,7 @@ namespace kTools.Portals
 				}
 
 				// Add to VisibilityTable
-				visibilityTable.Add(new SerializableKeyValuePair<SerializableVolume, GameObject[]>(volume, passedObjects.ToArray()));
+				visibilityTable.Add(new VisbilityData(volume, passedObjects.ToArray()));
 				yield return null;
 			}
 

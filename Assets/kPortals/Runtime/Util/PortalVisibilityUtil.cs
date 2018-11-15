@@ -16,6 +16,12 @@ namespace kTools.Portals
         // -------------------------------------------------- //
 
 #if UNITY_EDITOR
+		public static int CalculateRayCount(int density, int volumeCount)
+		{
+			// TODO - Calculate and TEST
+			return density;
+		}
+
 		public static Vector3 RandomPointWithinVolume(SerializableVolume volume)
         {
             var x = UnityEngine.Random.Range(volume.positionWS.x - (volume.scaleWS.x / 2), volume.positionWS.x + (volume.scaleWS.x / 2));
