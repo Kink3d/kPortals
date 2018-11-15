@@ -29,8 +29,8 @@ namespace kTools.Portals.Tests
 			ClearOccluderProxies();
 			m_Completion = 0.0f;
 			m_BakeState = BakeState.Occluders;
-			m_SerializableOccluders = PortalUtil.GetOccluderData();
-			m_OccluderProxies = PortalUtil.GetOccluderProxies(m_SerializableOccluders);
+			m_SerializableOccluders = PortalPrepareUtil.GetOccluderData();
+			m_OccluderProxies = PortalPrepareUtil.GetOccluderProxies(m_SerializableOccluders);
 			m_BakeState = BakeState.Active;
 			m_Completion = 1.0f;
 			UnityEditor.SceneView.RepaintAll();
@@ -52,7 +52,7 @@ namespace kTools.Portals.Tests
 			if(m_OccluderProxies != null)
 			{
 				for(int i = 0; i < m_OccluderProxies.Length; i++)
-					PortalUtil.Destroy(m_OccluderProxies[i].gameObject);
+					PortalCoreUtil.Destroy(m_OccluderProxies[i].gameObject);
 				m_OccluderProxies = null;
 			}
 		}

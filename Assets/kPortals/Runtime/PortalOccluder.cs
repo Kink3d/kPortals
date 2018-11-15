@@ -20,7 +20,7 @@ namespace kTools.Portals
 				positionWS = transform.position,
 				rotationWS = transform.rotation,
 				scaleWS = transform.lossyScale,
-				mesh = PortalUtil.cube
+				mesh = PortalCoreUtil.cube
 			};
 		}
 

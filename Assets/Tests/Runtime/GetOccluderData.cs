@@ -27,7 +27,7 @@ namespace kTools.Portals.Tests
 		{
 			m_Completion = 0.0f;
 			m_BakeState = BakeState.Occluders;
-			m_SerializableOccluders = PortalUtil.GetOccluderData();
+			m_SerializableOccluders = PortalPrepareUtil.GetOccluderData();
 			m_BakeState = BakeState.Active;
 			m_Completion = 1.0f;
 			UnityEditor.SceneView.RepaintAll();
