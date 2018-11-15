@@ -387,46 +387,55 @@ MonoBehaviour:
   - positionWS: {x: 0, y: 1, z: 0}
     rotationWS: {x: 0, y: 0, z: 0, w: 1}
     scaleWS: {x: 5, y: 5, z: 5}
+    volumeID: 0
     parentID: -1
     childIDs: 
   - positionWS: {x: -1.25, y: -0.25, z: -1.25}
     rotationWS: {x: 0, y: 0, z: 0, w: 1}
     scaleWS: {x: 2.5, y: 2.5, z: 2.5}
+    volumeID: 1
     parentID: 0
     childIDs: 
   - positionWS: {x: 1.25, y: -0.25, z: -1.25}
     rotationWS: {x: 0, y: 0, z: 0, w: 1}
     scaleWS: {x: 2.5, y: 2.5, z: 2.5}
+    volumeID: 2
     parentID: 0
     childIDs: 
   - positionWS: {x: -1.25, y: 2.25, z: -1.25}
     rotationWS: {x: 0, y: 0, z: 0, w: 1}
     scaleWS: {x: 2.5, y: 2.5, z: 2.5}
+    volumeID: 3
     parentID: 0
     childIDs: 
   - positionWS: {x: 1.25, y: 2.25, z: -1.25}
     rotationWS: {x: 0, y: 0, z: 0, w: 1}
     scaleWS: {x: 2.5, y: 2.5, z: 2.5}
+    volumeID: 4
     parentID: 0
     childIDs: 
   - positionWS: {x: -1.25, y: -0.25, z: 1.25}
     rotationWS: {x: 0, y: 0, z: 0, w: 1}
     scaleWS: {x: 2.5, y: 2.5, z: 2.5}
+    volumeID: 5
     parentID: 0
     childIDs: 
   - positionWS: {x: 1.25, y: -0.25, z: 1.25}
     rotationWS: {x: 0, y: 0, z: 0, w: 1}
     scaleWS: {x: 2.5, y: 2.5, z: 2.5}
+    volumeID: 6
     parentID: 0
     childIDs: 
   - positionWS: {x: -1.25, y: 2.25, z: 1.25}
     rotationWS: {x: 0, y: 0, z: 0, w: 1}
     scaleWS: {x: 2.5, y: 2.5, z: 2.5}
+    volumeID: 7
     parentID: 0
     childIDs: 
   - positionWS: {x: 1.25, y: 2.25, z: 1.25}
     rotationWS: {x: 0, y: 0, z: 0, w: 1}
     scaleWS: {x: 2.5, y: 2.5, z: 2.5}
+    volumeID: 8
     parentID: 0
     childIDs: 
   m_BakeState: 4

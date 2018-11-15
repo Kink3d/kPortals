@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 #if UNITY_EDITOR
     using UnityEditor;
@@ -6,7 +7,7 @@
 
 namespace kTools.Portals
 {
-	public class PortalCoreUtil
+	public static class PortalCoreUtil
 	{
 		// -------------------------------------------------- //
         //                   PRIVATE FIELDS                   //
@@ -38,6 +39,16 @@ namespace kTools.Portals
             #else
                 UnityEngine.Destroy(obj);
             #endif
+        }
+
+        /// <summary>
+        /// Add a value to the List if it is not already present.
+        /// </summary>
+        /// <param name="value">Value to add.</param>
+        public static void AddIfUnique<T>(this List<T> list, T value)
+        {
+            if (!list.Contains(value))
+				list.Add(value);
         }
 
 		// -------------------------------------------------- //

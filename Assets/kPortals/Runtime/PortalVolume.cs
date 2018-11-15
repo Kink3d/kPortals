@@ -13,13 +13,14 @@ namespace kTools.Portals
 		/// <summary>
         /// Converts this Monobehaviour to a SerializableVolume struct for storage.
         /// </summary>
-		public SerializableVolume Serialize()
+		public SerializableVolume Serialize(int index)
 		{
 			return new SerializableVolume()
 			{
 				positionWS = transform.position,
 				rotationWS = transform.rotation,
 				scaleWS = transform.lossyScale,
+				volumeID = index,
 				parentID = -1,
 				childIDs = null
 			};

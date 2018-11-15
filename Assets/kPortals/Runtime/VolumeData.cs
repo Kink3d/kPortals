@@ -34,17 +34,18 @@ namespace kTools.Portals
         //                  INTERNAL METHODS                  //
         // -------------------------------------------------- //
 
-		private void SerializeRecursive(ref List<SerializableVolume> serializableVolumes, int parentID, out int index)
+		private void SerializeRecursive(ref List<SerializableVolume> serializableVolumes, int parentID, out int volumeID)
 		{
 			// Serialize this volume
+			volumeID = serializableVolumes.Count;
 			SerializableVolume volume = new SerializableVolume()
 			{
 				positionWS = positionWS,
 				rotationWS = Quaternion.identity,
+				volumeID = volumeID,
 				scaleWS = scaleWS,
 				parentID = parentID
 			};
-			index = serializableVolumes.Count;
 			serializableVolumes.Add(volume);
 
 			// If no children we are finished
@@ -56,7 +57,7 @@ namespace kTools.Portals
 			for(int i = 0; i < children.Length; i++)
 			{
 				var childIndex = -1;
-				children[i].SerializeRecursive(ref serializableVolumes, index, out childIndex);
+				children[i].SerializeRecursive(ref serializableVolumes, volumeID, out childIndex);
 				volume.childIDs[i] = childIndex;
 			}
 		}

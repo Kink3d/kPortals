@@ -9,6 +9,7 @@ namespace kTools.Portals
 		public Vector3 positionWS;
 		public Quaternion rotationWS;
 		public Vector3 scaleWS;
+		public int volumeID;
 		public int parentID;
 		public int[] childIDs;
 	}

@@ -37,6 +37,16 @@ namespace kTools.Portals
                 colliders[i] = CreateOccluderProxy(occluders[i]);
             return colliders;
         }
+
+        /// <summary>
+        /// Get all renderers in Scene with OccludeeStatic flag. Editor only.
+        /// </summary>
+        public static MeshRenderer[] GetStaticOccludeeRenderers()
+        {
+            var occludeeFlag = (int)StaticEditorFlags.OccludeeStatic;
+            return UnityEngine.Object.FindObjectsOfType<MeshRenderer>().Where(
+                s => (occludeeFlag & (int)UnityEditor.GameObjectUtility.GetStaticEditorFlags(s.gameObject)) == occludeeFlag).ToArray();
+        }
         
         /// <summary>
         /// Get SerializableVolume data based on Volume mode. Editor only.
@@ -88,7 +98,7 @@ namespace kTools.Portals
         private static Bounds GetSceneBounds()
         {
             // Encapsulate all static occludees in Bounds
-            var occludeeObjects = GetStaticOccludeeRenderers();
+            var occludeeObjects = GetAllStaticRenderers();
             var sceneBounds = new Bounds(Vector3.zero, Vector3.zero);
             for (int i = 0; i < occludeeObjects.Length; i++)
                 sceneBounds.Encapsulate(occludeeObjects[i].bounds);
@@ -99,20 +109,18 @@ namespace kTools.Portals
             return sceneBounds;
         }
 
+        private static MeshRenderer[] GetAllStaticRenderers()
+        {
+            // Get all renderers in scene with full static flags
+            return UnityEngine.Object.FindObjectsOfType<MeshRenderer>().Where(s => s.gameObject.isStatic).ToArray();
+        }
+
         private static MeshRenderer[] GetStaticOccluderRenderers()
         {
             // Get all renderers in scene with correct static flags
             var occluderFlag = (int)StaticEditorFlags.OccluderStatic;
             return UnityEngine.Object.FindObjectsOfType<MeshRenderer>().Where(
                 s => (occluderFlag & (int)UnityEditor.GameObjectUtility.GetStaticEditorFlags(s.gameObject)) == occluderFlag).ToArray();
-        }
-
-        private static MeshRenderer[] GetStaticOccludeeRenderers()
-        {
-            // Get all renderers in scene with correct static flags
-            var occludeeFlag = (int)StaticEditorFlags.OccludeeStatic;
-            return UnityEngine.Object.FindObjectsOfType<MeshRenderer>().Where(
-                s => (occludeeFlag & (int)UnityEditor.GameObjectUtility.GetStaticEditorFlags(s.gameObject)) == occludeeFlag).ToArray();
         }
 
         // --------------------------------------------------
@@ -183,7 +191,7 @@ namespace kTools.Portals
 			// Serialize
             var manualVolumeData = new SerializableVolume[manualVolumeObjects.Length];
             for(int i = 0; i < manualVolumeData.Length; i++)
-                manualVolumeData[i] = manualVolumeObjects[i].Serialize();
+                manualVolumeData[i] = manualVolumeObjects[i].Serialize(i);
             return manualVolumeData;
         }
 

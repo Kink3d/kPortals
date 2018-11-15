@@ -53,7 +53,7 @@ namespace kTools.Portals
 
 	public static class PortalDebugColors
     {
-        public static PortalDebugColor volume = new PortalDebugColor(new Vector4(0.43f, 0.81f, 0.96f, 1.0f), new Vector4(0.43f, 0.81f, 0.96f, 0.5f));
+        public static PortalDebugColor volume = new PortalDebugColor(new Vector4(0.43f, 0.81f, 0.96f, 1.0f), new Vector4(0.43f, 0.81f, 0.96f, 0.25f));
         public static PortalDebugColor occluder = new PortalDebugColor(new Vector4(0.99f, 0.82f, 0.64f, 1.0f), new Vector4(0.99f, 0.82f, 0.64f, 0.5f));
     }
 

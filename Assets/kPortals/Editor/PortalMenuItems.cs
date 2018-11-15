@@ -6,6 +6,18 @@ namespace kTools.PortalsEditor
 {
     public class DecalMenuItems
     {
+        // Create a new PortalSystem object from Hierarchy window
+        [MenuItem("GameObject/kTools/Portals/Portal System", false, 10)]
+        static void CreatePortalSystemObject(MenuCommand menuCommand)
+        {
+            GameObject go = new GameObject();
+            go.name = "PortalSystem";
+            GameObjectUtility.SetParentAndAlign(go, menuCommand.context as GameObject);
+            go.AddComponent<PortalSystem>();
+            Undo.RegisterCreatedObjectUndo(go, "Create " + go.name);
+            Selection.activeObject = go;
+        }
+
         // Create a new PortalVolume object from Hierarchy window
         [MenuItem("GameObject/kTools/Portals/Portal Volume", false, 10)]
         static void CreatePortalVolumeObject(MenuCommand menuCommand)
