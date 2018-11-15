@@ -23,5 +23,20 @@ namespace kTools.Portals
 
 		public SerializableVolume volume;
 		public GameObject[] objects;
+
+		private MeshRenderer[] m_Renderers;
+		public MeshRenderer[] renderers
+		{
+			get
+			{
+				if(m_Renderers == null || m_Renderers.Length == 0)
+				{
+					m_Renderers = new MeshRenderer[objects.Length];
+					for(int i = 0; i < m_Renderers.Length; i++)
+						m_Renderers[i] = objects[i].GetComponent<MeshRenderer>();
+				}
+				return m_Renderers;
+			}
+		}
 	}
 }

@@ -18,7 +18,8 @@ namespace kTools.Portals
 #if UNITY_EDITOR
 		public static int CalculateRayCount(int density, int volumeCount)
 		{
-			// TODO - Calculate and TEST
+			// TODO
+			// - Calculate and TEST
 			return density;
 		}
 

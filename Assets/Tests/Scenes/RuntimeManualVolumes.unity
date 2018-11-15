@@ -405,7 +405,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_VolumeMode: 1
   m_Subdivisions: 0
-  m_RayDensity: 100
+  m_RayDensity: 1000
   m_ConeAngle: 45
   m_PortalData:
     volumes:
@@ -442,7 +442,43 @@ MonoBehaviour:
       rotationWS: {x: -0, y: -0, z: -0, w: 1}
       scaleWS: {x: 10, y: 5, z: 1}
       mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
-  m_ActiveVolumeID: -1
+    visibilityTable:
+    - volume:
+        positionWS: {x: 2.9, y: 1, z: -2.9}
+        rotationWS: {x: -0, y: -0, z: -0, w: 1}
+        scaleWS: {x: 4.5, y: 4.5, z: 4.5}
+        volumeID: 0
+        parentID: -1
+        childIDs: 
+      objects:
+      - {fileID: 431572726}
+    - volume:
+        positionWS: {x: -2.9, y: 1, z: 2.9}
+        rotationWS: {x: -0, y: -0, z: -0, w: 1}
+        scaleWS: {x: 4.5, y: 4.5, z: 4.5}
+        volumeID: 1
+        parentID: -1
+        childIDs: 
+      objects:
+      - {fileID: 1226219643}
+    - volume:
+        positionWS: {x: -2.9, y: 1, z: -2.9}
+        rotationWS: {x: -0, y: -0, z: -0, w: 1}
+        scaleWS: {x: 4.5, y: 4.5, z: 4.5}
+        volumeID: 2
+        parentID: -1
+        childIDs: 
+      objects:
+      - {fileID: 1197619213}
+    - volume:
+        positionWS: {x: 2.9, y: 1, z: 2.9}
+        rotationWS: {x: -0, y: -0, z: -0, w: 1}
+        scaleWS: {x: 4.5, y: 4.5, z: 4.5}
+        volumeID: 3
+        parentID: -1
+        childIDs: 
+      objects:
+      - {fileID: 1110372709}
   m_BakeState: 4
   m_Completion: 1
 --- !u!4 &432160991
@@ -569,6 +605,7 @@ GameObject:
   - component: {fileID: 534669905}
   - component: {fileID: 534669904}
   - component: {fileID: 534669903}
+  - component: {fileID: 534669906}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -636,6 +673,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: -45.000004, z: 0}
+--- !u!114 &534669906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 534669902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62c74cbbc25aab64eaefae519848b134, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &784148768
 GameObject:
   m_ObjectHideFlags: 0

@@ -31,12 +31,12 @@ namespace kTools.Portals
 			foreach (SerializableVolume volume in lowestSubdivisionVolumes)
 			{
 				// Iterate all volumes
-				GameObject[] volumeObjects;
-				if(!visibilityTable.TryGetObjects(volume, out volumeObjects))
+				MeshRenderer[] volumeRenderers;
+				if(!visibilityTable.TryGetRemderers(volume, out volumeRenderers))
 				{
-					// Get objects from VisbilityTable and collect renderers
-					foreach(GameObject go in volumeObjects)
-						renderers.Add(go.GetComponent<MeshRenderer>());
+					// Get renderers from VisbilityTable
+					foreach(MeshRenderer r in volumeRenderers)
+						renderers.Add(r);
 				}
 			}
 			// Store as dictionary with instanceID

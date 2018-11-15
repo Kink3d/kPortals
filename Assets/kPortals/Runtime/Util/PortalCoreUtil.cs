@@ -52,21 +52,21 @@ namespace kTools.Portals
         }
 
         /// <summary>
-        /// Try to the Value of a VisibilityData from a List.
+        /// Try to the Value of a VisibilityData as MeshRenderer[] from a List.
         /// </summary>
         /// <param name="volume">SerializableVolume to use as Key.</param>
-		/// <param name="objects">GameObject[] returns if true.</param>
-		public static bool TryGetObjects(this List<VisbilityData> list, SerializableVolume volume, out GameObject[] objects)
+		/// <param name="renderers">MeshRenderer[] returns if true.</param>
+		public static bool TryGetRemderers(this List<VisbilityData> list, SerializableVolume volume, out MeshRenderer[] renderers)
 		{
 			for(int i = 0; i < list.Count; i++)
 			{
 				if(list[i].volume.volumeID == volume.volumeID)
 				{
-					objects = list[i].objects;
+					renderers = list[i].renderers;
 					return true;
 				}
 			}
-			objects = null;
+			renderers = null;
 			return false;
 		}
 
