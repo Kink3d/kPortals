@@ -51,6 +51,25 @@ namespace kTools.Portals
 				list.Add(value);
         }
 
+        /// <summary>
+        /// Try to the Value of a VisibilityData from a List.
+        /// </summary>
+        /// <param name="volume">SerializableVolume to use as Key.</param>
+		/// <param name="objects">GameObject[] returns if true.</param>
+		public static bool TryGetObjects(this List<VisbilityData> list, SerializableVolume volume, out GameObject[] objects)
+		{
+			for(int i = 0; i < list.Count; i++)
+			{
+				if(list[i].volume.volumeID == volume.volumeID)
+				{
+					objects = list[i].objects;
+					return true;
+				}
+			}
+			objects = null;
+			return false;
+		}
+
 		// -------------------------------------------------- //
         //                  INTERNAL METHODS                  //
         // -------------------------------------------------- //

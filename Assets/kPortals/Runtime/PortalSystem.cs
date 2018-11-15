@@ -38,7 +38,6 @@ namespace kTools.Portals
 		[SerializeField] private int m_RayDensity = 10;
 		[SerializeField] private float m_ConeAngle = 45.0f;
 		[SerializeField] private SerializablePortalData m_PortalData;
-		[SerializeField] private int m_ActiveVolumeID;
 
 		[SerializeField] private BakeState m_BakeState;
 		public BakeState bakeState
@@ -52,16 +51,46 @@ namespace kTools.Portals
 			get { return m_Completion; }
 		}
 
+		private bool isInitialized = false;
+		private Dictionary<int, MeshRenderer> m_VisibleRenderers = new Dictionary<int, MeshRenderer>();
+		private Dictionary<PortalAgent, int> m_ActiveAgents = new Dictionary<PortalAgent, int>();
+
 		// -------------------------------------------------- //
         //                   PUBLIC METHODS                   //
         // -------------------------------------------------- //
 
+		/// <summary>
+        /// Register a PortalAgent for calculating visibility.
+        /// </summary>
+        /// <param name="agent">PortalAgent to add.</param>
+		public void RegisterAgent(PortalAgent agent)
+		{
+			if(!m_ActiveAgents.ContainsKey(agent))
+				m_ActiveAgents.Add(agent, -1);
+		}
+
+		/// <summary>
+        /// Unregister a PortalAgent from calculating visibility.
+        /// </summary>
+        /// <param name="agent">PortalAgent to remove.</param>
+		public void UnregisterAgent(PortalAgent agent)
+		{
+			if(m_ActiveAgents.ContainsKey(agent))
+				m_ActiveAgents.Remove(agent);
+		}
+
 #if UNITY_EDITOR
+		/// <summary>
+        /// Start the bake process. Editor only.
+        /// </summary>
 		public void OnClickBake()
 		{
 			EditorCoroutines.StartCoroutine(BakePortalData(), this);
 		}
-
+		
+		/// <summary>
+        /// Cancel any active bake and clear all data. Editor only.
+        /// </summary>
 		public void OnClickCancel()
 		{
 			// Reset all
@@ -77,6 +106,30 @@ namespace kTools.Portals
 		// -------------------------------------------------- //
         //                  INTERNAL METHODS                  //
         // -------------------------------------------------- //
+
+		private void OnEnable()
+		{
+			// Runtime only
+			if(!Application.isPlaying)
+				return;
+
+			// If not active data dont calculate visibility at runtime
+			if(m_BakeState != BakeState.Active)
+				return;
+
+			// Set renderers from all Volumes as visible
+            m_VisibleRenderers = m_PortalData.GetAllRenderers();
+
+			// Init per frame visibility calculations
+			isInitialized = true;
+		}
+
+		private void Update()
+		{
+			// Runtime only
+			if(!Application.isPlaying)
+				return;
+		}
 
 #if UNITY_EDITOR
 		private IEnumerator BakePortalData()
@@ -100,9 +153,9 @@ namespace kTools.Portals
 			};
 
 			// Finalize
-			m_ActiveVolumeID = -1;
 			m_BakeState = BakeState.Active;
 			m_Completion = 1.0f;
+			UnityEditor.SceneView.RepaintAll();
             UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
 		}
 
@@ -135,7 +188,6 @@ namespace kTools.Portals
 			{
 				// Setup
 				m_Completion = (float)(v + 1) / (float)lowestSubdivisionVolumes.Length;
-				m_ActiveVolumeID = lowestSubdivisionVolumes[v].volumeID;
 				var volume = lowestSubdivisionVolumes[v];
 				var passedObjects = new List<GameObject>();
 
