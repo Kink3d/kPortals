@@ -462,6 +462,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_VolumeMode: 1
+  m_Subdivisions: 0
   m_SerializableVolumes:
   - positionWS: {x: 4, y: 0, z: 1}
     rotationWS: {x: 0.46193978, y: 0.19134173, z: 0.19134173, w: 0.84462327}

@@ -19,7 +19,7 @@ namespace kTools.Portals
         // -------------------------------------------------- //
 
 		/// <summary>
-        /// Converts this Monobehaviour to a SerializableOccluder struct for storage.
+        /// Converts this VolumeData to a SerializableVolume array for storage.
         /// </summary>
 		public SerializableVolume[] Serialize()
 		{
