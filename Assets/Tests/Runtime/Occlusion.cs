@@ -33,7 +33,8 @@ namespace kTools.Portals.Tests
 			{
                 if (PortalVisibilityUtil.CheckAABBIntersection(raySource.position, raySource.forward, staticRenderers[i].bounds))
                 {
-                    if(PortalVisibilityUtil.CheckOcclusion(m_OccluderProxies, staticRenderers[i], raySource.position, raySource.forward))
+                    Vector3 hitPosition;
+                    if(PortalVisibilityUtil.CheckOcclusion(m_OccluderProxies, staticRenderers[i], raySource.position, raySource.forward, out hitPosition))
                         renderers.AddIfUnique(staticRenderers[i]);
                 }
 			}

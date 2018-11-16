@@ -80,8 +80,11 @@ namespace kTools.Portals
 			return true; 
 		}
 
-		public static bool CheckOcclusion(MeshCollider[] occluders, MeshRenderer occludee, Vector3 position, Vector3 direction)
+		public static bool CheckOcclusion(MeshCollider[] occluders, MeshRenderer occludee, Vector3 position, Vector3 direction, out Vector3 occluderHit)
 		{
+			// Initialize hit position
+			occluderHit = Vector3.zero;
+
 			// If no occluders always return true
 			if(occluders == null || occluders.Length == 0)
 				return true;
@@ -103,6 +106,9 @@ namespace kTools.Portals
 			// If it is the same object as the occludee always return true
 			if(AreOccludeeeAndOccluderEqual(closestOccluder.Key, occludee))
 				return true;
+
+			// Assign hit position to the location of hit on nearest occluder
+			occluderHit = closestOccluder.Value;
 
 			// TODO
 			// - Need intersection point with AABB

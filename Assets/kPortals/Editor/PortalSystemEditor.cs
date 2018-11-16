@@ -19,6 +19,10 @@ namespace kTools.PortalsEditor
             public static GUIContent bakeSettingsText = EditorGUIUtility.TrTextContent("Bake Settings");
             public static GUIContent rayDensityText = EditorGUIUtility.TrTextContent("Ray Density");
             public static GUIContent coneAngleText = EditorGUIUtility.TrTextContent("Cone Angle");
+            public static GUIContent debugSettingsText = EditorGUIUtility.TrTextContent("Debug Settings");
+            public static GUIContent drawOccludersText = EditorGUIUtility.TrTextContent("Draw Occluders");
+            public static GUIContent drawVolumesText = EditorGUIUtility.TrTextContent("Draw Volumes");
+            public static GUIContent drawVisibilityText = EditorGUIUtility.TrTextContent("Draw Visibility");
 			public static GUIContent bakeToolsText = EditorGUIUtility.TrTextContent("Bake Tools");
         }
 
@@ -30,6 +34,9 @@ namespace kTools.PortalsEditor
         SerializedProperty m_SubdivisionsProp;
         SerializedProperty m_RayDensityProp;
         SerializedProperty m_ConeAngleProp;
+        SerializedProperty m_DrawOccludersProp;
+        SerializedProperty m_DrawVolumesProp;
+        SerializedProperty m_DrawVisibilityProp;
 
 		// -------------------------------------------------- //
         //                   PUBLIC METHODS                   //
@@ -40,6 +47,7 @@ namespace kTools.PortalsEditor
             serializedObject.Update();
             DrawVolumeSettings();
             DrawBakeSettings();
+            DrawDebugSettings();
             
 			EditorGUILayout.LabelField(Styles.bakeToolsText, EditorStyles.boldLabel);
             BakeEditor.DrawBakeTools(target as IBake);
@@ -56,6 +64,9 @@ namespace kTools.PortalsEditor
             m_SubdivisionsProp = serializedObject.FindProperty("m_Subdivisions");
             m_RayDensityProp = serializedObject.FindProperty("m_RayDensity");
             m_ConeAngleProp = serializedObject.FindProperty("m_ConeAngle");
+            m_DrawOccludersProp = serializedObject.FindProperty("m_DrawOccluders");
+            m_DrawVolumesProp = serializedObject.FindProperty("m_DrawVolumes");
+            m_DrawVisibilityProp = serializedObject.FindProperty("m_DrawVisibility");
         }
 
         private void DrawVolumeSettings()
@@ -64,6 +75,15 @@ namespace kTools.PortalsEditor
             EditorGUILayout.PropertyField(m_VolumeModeProp, Styles.modeText);
             if(m_VolumeModeProp.enumValueIndex != (int)VolumeMode.Manual)
                 EditorGUILayout.PropertyField(m_SubdivisionsProp, Styles.subdivisionsText);
+            EditorGUILayout.Space();
+        }
+
+        private void DrawDebugSettings()
+        {
+            EditorGUILayout.LabelField(Styles.debugSettingsText, EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(m_DrawOccludersProp, Styles.drawOccludersText);
+            EditorGUILayout.PropertyField(m_DrawVolumesProp, Styles.drawVolumesText);
+            EditorGUILayout.PropertyField(m_DrawVisibilityProp, Styles.drawVisibilityText);
             EditorGUILayout.Space();
         }
 

@@ -38,6 +38,9 @@ namespace kTools.Portals
 		[SerializeField] private int m_Subdivisions;
 		[SerializeField] private int m_RayDensity = 10;
 		[SerializeField] private float m_ConeAngle = 45.0f;
+		[SerializeField] private bool m_DrawOccluders = false;
+		[SerializeField] private bool m_DrawVolumes = false;
+		[SerializeField] private bool m_DrawVisibility = false;
 		[SerializeField] private SerializablePortalData m_PortalData;
 
 		[SerializeField] private BakeState m_BakeState;
@@ -86,6 +89,14 @@ namespace kTools.Portals
         /// </summary>
 		public void OnClickBake()
 		{
+			// Abort if in play mode as save actions arent valid
+			if(Application.isPlaying)
+			{
+				Debug.LogWarning("Cannot modifiy Portal data while in Play mode. Aborting.");
+				return;
+			}
+
+			// Start bake
 			EditorCoroutines.StartCoroutine(BakePortalData(), this);
 		}
 		
@@ -94,6 +105,13 @@ namespace kTools.Portals
         /// </summary>
 		public void OnClickCancel()
 		{
+			// Abort if in play mode as save actions arent valid
+			if(Application.isPlaying)
+			{
+				Debug.LogWarning("Cannot modifiy Portal data while in Play mode. Aborting.");
+				return;
+			}
+
 			// Reset all
 			EditorCoroutines.StopAllCoroutines(this);
 			m_BakeState = BakeState.Empty;	
@@ -263,6 +281,7 @@ namespace kTools.Portals
 				m_Completion = (float)(v + 1) / (float)lowestSubdivisionVolumes.Length;
 				var volume = lowestSubdivisionVolumes[v];
 				var passedObjects = new List<GameObject>();
+				var debugData = new List<VisbilityData.Debug>();
 
 				// Iterate random rays based on volume density
 				var rayCount = PortalVisibilityUtil.CalculateRayCount(m_RayDensity, volume.scaleWS);
@@ -277,14 +296,25 @@ namespace kTools.Portals
 						// Test ray against renderer AABB and occluders
 						if(PortalVisibilityUtil.CheckAABBIntersection(rayPosition, rayDirection, filteredOccludees[f].bounds))
 						{
-							if(PortalVisibilityUtil.CheckOcclusion(occluderProxies, filteredOccludees[f], rayPosition, rayDirection))
+							Vector3 hitPos;
+                            bool hit = !PortalVisibilityUtil.CheckOcclusion(occluderProxies, filteredOccludees[f], rayPosition, rayDirection, out hitPos);
+							if(hit)
 								passedObjects.AddIfUnique(filteredOccludees[f].gameObject);
+
+                            debugData.Add(new VisbilityData.Debug()
+                            {
+                                source = rayPosition,
+                                hit = hitPos,
+                                direction = rayDirection,
+                                distance = Vector3.Distance(rayPosition, filteredOccludees[f].transform.position),
+                                isHit = hit,
+                            });
 						}
 					}
 				}
 
 				// Add to VisibilityTable
-				visibilityTable.Add(new VisbilityData(volume, passedObjects.ToArray()));
+				visibilityTable.Add(new VisbilityData(volume, passedObjects.ToArray(), debugData.ToArray()));
 				yield return null;
 			}
 
@@ -298,16 +328,66 @@ namespace kTools.Portals
 
         private void OnDrawGizmos()
         {
+			// If no Portal data dont draw gizmos
 			if(m_BakeState != BakeState.Active)
 				return;
 
+			// Conditional draw of gizmo types
+			DrawOccluderGizmos();
+			DrawVolumeGizmos();
+			DrawVisibilityGizmos();
+        }
+
+		private void DrawOccluderGizmos()
+		{
+			// Check draw toggle
+			if(m_DrawOccluders == false)
+				return;
+
+			// Draw gizmos for all Occluders
 			foreach(SerializableOccluder occluder in m_PortalData.occluders)
 				PortalDebugUtil.DrawMesh(occluder.positionWS, occluder.rotationWS, occluder.scaleWS, 
 					occluder.mesh, PortalDebugColors.occluder);
+		}
 
+		private void DrawVolumeGizmos()
+		{
+			// Check draw toggle
+			if(m_DrawVolumes == false)
+				return;
+
+			// Draw gizmos for all Volumes
 			foreach(SerializableVolume volume in PortalPrepareUtil.FilterVolumeDataNoChildren(m_PortalData.volumes))
 				PortalDebugUtil.DrawCube(volume.positionWS, volume.rotationWS, volume.scaleWS, PortalDebugColors.volume);
-        }
+		}
+
+		private void DrawVisibilityGizmos()
+		{
+			// Check draw toggle
+			if(m_DrawVisibility == false)
+				return;
+
+			// Iterate all debug data in Visibility table
+			foreach(VisbilityData visibilityData in m_PortalData.visibilityTable)
+            {
+				foreach(VisbilityData.Debug debug in visibilityData.debugData)
+				{
+					if(debug.isHit)
+					{
+						// Draw line between ray source and Occluder hit point
+						PortalDebugUtil.DrawSphere(debug.source, 0.1f, PortalDebugColors.black);
+						PortalDebugUtil.DrawSphere(debug.hit, 0.1f, PortalDebugColors.black);
+						PortalDebugUtil.DrawLine(debug.source, debug.hit, PortalDebugColors.black);
+					}
+					else
+					{
+						// Draw line between ray source and Occludee (rough)
+						PortalDebugUtil.DrawSphere(debug.source, 0.1f, PortalDebugColors.white);
+						PortalDebugUtil.DrawRay(debug.source, debug.direction, debug.distance, PortalDebugColors.white);
+					}
+				}
+            }
+		}
 #endif
 	}
 }

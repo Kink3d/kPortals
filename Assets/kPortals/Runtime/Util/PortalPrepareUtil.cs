@@ -61,7 +61,7 @@ namespace kTools.Portals
                 case VolumeMode.Manual:
                     return GetVolumeDataManual();
                 case VolumeMode.Hybrid:
-                    return GetVolumeDataAuto(autoSubdivisions).Concat(GetVolumeDataManual()).ToArray();
+                    return GetVolumeDataAuto(autoSubdivisions).Union(GetVolumeDataManual()).ToArray();
                 default:
                     Debug.LogError("Not a valid Volume mode!");
                     return null;

@@ -11,10 +11,11 @@ namespace kTools.Portals
 		//                     CONSTRUCTOR                    //
 		// -------------------------------------------------- //
 
-		public VisbilityData(SerializableVolume volume, GameObject[] objects)
+		public VisbilityData(SerializableVolume volume, GameObject[] objects, Debug[] debugData)
 		{
 			this.volume = volume;
 			this.objects = objects;
+			this.debugData = debugData;
 		}
 
 		// -------------------------------------------------- //
@@ -23,6 +24,7 @@ namespace kTools.Portals
 
 		public SerializableVolume volume;
 		public GameObject[] objects;
+		public Debug[] debugData;
 
 		private MeshRenderer[] m_Renderers;
 		public MeshRenderer[] renderers
@@ -38,5 +40,19 @@ namespace kTools.Portals
 				return m_Renderers;
 			}
 		}
+
+		// -------------------------------------------------- //
+		//                    DATA CLASSES                    //
+		// -------------------------------------------------- //
+
+		[Serializable]
+        public struct Debug
+        {
+            public Vector3 source;
+            public Vector3 hit;
+            public Vector3 direction;
+            public float distance;
+            public bool isHit;
+        }
 	}
 }
