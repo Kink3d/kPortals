@@ -75,12 +75,12 @@ namespace kTools.Portals
 			if (tzmin > tmin) 
 				tmin = tzmin; 
 			if (tzmax < tmax) 
-				tmax = tzmax; 
+				tmax = tzmax;
 
 			return true; 
 		}
 
-		public static bool CheckOcclusion(Collider[] occluders, MeshRenderer occludee, Vector3 position, Vector3 direction)
+		public static bool CheckOcclusion(MeshCollider[] occluders, MeshRenderer occludee, Vector3 position, Vector3 direction)
 		{
 			// If no occluders always return true
 			if(occluders == null || occluders.Length == 0)
@@ -92,7 +92,7 @@ namespace kTools.Portals
 				return true;
 			
 			// Get all occluders that intersected the ray, return true if no intersections
-			var intersectingOccluders = new Dictionary<Collider, Vector3>();
+			var intersectingOccluders = new Dictionary<MeshCollider, Vector3>();
 			if(!TryGetIntersectingOccluders(occluders, allHits, out intersectingOccluders))
 				return true;
 			
@@ -101,7 +101,7 @@ namespace kTools.Portals
 			var closestOccluder = orderedOccluders.ElementAt(0);
 
 			// If it is the same object as the occludee always return true
-			if(closestOccluder.Key.gameObject == occludee.gameObject)
+			if(AreOccludeeeAndOccluderEqual(closestOccluder.Key, occludee))
 				return true;
 
 			// TODO
@@ -141,11 +141,11 @@ namespace kTools.Portals
 		// --------------------------------------------------
         // OCCLUSION
 
-		private static bool TryGetIntersectingOccluders(Collider[] occluders, RaycastHit[] hits, out Dictionary<Collider, Vector3> occluderHits)
+		private static bool TryGetIntersectingOccluders(MeshCollider[] occluders, RaycastHit[] hits, out Dictionary<MeshCollider, Vector3> occluderHits)
 		{
 			// Iterate hits and occluders
 			// If occluders contains hit track the hit values
-			occluderHits = new Dictionary<Collider, Vector3>();
+			occluderHits = new Dictionary<MeshCollider, Vector3>();
 			for(int h = 0; h < hits.Length; h++)
 			{
 				for(int o = 0; o < occluders.Length; o++)
@@ -158,6 +158,14 @@ namespace kTools.Portals
 			// True if any occluders were hit
 			return occluderHits.Count > 0;
 		}
+
+		private static bool AreOccludeeeAndOccluderEqual(MeshCollider occluder, MeshRenderer occludee)
+		{
+			// Return true if occluder and occludee are based on the same object
+			var positionsEqual = occludee.transform.position == occluder.transform.position;
+			var meshesEqual = occludee.GetComponent<MeshFilter>().sharedMesh == occluder.sharedMesh;
+			return positionsEqual && meshesEqual;
+		} 
 #endif
 	}
 }

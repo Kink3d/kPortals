@@ -12,7 +12,7 @@ namespace kTools.Portals.Tests
 
         [SerializeField] private MeshRenderer[] m_PassedRenderers;
         [SerializeField] private SerializableOccluder m_Occluder;
-        [SerializeField] private Collider[] m_OccluderProxies;
+        [SerializeField] private MeshCollider[] m_OccluderProxies;
 
 		private void Update()
 		{
