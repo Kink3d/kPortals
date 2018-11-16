@@ -139,8 +139,10 @@ namespace kTools.Portals
 			if(m_BakeState != BakeState.Active)
 				return;
 
-			// Set renderers from all Volumes as visible
+			// Set renderers from all Volumes as not visible
             m_VisibleRenderers = m_PortalData.GetAllRenderers();
+			foreach(MeshRenderer renderer in m_VisibleRenderers.Values)
+				renderer.enabled = false;
 
 			// Init per frame visibility calculations
 			isInitialized = true;
@@ -298,7 +300,7 @@ namespace kTools.Portals
 						{
 							Vector3 hitPos;
                             bool hit = !PortalVisibilityUtil.CheckOcclusion(occluderProxies, filteredOccludees[f], rayPosition, rayDirection, out hitPos);
-							if(hit)
+							if(!hit)
 								passedObjects.AddIfUnique(filteredOccludees[f].gameObject);
 
                             debugData.Add(new VisbilityData.Debug()

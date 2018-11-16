@@ -32,7 +32,7 @@ namespace kTools.Portals
 			{
 				// Iterate all volumes
 				MeshRenderer[] volumeRenderers;
-				if(!visibilityTable.TryGetRemderers(volume, out volumeRenderers))
+				if(visibilityTable.TryGetRemderers(volume, out volumeRenderers))
 				{
 					// Get renderers from VisbilityTable
 					foreach(MeshRenderer r in volumeRenderers)
