@@ -35645,7 +35645,11 @@ MonoBehaviour:
 
     - Move object Camera between volumes
 
-    - Red cubes are culled correctly'
+    - Red cubes are culled correctly
+
+    - Click "Clear" then "Bake" in Inspector
+
+    - Results are the same'
 --- !u!222 &1258174761
 CanvasRenderer:
   m_ObjectHideFlags: 0

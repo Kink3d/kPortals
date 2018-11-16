@@ -61,7 +61,8 @@ namespace kTools.Portals
                 case VolumeMode.Manual:
                     return GetVolumeDataManual();
                 case VolumeMode.Hybrid:
-                    return GetVolumeDataAuto(autoSubdivisions).Union(GetVolumeDataManual()).ToArray();
+                    var volumesAuto = GetVolumeDataAuto(autoSubdivisions);
+                    return volumesAuto.Union(GetVolumeDataManual(volumesAuto.Length)).ToArray();
                 default:
                     Debug.LogError("Not a valid Volume mode!");
                     return null;
@@ -183,7 +184,7 @@ namespace kTools.Portals
         // --------------------------------------------------
         // VOLUME DATA
 
-        private static SerializableVolume[] GetVolumeDataManual()
+        private static SerializableVolume[] GetVolumeDataManual(int startID = 0)
         {
             // Get all VolumeOccluders in scene
             var manualVolumeObjects = UnityEngine.Object.FindObjectsOfType<PortalVolume>();
@@ -191,7 +192,7 @@ namespace kTools.Portals
 			// Serialize
             var manualVolumeData = new SerializableVolume[manualVolumeObjects.Length];
             for(int i = 0; i < manualVolumeData.Length; i++)
-                manualVolumeData[i] = manualVolumeObjects[i].Serialize(i);
+                manualVolumeData[i] = manualVolumeObjects[i].Serialize(startID + i);
             return manualVolumeData;
         }
 
