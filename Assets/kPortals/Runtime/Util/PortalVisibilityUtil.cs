@@ -16,13 +16,22 @@ namespace kTools.Portals
         // -------------------------------------------------- //
 
 #if UNITY_EDITOR
+		/// <summary>
+        /// Calculate the amount of rays that should be used for a Volume given its scale and a user defined density. Editor only.
+        /// </summary>
+        /// <param name="density">User defined density value. Equivalent to rays per cubic unit.</param>
+		/// <param name="volumeScale">Volume scale in world space.</param>
 		public static int CalculateRayCount(int density, Vector3 volumeScale)
 		{
 			int rayCount = (int)(density * volumeScale.x * volumeScale.y * volumeScale.z);
 			return rayCount;
 		}
-
-		public static Vector3 RandomPointWithinVolume(SerializableVolume volume)
+		
+		/// <summary>
+        /// Get a random position within the bounds of a Volume in world space. Editor only.
+        /// </summary>
+		/// <param name="volume">Volume to use for bounds.</param>
+		public static Vector3 GetRandomPointWithinVolume(SerializableVolume volume)
         {
             var x = UnityEngine.Random.Range(volume.positionWS.x - (volume.scaleWS.x / 2), volume.positionWS.x + (volume.scaleWS.x / 2));
             var y = UnityEngine.Random.Range(volume.positionWS.y - (volume.scaleWS.y / 2), volume.positionWS.y + (volume.scaleWS.y / 2));
@@ -30,6 +39,9 @@ namespace kTools.Portals
             return new Vector3(x, y, z);
         }
 
+		/// <summary>
+        /// Get a random direction vector using spherical distribution. Editor only.
+        /// </summary>
 		public static Vector3 RandomSphericalDistributionVector()
         {
             var theta = UnityEngine.Random.Range(-(Mathf.PI / 2), Mathf.PI / 2);
@@ -40,25 +52,38 @@ namespace kTools.Portals
             return new Vector3(x, y, z);
         }
 
-		public static MeshRenderer[] FilterRenderersByConeAngle(MeshRenderer[] input, Vector3 conePosition, Vector3 coneDirection, float coneAngle)
+		/// <summary>
+        /// Filter an array of MeshRenderers by whether their bounds center is within a cone. Editor only.
+        /// </summary>
+        /// <param name="input">MeshRenderer array to filter.</param>
+		/// <param name="conePositionWS">Position of the cone source in world space.</param>
+		/// <param name="coneDirectionWS">Direction of the cone in world space.</param>
+		/// <param name="coneAngle">Angle of the cone.</param>
+		public static MeshRenderer[] FilterRenderersByConeAngle(MeshRenderer[] input, Vector3 conePositionWS, Vector3 coneDirectionWS, float coneAngle)
 		{
-			Vector3 rayEnd = conePosition + coneDirection; 
-			return input.Where( s => AngleBetweenThreePoints(conePosition, rayEnd, s.bounds.center) < DegreesToRadians(coneAngle)).ToArray();
+			Vector3 rayEnd = conePositionWS + coneDirectionWS; 
+			return input.Where( s => AngleBetweenThreePoints(conePositionWS, rayEnd, s.bounds.center) < DegreesToRadians(coneAngle)).ToArray();
 		}
 
-		public static bool CheckAABBIntersection(Vector3 position, Vector3 direction, Bounds bounds)
+		/// <summary>
+        /// Check whether a ray interesects with an axis aligned bounding box. Editor only.
+        /// </summary>
+        /// <param name="positionWS">Ray source position in world space.</param>
+		/// <param name="directionWS">Direction of the ray in world space.</param>
+		/// <param name="bounds">AABB to test.</param>
+		public static bool CheckAABBIntersection(Vector3 positionWS, Vector3 directionWS, Bounds bounds)
 		{ 
 			var minMax = new Vector3[2] { bounds.min, bounds.max };
 
-			var inverseDirection = new Vector3(1 / direction.x, 1 / direction.y, 1 / direction.z);
+			var inverseDirection = new Vector3(1 / directionWS.x, 1 / directionWS.y, 1 / directionWS.z);
 			var signX = (inverseDirection.x < 0 ? 1 : 0);
 			var signY = (inverseDirection.y < 0 ? 1 : 0);
 			var signZ = (inverseDirection.z < 0 ? 1 : 0);
 
-			var tmin = (minMax[signX].x - position.x) * inverseDirection.x; 
-			var tmax = (minMax[1 - signX].x - position.x) * inverseDirection.x; 
-			var tymin = (minMax[signY].y - position.y) * inverseDirection.y; 
-			var tymax = (minMax[1 - signY].y - position.y) * inverseDirection.y; 
+			var tmin = (minMax[signX].x - positionWS.x) * inverseDirection.x; 
+			var tmax = (minMax[1 - signX].x - positionWS.x) * inverseDirection.x; 
+			var tymin = (minMax[signY].y - positionWS.y) * inverseDirection.y; 
+			var tymax = (minMax[1 - signY].y - positionWS.y) * inverseDirection.y; 
 
 			if ((tmin > tymax) || (tymin > tmax)) 
 				return false; 
@@ -67,8 +92,8 @@ namespace kTools.Portals
 			if (tymax < tmax) 
 				tmax = tymax; 
 
-			var tzmin = (minMax[signZ].z - position.z) * inverseDirection.z; 
-			var tzmax = (minMax[1 - signZ].z - position.z) * inverseDirection.z; 
+			var tzmin = (minMax[signZ].z - positionWS.z) * inverseDirection.z; 
+			var tzmax = (minMax[1 - signZ].z - positionWS.z) * inverseDirection.z; 
 
 			if ((tmin > tzmax) || (tzmin > tmax)) 
 				return false; 
@@ -80,7 +105,15 @@ namespace kTools.Portals
 			return true; 
 		}
 
-		public static bool CheckOcclusion(MeshCollider[] occluders, MeshRenderer occludee, Vector3 position, Vector3 direction, out Vector3 occluderHit)
+		/// <summary>
+        /// Check whether a ray that interesects with an Occludee collides with an Occluder first. Editor only.
+        /// </summary>
+		/// <param name="occluders">Occluders to test.</param>
+		/// <param name="occludee">Occludee to test against for distance.</param>
+        /// <param name="positionWS">Ray source position in world space.</param>
+		/// <param name="directionWS">Direction of the ray in world space.</param>
+		/// <param name="occluderHit">Position of ray hit on occluder if there was one.</param>
+		public static bool CheckOcclusion(MeshCollider[] occluders, MeshRenderer occludee, Vector3 positionWS, Vector3 directionWS, out Vector3 occluderHit)
 		{
 			// Initialize hit position
 			occluderHit = Vector3.zero;
@@ -90,7 +123,7 @@ namespace kTools.Portals
 				return true;
 
 			// Raycast through all objects, return true if no collisions
-			var allHits = Physics.RaycastAll(position, direction);
+			var allHits = Physics.RaycastAll(positionWS, directionWS);
 			if(allHits.Length == 0)
 				return true;
 			
@@ -100,7 +133,7 @@ namespace kTools.Portals
 				return true;
 			
 			// Filter by distance from ray source
-			var orderedOccluders = intersectingOccluders.OrderBy(s => Vector3.Distance(position, s.Value));
+			var orderedOccluders = intersectingOccluders.OrderBy(s => Vector3.Distance(positionWS, s.Value));
 			var closestOccluder = orderedOccluders.ElementAt(0);
 
 			// If it is the same object as the occludee always return true
@@ -113,7 +146,7 @@ namespace kTools.Portals
 			// TODO
 			// - Need intersection point with AABB
 			// Return true if the occluder is closer to the ray source than the occludee
-			return Vector3.Distance(position, closestOccluder.Value) > Vector3.Distance(position, occludee.bounds.center);
+			return Vector3.Distance(positionWS, closestOccluder.Value) > Vector3.Distance(positionWS, occludee.bounds.center);
 		}
 #endif
 

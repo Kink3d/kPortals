@@ -290,7 +290,7 @@ namespace kTools.Portals
 				for(int r = 0; r < rayCount; r++)
 				{
 					// Get a random ray and a list of cone filtered renderers to test
-					var rayPosition = PortalVisibilityUtil.RandomPointWithinVolume(volume);
+					var rayPosition = PortalVisibilityUtil.GetRandomPointWithinVolume(volume);
 					var rayDirection = PortalVisibilityUtil.RandomSphericalDistributionVector();
 					var filteredOccludees = PortalVisibilityUtil.FilterRenderersByConeAngle(occludees, rayPosition, rayDirection, m_ConeAngle);
 					for(int f = 0; f < filteredOccludees.Length; f++)

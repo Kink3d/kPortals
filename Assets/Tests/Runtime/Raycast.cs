@@ -40,7 +40,7 @@ namespace kTools.Portals.Tests
             var rayCount = PortalVisibilityUtil.CalculateRayCount(m_RayDensity, m_SerializableVolumes[0].scaleWS);
             for(int r = 0; r < rayCount; r++)
             {
-                var rayPosition = PortalVisibilityUtil.RandomPointWithinVolume(m_SerializableVolumes[0]);
+                var rayPosition = PortalVisibilityUtil.GetRandomPointWithinVolume(m_SerializableVolumes[0]);
                 var rayDirection = PortalVisibilityUtil.RandomSphericalDistributionVector();
                 rays.Add(new RayDebug(rayPosition, rayDirection));
 
