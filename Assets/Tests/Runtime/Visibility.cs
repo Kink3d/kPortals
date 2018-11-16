@@ -140,7 +140,7 @@ namespace kTools.Portals.Tests
 						if(PortalVisibilityUtil.CheckAABBIntersection(rayPosition, rayDirection, filteredOccludees[f].bounds))
 						{
                             Vector3 hitPos;
-                            bool hit = CheckOcclusion(occluderProxies, filteredOccludees[f], rayPosition, rayDirection, out hitPos);
+                            bool hit = !CheckOcclusion(occluderProxies, filteredOccludees[f], rayPosition, rayDirection, out hitPos);
 							if(hit)
 								passedObjects.AddIfUnique(filteredOccludees[f].gameObject);
 
@@ -149,6 +149,7 @@ namespace kTools.Portals.Tests
                                 source = rayPosition,
                                 hit = hitPos,
                                 direction = rayDirection,
+                                distance = Vector3.Distance(rayPosition, filteredOccludees[f].transform.position),
                                 isHit = hit,
                             });
 						}
@@ -187,19 +188,19 @@ namespace kTools.Portals.Tests
 				return true;
 			
 			// Filter by distance from ray source
-			intersectingOccluders.OrderBy(s => Vector3.Distance(position, s.Value));
-			var closestOccluder = intersectingOccluders.ElementAt(0);
+			var orderedHits = intersectingOccluders.Values.OrderBy(s => Vector3.Distance(position, s)).ToArray();
+			//var closestOccluder = intersectingOccluders.ElementAt(0);
 
 			// If it is the same object as the occludee always return true
-			if(closestOccluder.Key.gameObject == occludee.gameObject)
-				return true;
+			//if(closestOccluder.Key.gameObject == occludee.gameObject)
+			//	return true;
 
-            hitPos = closestOccluder.Value;
+            hitPos = orderedHits[0];
 
 			// TODO
 			// - Need intersection point with AABB
 			// Return true if the occluder is closer to the ray source than the occludee
-			return Vector3.Distance(position, closestOccluder.Value) > Vector3.Distance(position, occludee.bounds.center);
+			return Vector3.Distance(position, orderedHits[0]) > Vector3.Distance(position, occludee.bounds.center);
 		}
 
         private static bool TryGetIntersectingOccluders(Collider[] occluders, RaycastHit[] hits, out Dictionary<Collider, Vector3> occluderHits)
@@ -229,20 +230,16 @@ namespace kTools.Portals.Tests
             {
                 if(debug.isHit)
                 {
-                    PortalDebugUtil.DrawSphere(debug.source, 0.1f, PortalDebugColors.white);
-                    PortalDebugUtil.DrawSphere(debug.hit, 0.1f, PortalDebugColors.white);
-                    PortalDebugUtil.DrawLine(debug.source, debug.hit, PortalDebugColors.white);
+                    PortalDebugUtil.DrawSphere(debug.source, 0.1f, PortalDebugColors.black);
+                    PortalDebugUtil.DrawSphere(debug.hit, 0.1f, PortalDebugColors.black);
+                    PortalDebugUtil.DrawLine(debug.source, debug.hit, PortalDebugColors.black);
                 }
                 else
                 {
-                    PortalDebugUtil.DrawSphere(debug.source, 0.1f, PortalDebugColors.black);
-                    PortalDebugUtil.DrawRay(debug.source, debug.direction, 10.0f, PortalDebugColors.black);
+                    PortalDebugUtil.DrawSphere(debug.source, 0.1f, PortalDebugColors.white);
+                    PortalDebugUtil.DrawRay(debug.source, debug.direction, debug.distance, PortalDebugColors.white);
                 }
             }
-
-			//foreach(SerializableOccluder occluder in m_PortalData.occluders)
-			//	PortalDebugUtil.DrawMesh(occluder.positionWS, occluder.rotationWS, occluder.scaleWS, 
-			//		occluder.mesh, PortalDebugColors.occluder);
 
 			foreach(SerializableVolume volume in PortalPrepareUtil.FilterVolumeDataNoChildren(m_PortalData.volumes))
 				PortalDebugUtil.DrawCube(volume.positionWS, volume.rotationWS, volume.scaleWS, PortalDebugColors.volume);
@@ -254,6 +251,7 @@ namespace kTools.Portals.Tests
             public Vector3 source;
             public Vector3 hit;
             public Vector3 direction;
+            public float distance;
             public bool isHit;
         }
 #endif

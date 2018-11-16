@@ -97,8 +97,8 @@ namespace kTools.Portals
 				return true;
 			
 			// Filter by distance from ray source
-			intersectingOccluders.OrderBy(s => Vector3.Distance(position, s.Value));
-			var closestOccluder = intersectingOccluders.ElementAt(0);
+			var orderedOccluders = intersectingOccluders.OrderBy(s => Vector3.Distance(position, s.Value));
+			var closestOccluder = orderedOccluders.ElementAt(0);
 
 			// If it is the same object as the occludee always return true
 			if(closestOccluder.Key.gameObject == occludee.gameObject)
