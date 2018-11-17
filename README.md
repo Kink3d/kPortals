@@ -1,5 +1,5 @@
 # kPortals
-### A pre-calculated Portal visibility System for Unity.
+### A pre-calculated Portal visibility system for Unity.
 
 ![alt text](https://github.com/Kink3d/kPortals/blob/master/Source/Images/HowItWorks00.png?raw=true)
 *An example of Manual Volume mode visibility.*
