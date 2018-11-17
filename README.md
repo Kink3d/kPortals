@@ -1,5 +1,5 @@
 # kPortals
-### A simple pre-calculated Portal Visibility System for Occlusion Culling
+### A pre-calculated Portal visibility System for Unity.
 
 ![alt text](https://github.com/Kink3d/kPortals/blob/master/Source/Images/HowItWorks00.png?raw=true)
 *An example of Manual Volume mode visibility.*
