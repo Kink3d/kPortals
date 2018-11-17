@@ -25,7 +25,7 @@ namespace kTools.PortalsEditor
         /// Draw the Bake tools section for IBake. Editor only.
         /// </summary>
         /// <param name="target">Target Object as IBake interface.</param>
-		public static void DrawBakeTools(IBake target)
+		public static void DrawBakeTools(IBake target, string statistics = null)
         {
 			// Draw buttons
             EditorGUILayout.BeginHorizontal();
@@ -40,6 +40,14 @@ namespace kTools.PortalsEditor
 
 			// Draw progress bar
 			DrawProgressBar(target);
+            EditorGUILayout.Space();
+
+            // Draw statistics panel
+            if(!string.IsNullOrEmpty(statistics))
+            {
+                EditorGUILayout.LabelField("Statistics", EditorStyles.boldLabel);
+                DrawStatistics(statistics);
+            }
         }
 
 		// -------------------------------------------------- //
@@ -74,6 +82,15 @@ namespace kTools.PortalsEditor
             EditorGUI.ProgressBar(r, target.completion, label);
             GUILayout.Space(16);
             EditorGUILayout.EndVertical();
+        }
+
+        private static void DrawStatistics(string content)
+        {
+            Rect rect = GUILayoutUtility.GetRect(new GUIContent(content), GUIStyle.none);
+            rect.height += 4;
+            EditorGUI.DrawRect(rect, Color.grey);
+            EditorGUI.TextField(rect, content);
+            EditorGUILayout.Space();
             EditorGUILayout.Space();
         }
 	}

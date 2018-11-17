@@ -34,6 +34,7 @@ namespace kTools.Portals
         //                   PRIVATE FIELDS                   //
         // -------------------------------------------------- //
 
+		// Parameters
 		[SerializeField] private VolumeMode m_VolumeMode;
 		[SerializeField] private int m_Subdivisions;
 		[SerializeField] private int m_RayDensity = 10;
@@ -41,7 +42,6 @@ namespace kTools.Portals
 		[SerializeField] private bool m_DrawOccluders = false;
 		[SerializeField] private bool m_DrawVolumes = false;
 		[SerializeField] private bool m_DrawVisibility = false;
-		[SerializeField] private SerializablePortalData m_PortalData;
 
 		[SerializeField] private BakeState m_BakeState;
 		public BakeState bakeState
@@ -55,9 +55,33 @@ namespace kTools.Portals
 			get { return m_Completion; }
 		}
 
+		// Data
+		[SerializeField] private SerializablePortalData m_PortalData;
+
+		// Runtime
 		private bool isInitialized = false;
 		private Dictionary<int, MeshRenderer> m_VisibleRenderers = new Dictionary<int, MeshRenderer>();
 		private List<PortalAgent> m_ActiveAgents = new List<PortalAgent>();
+
+		// Statistics
+		private float m_BakeStartTime;
+		[SerializeField] private float m_BakeTime;
+		public float bakeTime
+		{
+			get { return m_BakeTime; }
+		} 
+
+		[SerializeField] private Vector3 m_RayStatistics;
+		public Vector3 rayStatistics
+		{
+			get { return m_RayStatistics; }
+		}
+
+		[SerializeField] private Vector2 m_OccludeeStatistics;
+		public Vector2 occludeeStatistics
+		{
+			get { return m_OccludeeStatistics; }
+		}
 
 		// -------------------------------------------------- //
         //                   PUBLIC METHODS                   //
@@ -125,6 +149,9 @@ namespace kTools.Portals
 		// -------------------------------------------------- //
         //                  INTERNAL METHODS                  //
         // -------------------------------------------------- //
+
+		// --------------------------------------------------
+        // RUNTIME
 
 		private void OnEnable()
 		{
@@ -224,11 +251,16 @@ namespace kTools.Portals
 				m_VisibleRenderers.Add(IDs[i], activeVolumeRenderers[i]);
 		}
 
+		// --------------------------------------------------
+        // BAKE
+
 #if UNITY_EDITOR
 		private IEnumerator BakePortalData()
 		{
 			// Generate Portal data
 			m_Completion = 0.0f;
+			m_BakeTime = 0.0f;
+			m_BakeStartTime = Time.realtimeSinceStartup;
 			m_BakeState = BakeState.Occluders;
 			var occluders = PortalPrepareUtil.GetOccluderData();
 			m_BakeState = BakeState.Volumes;
@@ -248,6 +280,7 @@ namespace kTools.Portals
 			// Finalize
 			m_BakeState = BakeState.Active;
 			m_Completion = 1.0f;
+			m_BakeTime = Time.realtimeSinceStartup - m_BakeStartTime;
 			UnityEditor.SceneView.RepaintAll();
             UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
 		}
@@ -266,6 +299,9 @@ namespace kTools.Portals
 			// Setup
 			m_BakeState = BakeState.Visibility;
 			var visibilityTable = new List<VisbilityData>();
+			int totalRays = 0;
+			int passedRays = 0;
+			int occludedRays = 0;
 
 			// Get Occluder proxies
 			var occluderProxies = PortalPrepareUtil.GetOccluderProxies(occluders);
@@ -287,6 +323,7 @@ namespace kTools.Portals
 
 				// Iterate random rays based on volume density
 				var rayCount = PortalVisibilityUtil.CalculateRayCount(m_RayDensity, volume.scaleWS);
+				totalRays += rayCount;
 				for(int r = 0; r < rayCount; r++)
 				{
 					// Get a random ray and a list of cone filtered renderers to test
@@ -301,7 +338,12 @@ namespace kTools.Portals
 							Vector3 hitPos;
                             bool hit = !PortalVisibilityUtil.CheckOcclusion(occluderProxies, filteredOccludees[f], rayPosition, rayDirection, out hitPos);
 							if(!hit)
+							{
 								passedObjects.AddIfUnique(filteredOccludees[f].gameObject);
+								passedRays++;
+							}
+							else
+								occludedRays++;	
 
                             debugData.Add(new VisbilityData.Debug()
                             {
@@ -324,9 +366,23 @@ namespace kTools.Portals
 			for(int i = 0; i < occluderProxies.Length; i++)
 				PortalCoreUtil.Destroy(occluderProxies[i].gameObject);
 
+			// Calculate statistics
+			var hitOccludeeGOs = new List<GameObject>();
+			foreach(VisbilityData visibilityData in visibilityTable)
+			{
+				foreach(GameObject go in visibilityData.objects)
+					hitOccludeeGOs.AddIfUnique(go);
+			}
+			m_OccludeeStatistics = new Vector2(hitOccludeeGOs.Count, occludees.Length);
+			m_RayStatistics = new Vector3(passedRays, occludedRays, totalRays);
+
 			// Finalize
 			result(visibilityTable);
 		}
+
+		// -------------------------------------------------- //
+        //                       GIZMOS                       //
+        // -------------------------------------------------- //
 
         private void OnDrawGizmos()
         {

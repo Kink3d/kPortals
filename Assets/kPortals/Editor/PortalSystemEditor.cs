@@ -50,7 +50,7 @@ namespace kTools.PortalsEditor
             DrawDebugSettings();
             
 			EditorGUILayout.LabelField(Styles.bakeToolsText, EditorStyles.boldLabel);
-            BakeEditor.DrawBakeTools(target as IBake);
+            BakeEditor.DrawBakeTools(target as IBake, GetStatistics());
             serializedObject.ApplyModifiedProperties();
         }
 		
@@ -67,6 +67,33 @@ namespace kTools.PortalsEditor
             m_DrawOccludersProp = serializedObject.FindProperty("m_DrawOccluders");
             m_DrawVolumesProp = serializedObject.FindProperty("m_DrawVolumes");
             m_DrawVisibilityProp = serializedObject.FindProperty("m_DrawVisibility");
+        }
+
+        private string GetStatistics()
+        {
+            var actualTarget = target as PortalSystem;
+            if(actualTarget.bakeState != BakeState.Active)
+                return "No bake data available.";
+
+            var passedRays = actualTarget.rayStatistics.x;
+            var occludedRays = actualTarget.rayStatistics.y;
+            var totalRays = actualTarget.rayStatistics.z;
+            var passedRaysPercentage = (actualTarget.rayStatistics.x / actualTarget.rayStatistics.z) * 100f;
+            var occludedRaysPercentage = (actualTarget.rayStatistics.y / actualTarget.rayStatistics.z) * 100f;
+            var passedOccludees = actualTarget.occludeeStatistics.x;
+            var allOccludees = actualTarget.occludeeStatistics.y;
+            var occludeesPercentage = (actualTarget.occludeeStatistics.x / actualTarget.occludeeStatistics.y) * 100f;
+            var elapsedTime = actualTarget.bakeTime;
+
+            return string.Format(
+@"Passing rays: {0}/{1} ({2}%)
+Occluded rays: {3}/{1} ({4}%)
+Processed Occludees: {5}/{6} ({7}%)
+Elapsed time: {8}s", 
+    passedRays, totalRays, string.Format("{0:0.00}", passedRaysPercentage),
+    occludedRays, string.Format("{0:0.00}", occludedRaysPercentage),
+    passedOccludees, allOccludees, string.Format("{0:0.00}", occludeesPercentage),
+    string.Format("{0:0.00}", elapsedTime));
         }
 
         private void DrawVolumeSettings()
