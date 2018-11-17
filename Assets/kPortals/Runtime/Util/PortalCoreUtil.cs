@@ -57,7 +57,7 @@ namespace kTools.Portals
         /// </summary>
         /// <param name="volume">SerializableVolume to use as Key.</param>
 		/// <param name="renderers">MeshRenderer[] returns if true.</param>
-		public static bool TryGetRemderers(this List<VisbilityData> list, SerializableVolume volume, out MeshRenderer[] renderers)
+		public static bool TryGetRenderers(this List<VisbilityData> list, SerializableVolume volume, out MeshRenderer[] renderers)
 		{
 			for(int i = 0; i < list.Count; i++)
 			{

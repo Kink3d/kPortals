@@ -207,38 +207,43 @@ namespace kTools.Portals
 
 		private void UpdateOcclusion()
 		{
-			// TODO
-			// - Rewrite this section for optimisation
-			if(m_ActiveAgents[0].activeVolumeID == -1)
-				return;
+			// Get an array of all unique active volumes
+			var activeVolumes = new SerializableVolume[m_ActiveAgents.Count];
+			for(int i = 0; i < activeVolumes.Length; i++)
+				activeVolumes[i] = m_PortalData.volumes[m_ActiveAgents[i].activeVolumeID];
+			var uniqueActiveVolumes = activeVolumes.Select(s => s.volumeID).Where(s => s != -1).Distinct().ToArray();
 
-			// Get renderers from active volume
-			SerializableVolume activeVolume = m_PortalData.volumes[m_ActiveAgents[0].activeVolumeID];
-			MeshRenderer[] activeVolumeRenderers;
-			m_PortalData.visibilityTable.TryGetRemderers(activeVolume, out activeVolumeRenderers);
+			// Get all Visibility data from active volumes
+			var activeVisibility = new List<VisbilityData>();
+			foreach(VisbilityData visibility in m_PortalData.visibilityTable)
+			{
+				if(uniqueActiveVolumes.Contains(visibility.volume.volumeID))
+					activeVisibility.Add(visibility);
+			}
 
 			// Disable all visible renderers not in this active Volume
-			List<MeshRenderer> visibleRenderers = m_VisibleRenderers.Values.ToList();
-			for (int i = 0; i < visibleRenderers.Count; i++)
+			var visibleRenderers = m_VisibleRenderers.Values.ToArray();
+			var allVisibilityRenderers = activeVisibility.SelectMany(i => i.renderers).Distinct().ToArray();
+			foreach(MeshRenderer renderer in visibleRenderers)
 			{
-				if (!activeVolumeRenderers.Contains(visibleRenderers[i]))
-					visibleRenderers[i].enabled = false;
+				if (!allVisibilityRenderers.Contains(renderer))
+					renderer.enabled = false;
 			}
 
-			// Enable all Volumes in this active Volume that arent current visible
-			MeshRenderer renderer;
-			int[] IDs = new int[activeVolumeRenderers.Length];
-			for (int i = 0; i < activeVolumeRenderers.Length; i++)
-			{
-				IDs[i] = activeVolumeRenderers[i].GetInstanceID();
-				if (!m_VisibleRenderers.TryGetValue(activeVolumeRenderers[i].gameObject.GetInstanceID(), out renderer))
-					activeVolumeRenderers[i].enabled = true;
-			}
-
-			// Update visible renderers to match active Volume
+			// Enable all Renderers in the active Volumes that arent current visible
+			MeshRenderer disposablerenderer;
 			m_VisibleRenderers.Clear();
-			for (int i = 0; i < activeVolumeRenderers.Length; i++)
-				m_VisibleRenderers.Add(IDs[i], activeVolumeRenderers[i]);
+			int[] IDs = new int[allVisibilityRenderers.Length];
+			for (int i = 0; i < allVisibilityRenderers.Length; i++)
+			{
+				IDs[i] = allVisibilityRenderers[i].GetInstanceID();
+				if (!m_VisibleRenderers.TryGetValue(allVisibilityRenderers[i].gameObject.GetInstanceID(), out disposablerenderer))
+					allVisibilityRenderers[i].enabled = true;
+			}
+
+			// Update visible renderers to match active Volumes
+			for (int i = 0; i < allVisibilityRenderers.Length; i++)
+				m_VisibleRenderers.Add(IDs[i], allVisibilityRenderers[i]);
 		}
 
 		// --------------------------------------------------
