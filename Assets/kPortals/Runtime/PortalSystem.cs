@@ -386,6 +386,9 @@ namespace kTools.Portals
 
         private void OnDrawGizmos()
         {
+			// Draw Icon
+			Gizmos.DrawIcon(transform.position, "kTools/Portals/PortalSystem icon.png", true);
+
 			// If no Portal data dont draw gizmos
 			if(m_BakeState != BakeState.Active)
 				return;
