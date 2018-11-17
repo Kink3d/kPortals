@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 #if UNITY_EDITOR
@@ -69,6 +70,17 @@ namespace kTools.Portals
 			renderers = null;
 			return false;
 		}
+
+        /// <summary>
+        /// Get the amount of all unique occludees in the visibility table.
+        /// </summary>
+        public static int GetUniqueOccludeeCount(this List<VisbilityData> list)
+		{
+            var occludeeIDs = new List<int>();
+            foreach(VisbilityData visibilityData in list)
+			    occludeeIDs.AddRange(visibilityData.objects.Select(i => i.GetInstanceID()));
+            return occludeeIDs.Distinct().Count();
+        }
 
 		// -------------------------------------------------- //
         //                  INTERNAL METHODS                  //

@@ -155,14 +155,11 @@ namespace kTools.Portals
 
 		private void OnEnable()
 		{
-			// TODO
-			// - Rewrite this section
-
 			// Runtime only
 			if(!Application.isPlaying)
 				return;
 
-			// If not active data dont calculate visibility at runtime
+			// If no active data dont calculate visibility at runtime
 			if(m_BakeState != BakeState.Active)
 				return;
 
@@ -177,9 +174,6 @@ namespace kTools.Portals
 
 		private void Update()
 		{
-			// TODO
-			// - Rewrite this section
-			
 			// Runtime only
 			if(!Application.isPlaying)
 				return;
@@ -194,25 +188,21 @@ namespace kTools.Portals
 
 		private void UpdateActiveVolume()
 		{
-			// TODO
-			// - Rewrite this section
-
-			// Get active volume
-			int volumeIndex = -1;
-			for(int i = 0; i < m_PortalData.volumes.Length; i++)
+			// Update active volumeID for each agent
+			var previousVolumeIDs = m_ActiveAgents.Select(i => i.activeVolumeID).ToArray();
+			for(int i = 0; i < m_ActiveAgents.Count; i++)
 			{
-				var volume =m_PortalData.volumes[i];
-				var bounds = new Bounds(volume.positionWS, volume.scaleWS);
-				if(bounds.Contains(m_ActiveAgents[0].transform.position))
-					volumeIndex = i;
+				foreach(SerializableVolume volume in m_PortalData.volumes)
+				{
+					if(new Bounds(volume.positionWS, volume.scaleWS).Contains(m_ActiveAgents[i].transform.position))
+						m_ActiveAgents[i].activeVolumeID = volume.volumeID;
+				}
 			}
 
-			// If active volume has changed update occlusion
-			if(volumeIndex != m_ActiveAgents[0].activeVolumeID)
-			{
-				m_ActiveAgents[0].activeVolumeID = volumeIndex;
+			// If active volume has changed for any agent update occlusion
+			var currentVolumeIDs = m_ActiveAgents.Select(i => i.activeVolumeID).ToArray();
+			if(!previousVolumeIDs.SequenceEqual(currentVolumeIDs))
 				UpdateOcclusion();
-			}
 		}
 
 		private void UpdateOcclusion()
@@ -303,13 +293,9 @@ namespace kTools.Portals
 			int passedRays = 0;
 			int occludedRays = 0;
 
-			// Get Occluder proxies
+			// Get Occluder proxies, volumes and occludees
 			var occluderProxies = PortalPrepareUtil.GetOccluderProxies(occluders);
-
-			// Get lowest subdivision volumes
 			var lowestSubdivisionVolumes = PortalPrepareUtil.FilterVolumeDataNoChildren(volumes);
-
-			// Get occludees
 			var occludees = PortalPrepareUtil.GetStaticOccludeeRenderers();
 
 			// Build Visibility for Volumes
@@ -332,26 +318,31 @@ namespace kTools.Portals
 					var filteredOccludees = PortalVisibilityUtil.FilterRenderersByConeAngle(occludees, rayPosition, rayDirection, m_ConeAngle);
 					for(int f = 0; f < filteredOccludees.Length; f++)
 					{
-						// Test ray against renderer AABB and occluders
+						// Test ray against renderer AABB
 						if(PortalVisibilityUtil.CheckAABBIntersection(rayPosition, rayDirection, filteredOccludees[f].bounds))
 						{
+							// Test ray against occluders
 							Vector3 hitPos;
-                            bool hit = !PortalVisibilityUtil.CheckOcclusion(occluderProxies, filteredOccludees[f], rayPosition, rayDirection, out hitPos);
-							if(!hit)
+                            bool passed = PortalVisibilityUtil.CheckOcclusion(occluderProxies, filteredOccludees[f], rayPosition, rayDirection, out hitPos);
+							switch(passed)
 							{
-								passedObjects.AddIfUnique(filteredOccludees[f].gameObject);
-								passedRays++;
+								case true:
+									passedObjects.AddIfUnique(filteredOccludees[f].gameObject);
+									passedRays++;
+									break;
+								case false:
+									occludedRays++;	
+									break;
 							}
-							else
-								occludedRays++;	
 
+							// Track visibility debug data
                             debugData.Add(new VisbilityData.Debug()
                             {
                                 source = rayPosition,
                                 hit = hitPos,
                                 direction = rayDirection,
                                 distance = Vector3.Distance(rayPosition, filteredOccludees[f].transform.position),
-                                isHit = hit,
+                                isHit = !passed,
                             });
 						}
 					}
@@ -366,14 +357,9 @@ namespace kTools.Portals
 			for(int i = 0; i < occluderProxies.Length; i++)
 				PortalCoreUtil.Destroy(occluderProxies[i].gameObject);
 
-			// Calculate statistics
-			var hitOccludeeGOs = new List<GameObject>();
-			foreach(VisbilityData visibilityData in visibilityTable)
-			{
-				foreach(GameObject go in visibilityData.objects)
-					hitOccludeeGOs.AddIfUnique(go);
-			}
-			m_OccludeeStatistics = new Vector2(hitOccludeeGOs.Count, occludees.Length);
+			// Save statistics
+			var occludeeCount = PortalCoreUtil.GetUniqueOccludeeCount(visibilityTable);
+			m_OccludeeStatistics = new Vector2(occludeeCount, occludees.Length);
 			m_RayStatistics = new Vector3(passedRays, occludedRays, totalRays);
 
 			// Finalize
