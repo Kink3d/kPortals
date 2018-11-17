@@ -2,7 +2,7 @@
 ### A simple pre-calculated Portal Visibility System for Occlusion Culling
 
 ![alt text](https://github.com/Kink3d/kPortals/blob/master/Source/Images/HowItWorks00.png?raw=true)
-*An example of Manual Volume mode culling.*
+*An example of Manual Volume mode visibility.*
 
 kPortals is a pre-calculated Portal visibility system. It offers Manual, Automatic and Hybrid volume modes, where Manual mode gives the user ability to generate very aggressive culling, Automatic requires zero user setup but provides more conservative culling, and Hybrid provides a mixed solution. Bake time can be offset against visibility accuracy using parameters on the component.
 
