@@ -2,7 +2,7 @@
 ### A pre-calculated Portal visibility system for Unity.
 
 ![alt text](https://github.com/Kink3d/kPortals/blob/master/Source/Images/HowItWorks00.png?raw=true)
-*An example of Manual Volume mode visibility.*
+*A visualization of baked visibility information.*
 
 kPortals is a pre-calculated Portal visibility system. It offers Manual, Automatic and Hybrid volume modes, where Manual mode gives the user ability to generate very aggressive culling, Automatic requires zero user setup but provides more conservative culling, and Hybrid provides a mixed solution. Bake time can be offset against visibility accuracy using parameters on the component.
 
