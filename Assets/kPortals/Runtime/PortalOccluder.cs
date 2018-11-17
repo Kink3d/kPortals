@@ -31,7 +31,7 @@ namespace kTools.Portals
 #if UNITY_EDITOR
         private void OnDrawGizmos()
         {
-			Gizmos.DrawIcon(transform.position, "kTools/Portals/PortalVolume icon.png", true);
+			Gizmos.DrawIcon(transform.position, "kTools/Portals/PortalOccluder icon.png", true);
 			PortalDebugUtil.DrawCube(transform.position, transform.rotation, transform.lossyScale, PortalDebugColors.occluder);
         }
 #endif
