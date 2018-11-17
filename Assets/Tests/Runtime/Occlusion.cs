@@ -1,74 +1,59 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using marijnz.EditorCoroutines;
 
-namespace SimpleTools.Culling.Tests
+namespace kTools.Portals.Tests
 {
 	[ExecuteInEditMode]
+    [AddComponentMenu("kTools/Tests/Portals/Occlusion")]
 	public class Occlusion : MonoBehaviour 
-	{
+	{	
+		public Transform raySource;
 
-#if UNITY_EDITOR
+        [SerializeField] private MeshRenderer[] m_PassedRenderers;
+        [SerializeField] private SerializableOccluder m_Occluder;
+        [SerializeField] private MeshCollider[] m_OccluderProxies;
 
-        // ----------------------------------------------------------------------------------------------------//
-        //                                           PUBLIC FIELDS                                             //
-        // ----------------------------------------------------------------------------------------------------//
-
-        public Transform raySource;
-		public float maxDisatnce = 10;
-
-        // ----------------------------------------------------------------------------------------------------//
-        //                                               TEST                                                  //
-        // ----------------------------------------------------------------------------------------------------//
-
-        // --------------------------------------------------
-        // Runtime Data
-
-        [SerializeField]
-        private MeshRenderer[] m_StaticRenderers;
-
-        [SerializeField]
-		private MeshRenderer[] m_PassedRenderers;
-
-        [SerializeField]
-        private OccluderData[] m_Occluders;
-
-        // --------------------------------------------------
-        // Test Execution
-
-        private void Update()
+		private void Update()
 		{
-            m_StaticRenderers = Utils.GetStaticRenderers();
+            if(raySource == null)
+                return;
+
+            if(m_OccluderProxies == null || m_OccluderProxies.Length == 0)
+            {
+                var occluders = PortalPrepareUtil.GetOccluderData();
+			    m_OccluderProxies = PortalPrepareUtil.GetOccluderProxies(occluders);
+                foreach(Collider col in m_OccluderProxies)
+                    col.transform.SetParent(transform);
+            }
+
+            var staticRenderers = PortalPrepareUtil.GetStaticOccludeeRenderers();
             List<MeshRenderer> renderers = new List<MeshRenderer>();
-
-            if (m_Occluders == null)
-                EditorCoroutines.StartCoroutine(Utils.BuildOccluderProxyGeometry(transform, m_StaticRenderers, value => m_Occluders = value, this), this);
-
-            for (int i = 0; i < m_StaticRenderers.Length; i++)
+			for(int i = 0; i < staticRenderers.Length; i++)
 			{
-				if(Utils.CheckAABBIntersection(raySource.position, raySource.forward, m_StaticRenderers[i].bounds))
+                if (PortalVisibilityUtil.CheckAABBIntersection(raySource.position, raySource.forward, staticRenderers[i].bounds))
                 {
-                    if(Utils.CheckOcclusion(m_Occluders, m_StaticRenderers[i], raySource.position, raySource.forward))
-                        renderers.Add(m_StaticRenderers[i]);
+                    Vector3 hitPosition;
+                    if(PortalVisibilityUtil.CheckOcclusion(m_OccluderProxies, staticRenderers[i], raySource.position, raySource.forward, out hitPosition))
+                        renderers.AddIfUnique(staticRenderers[i]);
                 }
 			}
             m_PassedRenderers = renderers.ToArray();
         }
 
-        // ----------------------------------------------------------------------------------------------------//
-        //                                              DEBUG                                                  //
-        // ----------------------------------------------------------------------------------------------------//
-
-        [ExecuteInEditMode]
+#if UNITY_EDITOR
         private void OnDrawGizmos()
         {
-            DebugUtils.DrawRay(raySource.position, raySource.forward);
-            DebugUtils.DrawRenderers(m_StaticRenderers, m_PassedRenderers);
-			DebugUtils.DrawSphere(raySource.position, 0.25f);
+			if(raySource == null || m_PassedRenderers == null)
+                return;
+
+            PortalDebugUtil.DrawRay(raySource.position, raySource.forward, 10, PortalDebugColors.raycast);
+			PortalDebugUtil.DrawSphere(raySource.position, 0.25f, PortalDebugColors.raycast);
+
+			foreach(MeshRenderer renderer in m_PassedRenderers)
+				PortalDebugUtil.DrawMesh(renderer.transform.position, renderer.transform.rotation, renderer.transform.lossyScale,
+					renderer.GetComponent<MeshFilter>().sharedMesh, PortalDebugColors.white);
         }
-
 #endif
-
-    }
+	}
 }

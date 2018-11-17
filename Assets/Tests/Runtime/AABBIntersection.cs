@@ -1,63 +1,45 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace SimpleTools.Culling.Tests
+namespace kTools.Portals.Tests
 {
 	[ExecuteInEditMode]
+    [AddComponentMenu("kTools/Tests/Portals/AABBIntersection")]
 	public class AABBIntersection : MonoBehaviour 
-	{
+	{	
+		public Transform raySource;
 
-#if UNITY_EDITOR
-
-        // ----------------------------------------------------------------------------------------------------//
-        //                                           PUBLIC FIELDS                                             //
-        // ----------------------------------------------------------------------------------------------------//
-
-        public Transform raySource;
-
-        // ----------------------------------------------------------------------------------------------------//
-        //                                               TEST                                                  //
-        // ----------------------------------------------------------------------------------------------------//
-
-        // --------------------------------------------------
-        // Runtime Data
-
-        [SerializeField]
-        private MeshRenderer[] m_StaticRenderers;
-
-        [SerializeField]
         private MeshRenderer[] m_PassedRenderers;
-
-		// --------------------------------------------------
-		// Test Execution
 
 		private void Update()
 		{
-            m_StaticRenderers = Utils.GetStaticRenderers();
-            List<MeshRenderer> renderers = new List<MeshRenderer>();
+            if(raySource == null)
+                return;
 
-			for(int i = 0; i < m_StaticRenderers.Length; i++)
+            var staticRenderers = PortalPrepareUtil.GetStaticOccludeeRenderers();
+            List<MeshRenderer> renderers = new List<MeshRenderer>();
+			for(int i = 0; i < staticRenderers.Length; i++)
 			{
-                if (Utils.CheckAABBIntersection(raySource.position, raySource.forward, m_StaticRenderers[i].bounds))
-                    renderers.Add(m_StaticRenderers[i]);
+                if (PortalVisibilityUtil.CheckAABBIntersection(raySource.position, raySource.forward, staticRenderers[i].bounds))
+                    renderers.Add(staticRenderers[i]);
 			}
             m_PassedRenderers = renderers.ToArray();
         }
 
-		// ----------------------------------------------------------------------------------------------------//
-		//                                              DEBUG                                                  //
-		// ----------------------------------------------------------------------------------------------------//
-
-		[ExecuteInEditMode]
+#if UNITY_EDITOR
         private void OnDrawGizmos()
         {
-            DebugUtils.DrawRay(raySource.position, raySource.forward);
-            DebugUtils.DrawRenderers(m_StaticRenderers, m_PassedRenderers);
-			DebugUtils.DrawSphere(raySource.position, 0.25f);
+			if(raySource == null || m_PassedRenderers == null)
+                return;
+
+            PortalDebugUtil.DrawRay(raySource.position, raySource.forward, 10, PortalDebugColors.raycast);
+			PortalDebugUtil.DrawSphere(raySource.position, 0.25f, PortalDebugColors.raycast);
+
+			foreach(MeshRenderer renderer in m_PassedRenderers)
+				PortalDebugUtil.DrawMesh(renderer.transform.position, renderer.transform.rotation, renderer.transform.lossyScale,
+					renderer.GetComponent<MeshFilter>().sharedMesh, PortalDebugColors.white);
         }
-
 #endif
-
-    }
+	}
 }
